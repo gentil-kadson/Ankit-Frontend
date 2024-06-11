@@ -24,3 +24,7 @@ body {
   height: 100vh;
   background: var(--background);
 }
+
+.blue-text {
+  color: var(--blue);
+}
