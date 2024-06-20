@@ -1,3 +1,5 @@
+import Button from "@/components/Button";
+
 export default function Home() {
-  return <p>Hello world!!!</p>;
+  return <Button width={10}>Valha mds</Button>;
 }
