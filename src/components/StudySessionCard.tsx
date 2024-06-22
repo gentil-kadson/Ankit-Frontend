@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { MaterialSymbol } from "react-material-symbols";
 import StudySessionInfo from "./StudySessionInfo";
+import StudySessionActionButton from "./StudySessionActionButton";
 
 type Props = {
   title: string;
@@ -30,6 +31,14 @@ export default function StudySessionCard() {
             text="10 min"
             icon={<MaterialSymbol icon="alarm" size={24} />}
           />
+        </div>
+        <div className="action-buttons">
+          <StudySessionActionButton onClick={() => 2 + 2}>
+            <MaterialSymbol icon="csv" size={24} fill />
+          </StudySessionActionButton>
+          <StudySessionActionButton onClick={() => 1 + 1}>
+            <MaterialSymbol icon="delete" size={24} />
+          </StudySessionActionButton>
         </div>
       </div>
     </Container>
@@ -76,5 +85,11 @@ const Container = styled.div`
     display: flex;
     flex-wrap: wrap;
     padding-top: 0.6875rem;
+  }
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 `;
