@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { MaterialSymbol } from "react-material-symbols";
 
 type Props = {
   children: React.ReactNode;
