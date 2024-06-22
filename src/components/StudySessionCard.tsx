@@ -37,7 +37,6 @@ export default function StudySessionCard() {
 }
 
 const Container = styled.div`
-  border: 3px solid var(--white);
   border-radius: 1rem;
 
   width: 25rem;
@@ -59,15 +58,23 @@ const Container = styled.div`
   }
 
   .study-session-data-actions {
-    background: var(--component);
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+
+    background: var(--component);
+    height: 12.375rem;
+    border-radius: 0rem 0rem 1rem 1rem;
+    padding: 1.5rem 1.25rem;
   }
 
   .study-session-info {
     max-width: 11.5625rem;
+    row-gap: 0.75rem;
+    column-gap: 0.5rem;
 
     display: flex;
     flex-wrap: wrap;
+    padding-top: 0.6875rem;
   }
 `;
