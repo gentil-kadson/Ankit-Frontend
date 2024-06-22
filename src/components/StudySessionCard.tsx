@@ -10,35 +10,36 @@ type Props = {
   numberOfCards: number;
 };
 
-export default function StudySessionCard() {
+export default function StudySessionCard({
+  title,
+  studyTime,
+  studiedLanguage,
+  numberOfCards,
+}: Props) {
   return (
     <Container>
       <div className="card-title">
         <MaterialSymbol icon="dictionary" size={24} />
-        <h3>At The Doctor</h3>
+        <h3>{title}</h3>
       </div>
       <div className="study-session-data-actions">
         <div className="study-session-info">
           <StudySessionInfo
-            text="10 min"
+            text={`${studyTime} min`}
             icon={<MaterialSymbol icon="alarm" size={24} />}
           />
           <StudySessionInfo
-            text="10 min"
-            icon={<MaterialSymbol icon="alarm" size={24} />}
+            text={studiedLanguage}
+            icon={<MaterialSymbol icon="translate" size={24} />}
           />
           <StudySessionInfo
-            text="10 min"
-            icon={<MaterialSymbol icon="alarm" size={24} />}
+            text={`${numberOfCards} min`}
+            icon={<MaterialSymbol icon="content_copy" size={24} />}
           />
         </div>
         <div className="action-buttons">
-          <StudySessionActionButton onClick={() => 2 + 2}>
-            <MaterialSymbol icon="csv" size={24} fill />
-          </StudySessionActionButton>
-          <StudySessionActionButton onClick={() => 1 + 1}>
-            <MaterialSymbol icon="delete" size={24} />
-          </StudySessionActionButton>
+          <StudySessionActionButton onClick={() => 2 + 2} icon="csv" />
+          <StudySessionActionButton onClick={() => 1 + 1} icon="delete" />
         </div>
       </div>
     </Container>
@@ -91,5 +92,9 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
+  }
+
+  @media (max-width: 431px) {
+    width: 100%;
   }
 `;

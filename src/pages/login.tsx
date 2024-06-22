@@ -1,5 +1,3 @@
-import StudySessionCard from "@/components/StudySessionCard";
-
 export default function Login() {
-  return <StudySessionCard />;
+  return <h1>This is the login page.</h1>;
 }
