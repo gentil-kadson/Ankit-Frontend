@@ -28,3 +28,7 @@ body {
 .blue-text {
   color: var(--blue);
 }
+
+button:hover {
+  cursor: pointer;
+}
