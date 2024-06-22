@@ -19,6 +19,7 @@ const StatisticsSection = styled.section`
   display: flex;
   flex-direction: column;
   max-width: 30.625rem;
+  background-color: var(--component);
 
   h2 {
     color: var(--blue);
