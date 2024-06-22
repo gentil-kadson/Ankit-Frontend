@@ -10,7 +10,12 @@ type Props = {
 export default function Label({ children, symbolIcon }: Props) {
   return (
     <CustomLabel>
-      <MaterialSymbol icon={symbolIcon} color="var(--blue)" weight={900} />
+      <MaterialSymbol
+        size={24}
+        icon={symbolIcon}
+        color="var(--blue)"
+        weight={900}
+      />
       {children}
     </CustomLabel>
   );
