@@ -1,5 +1,6 @@
 import Button from "@/components/Button";
+import Label from "@/components/Label";
 
 export default function Home() {
-  return <div>This is the homepage.</div>;
+  return <Label symbolIcon="folder">Meu Label</Label>;
 }
