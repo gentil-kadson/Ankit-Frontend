@@ -18,6 +18,7 @@ export default function StatisticsCard({ title, children }: Props) {
 const StatisticsSection = styled.section`
   display: flex;
   flex-direction: column;
+  max-width: 30.625rem;
 
   h2 {
     color: var(--blue);
@@ -25,4 +26,6 @@ const StatisticsSection = styled.section`
   }
 `;
 
-const StatisticsCardsGroup = styled.div``;
+const StatisticsCardsGroup = styled.div`
+  width: 100%;
+`;
