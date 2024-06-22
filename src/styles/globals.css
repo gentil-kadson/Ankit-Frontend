@@ -32,3 +32,19 @@ body {
 button:hover {
   cursor: pointer;
 }
+
+input,
+select {
+  background-color: var(--component);
+  color: var(--white);
+  width: 26.375rem;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0.625rem;
+  border-radius: 0.625rem;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+}

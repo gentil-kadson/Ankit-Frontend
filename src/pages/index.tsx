@@ -1,5 +1,3 @@
-import Button from "@/components/Button";
-
 export default function Home() {
-  return <div>This is the homepage.</div>;
+  return <h1>Hello Word</h1>;
 }
