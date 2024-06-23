@@ -5,16 +5,22 @@ type Props = {
   src: string | StaticImport;
   width: number;
   height: number;
+  onClick?: () => void;
 };
 
-export default function ProfilePicture({ src, width, height }: Props) {
+export default function ProfilePicture({ src, width, height, onClick }: Props) {
   return (
     <Image
       src={src}
       alt="User profile picture"
       width={width}
       height={height}
-      style={{ border: "solid 2px var(--blue)", borderRadius: 50 }}
+      onClick={onClick}
+      style={{
+        border: "solid 0.125rem var(--blue)",
+        borderRadius: 50,
+        cursor: "pointer",
+      }}
     />
   );
 }
