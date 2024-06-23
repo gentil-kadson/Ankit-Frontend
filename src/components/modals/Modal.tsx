@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { MaterialSymbol } from "react-material-symbols";
 import { SymbolCodepoints } from "react-material-symbols";
 
-import Button from "./Button";
+import Button from "../Button";
 
 type ActionButton = {
   symbolIcon?: SymbolCodepoints;
@@ -13,7 +13,6 @@ type ActionButton = {
 type Props = {
   mainTitle: string;
   subtitle: React.ReactNode;
-  strongText: string;
   modalForm: React.ReactNode;
   actionButtonsContent: ActionButton[];
 };
