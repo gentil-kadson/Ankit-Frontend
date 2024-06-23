@@ -29,6 +29,7 @@ const CustomButton = styled.button<{ width: string; inverted?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 0.5rem;
   border-radius: 0.625rem;
   padding: 12px 0px;
 
