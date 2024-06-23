@@ -40,7 +40,7 @@ export default function Modal({
           )}
           {actionButtonsContent[0].text}
         </Button>
-        <Button width="11.625rem" inverted>
+        <Button width="11.625rem" $inverted>
           {actionButtonsContent[1].text}
         </Button>
       </div>
