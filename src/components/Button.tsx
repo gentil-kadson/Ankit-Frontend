@@ -6,6 +6,10 @@ type Props = {
   children: React.ReactNode;
   onClick?: () => {};
   $inverted?: boolean;
+  className?: string;
+  id?: string;
+  $htmlType?: string;
+  form?: string;
 };
 
 export default function Button({ children, width, onClick, ...props }: Props) {

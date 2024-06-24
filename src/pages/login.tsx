@@ -117,6 +117,10 @@ const LoginForm = styled.form`
     align-items: center;
     gap: 3rem;
     width: 100%;
+
+    @media (max-width: 431px) {
+      width: 80%;
+    }
   }
 
   #buttons {

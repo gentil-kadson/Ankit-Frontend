@@ -15,6 +15,6 @@ const InputGroup = styled.div`
   gap: 0.75rem;
 
   @media (max-width: 431px) {
-    width: 80%;
+    width: 100%;
   }
 `;
