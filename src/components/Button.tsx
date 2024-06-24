@@ -4,7 +4,7 @@ import styled from "styled-components";
 type Props = {
   width: string;
   children: React.ReactNode;
-  onClick?: () => {};
+  onClick?: () => void;
   $inverted?: boolean;
   className?: string;
   id?: string;

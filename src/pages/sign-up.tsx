@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Link from "next/link";
 
 import { MaterialSymbol } from "react-material-symbols";
@@ -8,23 +9,12 @@ import FormGroup from "@/components/FormGroup";
 import Label from "@/components/Label";
 
 export default function SignUp() {
-  return (
-    <Main>
-      <header>
-        <Link style={{ textDecoration: "none" }} href="login/">
-          <Button $inverted width="59px">
-            <MaterialSymbol icon="home" color="var(--blue)" size={33} />
-          </Button>
-        </Link>
-      </header>
+  const [currentFormStep, setCurrentFormStep] = useState<number>(1);
+
+  function renderUserDataForm() {
+    return (
       <Form action="post" id="user-form">
-        <header>
-          <MaterialSymbol size={80} icon="package" color="var(--blue)" />
-          <p>
-            Nos conte mais sobre você para que possamos customizar sua
-            experiência no <span>Ankit</span>
-          </p>
-        </header>
+        <header></header>
         <fieldset>
           <FormGroup>
             <Label inputId="email" symbolIcon="email">
@@ -45,15 +35,46 @@ export default function SignUp() {
             <input type="password" name="password2" id="password2" required />
           </FormGroup>
           <Button
-            $htmlType="submit"
+            onClick={() => setCurrentFormStep(2)}
             id="submit-form-button"
-            form="user-form"
             width="59px"
           >
             <MaterialSymbol icon="arrow_forward" size={33} />
           </Button>
         </fieldset>
       </Form>
+    );
+  }
+
+  function renderStudentDataForm() {
+    return <h1>Hello Word</h1>;
+  }
+
+  function renderForm() {
+    if (currentFormStep == 1) {
+      return renderUserDataForm();
+    } else {
+      return renderStudentDataForm();
+    }
+  }
+
+  return (
+    <Main>
+      <header>
+        <Link style={{ textDecoration: "none" }} href="login/" id="home-link">
+          <Button $inverted width="59px">
+            <MaterialSymbol icon="home" color="var(--blue)" size={33} />
+          </Button>
+        </Link>
+        <span className="heading-title">
+          <MaterialSymbol size={80} icon="package" color="var(--blue)" />
+          <p>
+            Nos conte mais sobre você para que possamos customizar sua
+            experiência no <span>Ankit</span>
+          </p>
+        </span>
+      </header>
+      {renderForm()}
     </Main>
   );
 }
@@ -62,13 +83,48 @@ const Main = styled.main`
   display: flex;
   flex-direction: column;
 
+  header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    #home-link {
+      align-self: flex-start;
+    }
+
+    span.heading-title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+
+      span {
+        color: var(--blue);
+      }
+
+      @media (max-width: 431px) {
+        width: 70%;
+      }
+    }
+
+    @media (max-width: 431px) {
+      #home-link {
+        width: 25%;
+        align-self: center;
+      }
+    }
+  }
+
   @media (min-width: 540px) {
     padding: 100px;
   }
 
   @media (max-width: 431px) {
     > header {
-      width: 20%;
       align-self: center;
       padding-bottom: 20px;
     }
@@ -80,24 +136,6 @@ const Form = styled.form`
   flex-direction: column;
   align-items: center;
   gap: 100px;
-
-  header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-
-    span {
-      color: var(--blue);
-    }
-
-    @media (max-width: 431px) {
-      width: 70%;
-    }
-  }
 
   fieldset {
     display: flex;
