@@ -1,5 +1,3 @@
-import CreateStudySessionModal from "@/components/modals/CreateStudySessionModal";
-
 export default function Login() {
-  return <CreateStudySessionModal />;
+  return <h1>This is the login page.</h1>;
 }

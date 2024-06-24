@@ -35,4 +35,8 @@ const CustomButton = styled.button<{ width: string; $inverted?: boolean }>`
   }};
   width: ${(props) => props.width};
   color: ${(props) => (props.$inverted ? "var(--blue)" : "var(--white)")};
+
+  @media (max-width: 431px) {
+    width: 100%;
+  }
 `;
