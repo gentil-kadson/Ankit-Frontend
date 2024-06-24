@@ -140,14 +140,14 @@ export default function SignUp() {
             </Label>
             <Select
               value={formData.educational_level}
-              onChange={(event) =>
+              onChange={(event) => {
                 setFormData((prevState) => {
                   return {
                     ...prevState,
                     educational_level: event.target.value,
                   };
-                })
-              }
+                });
+              }}
               name="educational_level"
               id="educational_level"
             >
@@ -161,7 +161,17 @@ export default function SignUp() {
             <Label inputId="nationality" symbolIcon="crib">
               Nacionalidade
             </Label>
-            <Select required name="nationality" id="nationality">
+            <Select
+              value={formData.nationality}
+              onChange={(event) =>
+                setFormData((prevState) => {
+                  return { ...prevState, nationality: event.target.value };
+                })
+              }
+              required
+              name="nationality"
+              id="nationality"
+            >
               <option value="brazilian">Brasileiro</option>
               <option value="north-american">Estadunidense</option>
               <option value="french">Francês</option>
@@ -214,7 +224,7 @@ export default function SignUp() {
 const Main = styled.main`
   display: flex;
   flex-direction: column;
-  gap: 100px;
+  gap: 6.25rem;
 
   header {
     display: flex;
@@ -224,6 +234,10 @@ const Main = styled.main`
 
     #home-link {
       align-self: flex-start;
+
+      @media (max-width: 875px) {
+        align-self: center;
+      }
     }
 
     span.heading-title {
@@ -253,13 +267,13 @@ const Main = styled.main`
   }
 
   @media (min-width: 540px) {
-    padding: 100px;
+    padding: 6.25rem;
   }
 
   @media (max-width: 431px) {
     > header {
       align-self: center;
-      padding-bottom: 20px;
+      padding-bottom: 1.25rem;
     }
   }
 `;
@@ -268,13 +282,13 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 100px;
+  gap: 6.25rem;
 
   fieldset {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 24px;
+    gap: 1.5rem;
 
     #submit-form-button {
       align-self: flex-end;
@@ -291,7 +305,7 @@ const StudentFormFields = styled.div`
   grid-template-areas:
     "fieldset-1 fieldset-2"
     "buttons buttons";
-  gap: 32px;
+  gap: 2rem;
 
   #fieldset-1 {
     grid-area: fieldset-1;
@@ -314,7 +328,7 @@ const StudentFormButtons = styled.div`
   display: flex;
   width: 100%;
   justify-content: flex-end;
-  gap: 16px;
+  gap: 1rem;
 
   @media (max-width: 875px) {
     width: 80%;
