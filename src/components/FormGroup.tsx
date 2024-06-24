@@ -13,4 +13,8 @@ const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+
+  @media (max-width: 431px) {
+    width: 80%;
+  }
 `;

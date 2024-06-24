@@ -43,8 +43,8 @@ export default function Login() {
           </FormGroup>
         </fieldset>
         <div id="buttons">
-          <Button width="415px">Entrar</Button>
-          <Button inverted width="415px">
+          <Button width="25.9375rem">Entrar</Button>
+          <Button width="25.9375rem" $inverted>
             <Image src={googleLogo} alt="G from Google" />
           </Button>
         </div>
@@ -65,11 +65,6 @@ const Main = styled.main`
   justify-content: center;
   align-items: center;
   gap: 1.25rem;
-  height: 100vh;
-
-  @media (max-width: 431px) {
-    height: auto;
-  }
 `;
 
 const Header = styled.header`
@@ -128,7 +123,13 @@ const LoginForm = styled.form`
     margin-top: 3rem;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1.5rem;
+    width: 100%;
+
+    @media (max-width: 431px) {
+      width: 80%;
+    }
   }
 
   #sign-up-link {
