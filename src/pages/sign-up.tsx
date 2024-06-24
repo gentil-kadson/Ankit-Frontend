@@ -9,54 +9,52 @@ import Label from "@/components/Label";
 
 export default function SignUp() {
   return (
-    <>
-      <Main>
+    <Main>
+      <header>
+        <Link style={{ textDecoration: "none" }} href="login/">
+          <Button $inverted width="59px">
+            <MaterialSymbol icon="home" color="var(--blue)" size={33} />
+          </Button>
+        </Link>
+      </header>
+      <Form action="post" id="user-form">
         <header>
-          <Link style={{ textDecoration: "none" }} href="login/">
-            <Button $inverted width="59px">
-              <MaterialSymbol icon="home" color="var(--blue)" size={33} />
-            </Button>
-          </Link>
+          <MaterialSymbol size={80} icon="package" color="var(--blue)" />
+          <p>
+            Nos conte mais sobre você para que possamos customizar sua
+            experiência no <span>Ankit</span>
+          </p>
         </header>
-        <Form action="post" id="user-form">
-          <header>
-            <MaterialSymbol size={80} icon="package" color="var(--blue)" />
-            <p>
-              Nos conte mais sobre você para que possamos customizar sua
-              experiência no <span>Ankit</span>
-            </p>
-          </header>
-          <fieldset>
-            <FormGroup>
-              <Label inputId="email" symbolIcon="email">
-                Email
-              </Label>
-              <input type="email" name="email" id="email" />
-            </FormGroup>
-            <FormGroup>
-              <Label inputId="password-1" symbolIcon="password">
-                Senha
-              </Label>
-              <input type="password" name="password-1" id="password-1" />
-            </FormGroup>
-            <FormGroup>
-              <Label inputId="password-2" symbolIcon="password">
-                Repetir Senha
-              </Label>
-              <input type="password" name="password-2" id="password-2" />
-            </FormGroup>
-            <Button
-              $htmlType="submit"
-              id="submit-form-button"
-              form="user-form"
-              width="59px"
-            >
-              <MaterialSymbol icon="arrow_forward" size={33} />
-            </Button>
-          </fieldset>
-        </Form>
-      </Main>
-    </>
+        <fieldset>
+          <FormGroup>
+            <Label inputId="email" symbolIcon="email">
+              Email
+            </Label>
+            <input type="email" name="email" id="email" required />
+          </FormGroup>
+          <FormGroup>
+            <Label inputId="password1" symbolIcon="password">
+              Senha
+            </Label>
+            <input type="password" name="password1" id="password1" required />
+          </FormGroup>
+          <FormGroup>
+            <Label inputId="password2" symbolIcon="password">
+              Repetir Senha
+            </Label>
+            <input type="password" name="password2" id="password2" required />
+          </FormGroup>
+          <Button
+            $htmlType="submit"
+            id="submit-form-button"
+            form="user-form"
+            width="59px"
+          >
+            <MaterialSymbol icon="arrow_forward" size={33} />
+          </Button>
+        </fieldset>
+      </Form>
+    </Main>
   );
 }
 
