@@ -5,11 +5,12 @@ import { MaterialSymbol, SymbolCodepoints } from "react-material-symbols";
 type Props = {
   children: React.ReactNode;
   symbolIcon: SymbolCodepoints;
+  inputId: string;
 };
 
-export default function Label({ children, symbolIcon }: Props) {
+export default function Label({ children, symbolIcon, inputId }: Props) {
   return (
-    <CustomLabel>
+    <CustomLabel htmlFor={inputId}>
       <MaterialSymbol
         size={24}
         icon={symbolIcon}

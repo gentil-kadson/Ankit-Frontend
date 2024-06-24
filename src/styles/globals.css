@@ -26,6 +26,10 @@ body {
   background: var(--background);
 }
 
+main {
+  height: 100vh;
+}
+
 .blue-text {
   color: var(--blue);
 }
@@ -54,5 +58,10 @@ select:focus {
   input,
   select {
     width: 100%;
+  }
+
+  main {
+    height: auto;
+    padding: 0.5rem;
   }
 }
