@@ -49,4 +49,18 @@ const Container = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 3.75rem;
   grid-row-gap: 2.5rem;
+
+  @media (max-width: 1000px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+  }
+
+  @media (max-width: 432px) {
+    div {
+      width: 100%;
+    }
+  }
 `;

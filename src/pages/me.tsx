@@ -42,8 +42,6 @@ const Main = styled.main`
   padding-top: 3.75rem;
   padding-bottom: 5.8125rem;
 
-  border: 1px solid white;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -76,6 +74,26 @@ const Main = styled.main`
 
     button {
       align-self: flex-end;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    gap: 2rem;
+
+    .profile-picture {
+      width: 100%;
+      .buttons-container {
+        width: inherit;
+        flex-direction: column;
+      }
+    }
+
+    .user-data {
+      width: 100%;
+
+      button {
+        align-self: center;
+      }
     }
   }
 `;
