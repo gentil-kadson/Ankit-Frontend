@@ -7,6 +7,8 @@ import ProfilePicture from "@/components/ProfilePicture";
 import StatisticsCard from "@/components/statistics/StatisticsCard";
 import LanguageStatisticRow from "@/components/statistics/LanguageStatisticRow";
 import StreakStudyRow from "@/components/statistics/StreakStudy";
+import FormGroup from "@/components/FormGroup";
+import Select from "@/components/Select";
 
 import brazilFlag from "/public/brazilFlag.svg";
 
@@ -17,10 +19,20 @@ export default function Statistics() {
         <Main>
             <Header>
                 <h2>Statistics</h2>
-                <Button width="125px">
-                    <MaterialSymbol icon="filter_list" size={30}/>
-                    Filtrar
-                </Button>
+                <form method="get">
+                    <FormGroup>
+                        <Select>
+                            <option value="">Neste mês</option>
+                            <option value="">Últimos 6 meses</option>
+                            <option value="">Ano passado</option>
+                            <option value="">Nenhum</option>
+                        </Select>
+                    </FormGroup>
+                    <Button width="125px">
+                        <MaterialSymbol icon="filter_list" size={30}/>
+                        Filtrar
+                    </Button>
+                </form>
             </Header>
             <StreakHoursSection>
                 <ProfilePicture src={brazilFlag} width={194} height={194}/>
@@ -68,6 +80,16 @@ const Header = styled.header`
         flex-direction: column;
         align-items: center;
         gap: 1rem;
+    }
+
+    form {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        @media(max-width: 875px) {
+            flex-direction: column;
+        }
     }
 `
 
