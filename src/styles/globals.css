@@ -26,10 +26,6 @@ body {
   background: var(--background);
 }
 
-main {
-  height: 100vh;
-}
-
 .blue-text {
   color: var(--blue);
 }
@@ -52,6 +48,23 @@ select {
 input:focus,
 select:focus {
   outline: none;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--material-grey);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4e5053;
 }
 
 @media (max-width: 431px) {

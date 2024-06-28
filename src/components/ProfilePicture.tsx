@@ -18,7 +18,7 @@ export default function ProfilePicture({ src, width, height, onClick }: Props) {
       onClick={onClick}
       style={{
         border: "solid 0.125rem var(--blue)",
-        borderRadius: 50,
+        borderRadius: "50%",
         cursor: "pointer",
       }}
     />
