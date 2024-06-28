@@ -18,16 +18,18 @@ export default function LanguageStatisticRow({
   return (
     <Row>
       <FlagItem src={flagSrc} alt={language} language={language} />
-      <span>{number}</span>
+      <span className="row-data-number">{number}</span>
     </Row>
   );
 }
 
-const Row = styled.p`
+const Row = styled.div`
   display: flex;
   justify-content: space-between;
+  padding: 1rem 2rem;
+  align-items: center;
 
-  span {
+  span.row-data-number {
     color: var(--blue);
     font-weight: bold;
   }
