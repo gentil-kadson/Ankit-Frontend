@@ -4,8 +4,12 @@ import styled from "styled-components";
 type Props = {
   width: string;
   children: React.ReactNode;
-  onClick?: () => {};
+  onClick?: () => void;
   $inverted?: boolean;
+  className?: string;
+  id?: string;
+  $htmlType?: string;
+  form?: string;
 };
 
 export default function Button({ children, width, onClick, ...props }: Props) {
