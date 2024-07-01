@@ -1,10 +1,6 @@
 import styled from "styled-components";
 
 import ChatContainer from "@/components/GPTChat/ChatContainer";
-import Button from "@/components/Button";
-import SSButton from "@/components/studySessionOnlyComponents/SSButton";
-import { MaterialSymbol } from "react-material-symbols";
-import Radio from "@/components/Radio";
 import UpperPart from "@/components/studySessionOnlyComponents/UpperPart";
 import LowerPart from "@/components/studySessionOnlyComponents/LowerPart";
 

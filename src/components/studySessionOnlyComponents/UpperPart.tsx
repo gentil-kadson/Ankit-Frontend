@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Button from "../Button";
 import { MaterialSymbol } from "react-material-symbols";
-import SSButton from "./SSButton";
+import StudySessionButton from "./StudySessionButton";
 
 export default function UpperPart() {
   return (
@@ -13,14 +13,14 @@ export default function UpperPart() {
         </Button>
       </div>
       <div className="right-side">
-        <SSButton width="9.25rem">
+        <StudySessionButton width="9.25rem">
           <MaterialSymbol icon="topic" size={35} color="var(--white)" />
           Tópico
-        </SSButton>
-        <SSButton width="9.25rem" $black>
+        </StudySessionButton>
+        <StudySessionButton width="9.25rem" $black>
           <MaterialSymbol icon="dictionary" size={35} color="var(--white)" />
           Palavra
-        </SSButton>
+        </StudySessionButton>
       </div>
     </Container>
   );

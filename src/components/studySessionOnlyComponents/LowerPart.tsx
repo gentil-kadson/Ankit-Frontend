@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import Radio from "../Radio";
-import SSButton from "./SSButton";
+import StudySessionButton from "./StudySessionButton";
 import { MaterialSymbol } from "react-material-symbols";
 
 export default function LowerPart() {
@@ -19,10 +19,10 @@ export default function LowerPart() {
           <Radio id="advanced" labelText="Avançado" name="card-level-radio" />
         </div>
       </section>
-      <SSButton width="11.375rem">
+      <StudySessionButton width="11.375rem">
         <MaterialSymbol icon="download" size={35} color="var(--white)" />
         Vocabulário
-      </SSButton>
+      </StudySessionButton>
     </Container>
   );
 }

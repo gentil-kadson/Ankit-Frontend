@@ -6,7 +6,11 @@ type Props = {
   width: string;
 };
 
-export default function SSButton({ children, width, ...props }: Props) {
+export default function StudySessionButton({
+  children,
+  width,
+  ...props
+}: Props) {
   return (
     <Button width={width} {...props}>
       {children}
