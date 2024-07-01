@@ -9,6 +9,7 @@ import LanguageStatisticRow from "@/components/statistics/LanguageStatisticRow";
 import StreakStudyRow from "@/components/statistics/StreakStudy";
 import FormGroup from "@/components/FormGroup";
 import Select from "@/components/Select";
+import LanguageStatisticsSection from "@/components/statistics/LanguageStatisticsSection";
 
 import brazilFlag from "/public/brazilFlag.svg";
 
@@ -42,20 +43,7 @@ export default function Statistics() {
                     <StreakStudyRow icon="alarm" text="Tempo de Estudo (min)" number={25}/>
                 </StatisticsCard>
             </StreakHoursSection>
-            <LanguageStatisticsSection>
-                <StatisticsCard title="Quantidade de Cards por Idioma">
-                    <LanguageStatisticRow flagSrc={brazilFlag} alt="brazil-flag" language="Portuguese" number={25}/>
-                    <LanguageStatisticRow flagSrc={brazilFlag} alt="brazil-flag" language="Portuguese" number={25}/>
-                    <LanguageStatisticRow flagSrc={brazilFlag} alt="brazil-flag" language="Portuguese" number={25}/>
-                    <LanguageStatisticRow flagSrc={brazilFlag} alt="brazil-flag" language="Portuguese" number={25}/>
-                </StatisticsCard>
-                <StatisticsCard title="Sessões de Estudo por Idioma">
-                    <LanguageStatisticRow flagSrc={brazilFlag} alt="brazil-flag" language="Portuguese" number={25}/>
-                    <LanguageStatisticRow flagSrc={brazilFlag} alt="brazil-flag" language="Portuguese" number={25}/>
-                    <LanguageStatisticRow flagSrc={brazilFlag} alt="brazil-flag" language="Portuguese" number={25}/>
-                    <LanguageStatisticRow flagSrc={brazilFlag} alt="brazil-flag" language="Portuguese" number={25}/>
-                </StatisticsCard>
-            </LanguageStatisticsSection>
+            <LanguageStatisticsSection />
         </Main>
     </> 
     )
@@ -98,15 +86,4 @@ const StreakHoursSection = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 0.9375rem;
-`
-
-const LanguageStatisticsSection = styled.div`
-    display: flex;
-    justify-content: center;
-    gap: 15.625rem;
-
-    @media(max-width: 875px) {
-        flex-direction: column;
-        align-items: center;
-    }
 `
