@@ -59,6 +59,14 @@ const Section = styled.section`
   align-items: center;
   justify-content: space-between;
 
+  position: fixed;
+  transform: translateX(100%);
+  background-color: var(--component);
+
+  -webkit-box-shadow: 0px 0.375rem 0.3125 0.1875rem rgba(0,0,0,0.43);
+  -moz-box-shadow: 0px 0.375rem 0.3125 0.1875rem rgba(0,0,0,0.43);
+  box-shadow: 0px 0.375rem 0.3125 0.1875rem rgba(0,0,0,0.43);
+
   main {
     display: flex;
     flex-direction: column;

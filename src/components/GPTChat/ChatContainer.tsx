@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 type Props = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 export default function ChatContainer({ children }: Props) {
@@ -10,6 +10,7 @@ export default function ChatContainer({ children }: Props) {
 
 const Container = styled.div`
   max-width: 58.375rem;
+  width: 100%;
   max-height: 38.0625rem;
   height: 38.0625rem;
 
