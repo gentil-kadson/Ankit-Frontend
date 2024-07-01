@@ -1,0 +1,42 @@
+import styled from "styled-components";
+
+import { MaterialSymbol } from "react-material-symbols";
+
+export default function SearchInput() {
+  return (
+    <Container>
+      <input
+        type="text"
+        name="search-ss"
+        id="search-ss"
+        placeholder="The Whale..."
+      />
+      <div className="search-icon-container">
+        <MaterialSymbol icon="search" color="var(--white)" size={24} />
+      </div>
+    </Container>
+  );
+}
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+
+  position: relative;
+
+  input {
+    display: flex;
+    align-items: center;
+
+    width: 16rem;
+    padding: 0.75rem;
+    padding-right: 2.2rem;
+
+    font-weight: normal;
+  }
+
+  .search-icon-container {
+    position: absolute;
+    right: 4%;
+  }
+`;
