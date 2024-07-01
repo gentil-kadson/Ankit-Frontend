@@ -1,12 +1,11 @@
 import styled from "styled-components";
 
 import ChatContainer from "@/components/GPTChat/ChatContainer";
-import FormGroup from "@/components/FormGroup";
-import Label from "@/components/Label";
 import Button from "@/components/Button";
 import SSButton from "@/components/studySessionOnlyComponents/SSButton";
 import { MaterialSymbol } from "react-material-symbols";
 import Radio from "@/components/Radio";
+import UpperPart from "@/components/studySessionOnlyComponents/UpperPart";
 
 export default function StudySession() {
   return (
@@ -15,32 +14,7 @@ export default function StudySession() {
         <></>
       </ChatContainer>
       <form method="POST">
-        <div className="upper-part">
-          <div className="left-side">
-            <input type="text" name="word-topic" id="word-topic" />
-            <Button width="3.75rem">
-              <MaterialSymbol
-                icon="arrow_upward"
-                color="var(--white)"
-                size={30}
-              />
-            </Button>
-          </div>
-          <div className="right-side">
-            <SSButton width="9.25rem">
-              <MaterialSymbol icon="topic" size={35} color="var(--white)" />
-              Tópico
-            </SSButton>
-            <SSButton width="9.25rem" $black>
-              <MaterialSymbol
-                icon="dictionary"
-                size={35}
-                color="var(--white)"
-              />
-              Palavra
-            </SSButton>
-          </div>
-        </div>
+        <UpperPart />
         <div className="lower-part">
           <section id="card-levels">
             <h2>Nível de Card</h2>
@@ -81,25 +55,6 @@ const Main = styled.main`
 
   form {
     width: 100%;
-
-    .upper-part {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-
-      .left-side,
-      .right-side {
-        display: flex;
-      }
-
-      .left-side {
-        gap: 0.75rem;
-      }
-
-      .right-side {
-        gap: 1rem;
-      }
-    }
 
     .lower-part {
       display: flex;
