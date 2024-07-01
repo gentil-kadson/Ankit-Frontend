@@ -2,14 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 type Props = {
-  title: string;
+  title?: string;
   children: React.ReactNode;
 };
 
 export default function StatisticsCard({ title, children }: Props) {
   return (
     <StatisticsSection>
-      <h2>{title}</h2>
+      {title && <h2>{title}</h2>}
       <StatisticsCardsGroup>{children}</StatisticsCardsGroup>
     </StatisticsSection>
   );
@@ -20,10 +20,12 @@ const StatisticsSection = styled.section`
   flex-direction: column;
   max-width: 30.625rem;
   background-color: var(--component);
+  border-radius: 10px;
 
   h2 {
     color: var(--blue);
     font-weight: bold;
+    padding: 1rem;
   }
 `;
 

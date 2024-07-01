@@ -18,6 +18,8 @@ export default function FlagItem({ src, alt, language }: Props) {
 }
 
 const LanguageFlagItem = styled.p`
+  display: flex;
+  align-items: center;
   color: var(--white);
   font-weight: bold;
 
