@@ -129,4 +129,49 @@ const Main = styled.main`
       }
     }
   }
+
+  @media (max-width: 432px) {
+    .upper-part,
+    .left-side,
+    .right-side,
+    .lower-part {
+      flex-direction: column;
+    }
+
+    .upper-part {
+      gap: 1.5rem;
+    }
+
+    .left-side {
+      gap: 1rem;
+    }
+
+    .right-side {
+      button {
+        width: 100%;
+      }
+    }
+
+    form {
+      .lower-part {
+        gap: 1rem;
+
+        #card-levels {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .radios-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+          }
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
 `;
