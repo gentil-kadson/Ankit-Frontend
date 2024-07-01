@@ -3,6 +3,11 @@ import styled from "styled-components";
 
 type Props = {
   children: React.ReactNode;
+  name?: string;
+  id?: string;
+  required?: boolean;
+  onChange?: (event?: any) => void;
+  value?: string;
 };
 
 export default function Select({ children, ...props }: Props) {
