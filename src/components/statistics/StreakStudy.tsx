@@ -33,6 +33,7 @@ const Row = styled.div`
   color: var(--blue);
   font-weight: bold;
   gap: 2.75rem;
+  padding: 1rem;
 
   span {
     color: var(--white);

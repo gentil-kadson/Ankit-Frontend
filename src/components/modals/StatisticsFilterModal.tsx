@@ -7,26 +7,26 @@ import Radio from "../Radio";
 const buttonsData = [
   {
     symbolIcon: "check" as SymbolCodepoints,
-    text: "Apply",
+    text: "Filtrar",
   },
   {
-    text: "Cancel",
+    text: "Cancelar",
   },
 ];
 
 export default function StatisticsFilterModal() {
   const formElements = (
     <Container>
-      <h3>Select One</h3>
+      <h3>Selecione uma Opção</h3>
       <div className="radio-buttons-container">
-        <Radio id="this-month" labelText="This month" name="this-month" />
+        <Radio id="this-month" labelText="Este mês" name="history_date__date__lte" />
         <Radio
           id="last-six-months"
-          labelText="Last 6 months"
-          name="Last 6 months"
+          labelText="Últimos 6 meses"
+          name="history_date__date__lte"
         />
-        <Radio id="this-year" labelText="This year" name="This year" />
-        <Radio id="none" labelText="None" name="None" />
+        <Radio id="this-year" labelText="Este ano" name="history_date__date__lte" />
+        <Radio id="none" labelText="Nenhum" name="history_date__date__lte" />
       </div>
     </Container>
   );
