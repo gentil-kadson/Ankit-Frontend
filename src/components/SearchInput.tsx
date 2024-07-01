@@ -39,4 +39,11 @@ const Container = styled.div`
     position: absolute;
     right: 4%;
   }
+
+  @media (max-width: 432px) {
+    width: 100%;
+    input {
+      width: 100%;
+    }
+  }
 `;

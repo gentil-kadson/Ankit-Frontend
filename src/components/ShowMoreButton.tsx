@@ -26,4 +26,8 @@ const Button = styled.button`
   color: var(--white);
   font-size: 1.25rem;
   font-weight: bold;
+
+  @media (max-width: 431px) {
+    display: none;
+  }
 `;
