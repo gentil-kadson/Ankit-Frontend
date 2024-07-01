@@ -5,7 +5,7 @@ import SSButton from "./SSButton";
 
 export default function UpperPart() {
   return (
-    <Container className="upper-part">
+    <Container>
       <div className="left-side">
         <input type="text" name="word-topic" id="word-topic" />
         <Button width="3.75rem">
@@ -30,6 +30,7 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  gap: 1.5rem;
 
   .left-side,
   .right-side {
@@ -47,5 +48,16 @@ const Container = styled.div`
   @media (max-width: 431px) {
     flex-direction: column;
     gap: 1.5rem;
+
+    .left-side {
+      gap: 1rem;
+      flex-direction: column;
+    }
+
+    .right-side {
+      button {
+        width: 100%;
+      }
+    }
   }
 `;
