@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import useScreenSize from "@/hooks/useScreenSize";
 
 import Title from "@/components/Title";
 import StudySessionCard from "@/components/studySessionCard/StudySessionCard";
@@ -9,6 +10,8 @@ import Select from "@/components/Select";
 import { MaterialSymbol } from "react-material-symbols";
 
 export default function Home() {
+  const { width } = useScreenSize();
+
   return (
     <Main>
       <div className="title-and-filter">
@@ -48,11 +51,12 @@ export default function Home() {
           title="The Whale"
         />
       </div>
+      {width <= 432 && <ShowMoreButton width={width} />}
       <div id="sticky-buttons-container">
         <StartStudySession>
           <MaterialSymbol icon="add" color="var(--white)" size={40} />
         </StartStudySession>
-        <ShowMoreButton />
+        {width >= 433 && <ShowMoreButton width={width} />}
       </div>
     </Main>
   );

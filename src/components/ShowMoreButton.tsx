@@ -1,8 +1,42 @@
 import styled from "styled-components";
 
-export default function ShowMoreButton() {
-  return <Button>Mostar mais</Button>;
+import Image from "next/image";
+import SelectArrow from "/public/selectArrow.svg";
+
+type Props = {
+  width: number;
+};
+
+export default function ShowMoreButton({ width }: Props) {
+  const showMoreElement =
+    width <= 431 ? (
+      <MobileButtonContainer>
+        <button id="mobile-show-more">
+          <Image
+            src={SelectArrow}
+            width={40}
+            height={40}
+            alt="Uma seta que aponta para baixo"
+          />
+        </button>
+      </MobileButtonContainer>
+    ) : (
+      <Button>Mostar mais</Button>
+    );
+
+  return showMoreElement;
 }
+
+const MobileButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  button {
+    background: transparent;
+  }
+`;
 
 const Button = styled.button`
   display: flex;
@@ -27,7 +61,7 @@ const Button = styled.button`
   font-size: 1.25rem;
   font-weight: bold;
 
-  @media (max-width: 431px) {
-    display: none;
+  @media (max-width: 432px) {
+    align-self: center;
   }
 `;
