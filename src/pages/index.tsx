@@ -51,12 +51,11 @@ export default function Home() {
           title="The Whale"
         />
       </div>
-      {width <= 432 && <ShowMoreButton width={width} />}
+      <ShowMoreButton width={width} />
       <div id="sticky-buttons-container">
         <StartStudySession>
           <MaterialSymbol icon="add" color="var(--white)" size={40} />
         </StartStudySession>
-        {width >= 433 && <ShowMoreButton width={width} />}
       </div>
     </Main>
   );
@@ -103,7 +102,7 @@ const Main = styled.main`
     align-items: center;
 
     position: sticky;
-    bottom: 0;
+    bottom: 0.625rem;
   }
 
   @media (max-width: 432px) {
