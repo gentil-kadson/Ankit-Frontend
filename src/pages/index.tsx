@@ -4,6 +4,8 @@ import Title from "@/components/Title";
 import StudySessionCard from "@/components/studySessionCard/StudySessionCard";
 import SearchInput from "@/components/SearchInput";
 import ShowMoreButton from "@/components/ShowMoreButton";
+import Button from "@/components/Button";
+import Select from "@/components/Select";
 import { MaterialSymbol } from "react-material-symbols";
 
 export default function Home() {
@@ -11,45 +13,22 @@ export default function Home() {
     <Main>
       <div className="title-and-filter">
         <Title>My Study Sessions</Title>
-        <SearchInput />
+        <div className="filters-container">
+          <SearchInput />
+          <form className="language-filter-container">
+            <Select width="12rem">
+              <option value="english">Inglês</option>
+              <option value="german">Alemão</option>
+              <option value="japanese">Japonês</option>
+            </Select>
+            <Button width="7.8125rem">
+              <MaterialSymbol icon="filter_list" size={22.5} fill />
+              Filtrar
+            </Button>
+          </form>
+        </div>
       </div>
       <div className="cards-container">
-        <StudySessionCard
-          numberOfCards={10}
-          studiedLanguage="Inglês"
-          studyTime={10}
-          title="The Whale"
-        />
-        <StudySessionCard
-          numberOfCards={10}
-          studiedLanguage="Inglês"
-          studyTime={10}
-          title="The Whale"
-        />
-        <StudySessionCard
-          numberOfCards={10}
-          studiedLanguage="Inglês"
-          studyTime={10}
-          title="The Whale"
-        />
-        <StudySessionCard
-          numberOfCards={10}
-          studiedLanguage="Inglês"
-          studyTime={10}
-          title="The Whale"
-        />
-        <StudySessionCard
-          numberOfCards={10}
-          studiedLanguage="Inglês"
-          studyTime={10}
-          title="The Whale"
-        />
-        <StudySessionCard
-          numberOfCards={10}
-          studiedLanguage="Inglês"
-          studyTime={10}
-          title="The Whale"
-        />
         <StudySessionCard
           numberOfCards={10}
           studiedLanguage="Inglês"
@@ -92,6 +71,17 @@ const Main = styled.main`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .filters-container {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .language-filter-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
   }
 
   .cards-container {
@@ -117,6 +107,16 @@ const Main = styled.main`
       flex-direction: column;
       align-items: flex-start;
       gap: 1rem;
+    }
+
+    .filters-container,
+    .language-filter-container {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    select {
+      width: 100%;
     }
   }
 `;

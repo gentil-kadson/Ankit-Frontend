@@ -8,17 +8,20 @@ type Props = {
   required?: boolean;
   onChange?: (event?: any) => void;
   value?: string;
+  width?: string;
 };
 
 export default function Select({ children, ...props }: Props) {
   return <SelectInput {...props}>{children}</SelectInput>;
 }
 
-const SelectInput = styled.select`
+const SelectInput = styled.select<{ width?: string }>`
   display: flex;
   justify-content: flex-start;
   align-items: center;
   gap: 0.375rem;
+
+  width: ${(props) => (props.width ? props.width : "26.375rem")};
 
   appearance: none;
   background-image: url("selectArrow.svg");
