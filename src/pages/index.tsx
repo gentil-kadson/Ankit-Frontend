@@ -9,58 +9,46 @@ import Button from "@/components/Button";
 import Select from "@/components/Select";
 import Navbar from "@/components/Navbar";
 import { MaterialSymbol } from "react-material-symbols";
+import HomepageFilters from "@/components/HomepageFilters";
 
 export default function Home() {
   const { width } = useScreenSize();
 
   return (
     <>
-    <Navbar />
-    <Main>
-      <div className="title-and-filter">
-        <Title>My Study Sessions</Title>
-        <div className="filters-container">
-          <SearchInput />
-          <form className="language-filter-container">
-            <Select width="12rem">
-              <option value="english">Inglês</option>
-              <option value="german">Alemão</option>
-              <option value="japanese">Japonês</option>
-            </Select>
-            <Button width="7.8125rem">
-              <MaterialSymbol icon="filter_list" size={22.5} fill />
-              Filtrar
-            </Button>
-          </form>
+      <Navbar />
+      <Main>
+        <div className="title-and-filter">
+          <Title>My Study Sessions</Title>
+          <HomepageFilters />
         </div>
-      </div>
-      <div className="cards-container">
-        <StudySessionCard
-          numberOfCards={10}
-          studiedLanguage="Inglês"
-          studyTime={10}
-          title="The Whale"
-        />
-        <StudySessionCard
-          numberOfCards={10}
-          studiedLanguage="Inglês"
-          studyTime={10}
-          title="The Whale"
-        />
-        <StudySessionCard
-          numberOfCards={10}
-          studiedLanguage="Inglês"
-          studyTime={10}
-          title="The Whale"
-        />
-      </div>
-      <ShowMoreButton width={width} />
-      <div id="sticky-buttons-container">
-        <StartStudySession>
-          <MaterialSymbol icon="add" color="var(--white)" size={40} />
-        </StartStudySession>
-      </div>
-    </Main>
+        <div className="cards-container">
+          <StudySessionCard
+            numberOfCards={10}
+            studiedLanguage="Inglês"
+            studyTime={10}
+            title="The Whale"
+          />
+          <StudySessionCard
+            numberOfCards={10}
+            studiedLanguage="Inglês"
+            studyTime={10}
+            title="The Whale"
+          />
+          <StudySessionCard
+            numberOfCards={10}
+            studiedLanguage="Inglês"
+            studyTime={10}
+            title="The Whale"
+          />
+        </div>
+        <ShowMoreButton width={width} />
+        <div id="sticky-buttons-container">
+          <StartStudySession>
+            <MaterialSymbol icon="add" color="var(--white)" size={40} />
+          </StartStudySession>
+        </div>
+      </Main>
     </>
   );
 }
@@ -79,7 +67,7 @@ const Main = styled.main`
     justify-content: space-between;
     align-items: center;
 
-    .filters-container {
+    /* .filters-container {
       display: flex;
       gap: 1rem;
     }
@@ -88,7 +76,7 @@ const Main = styled.main`
       display: flex;
       align-items: center;
       gap: 1rem;
-    }
+    } */
   }
 
   .cards-container {
@@ -116,11 +104,11 @@ const Main = styled.main`
       gap: 1rem;
     }
 
-    .filters-container,
+    /* .filters-container,
     .language-filter-container {
       flex-direction: column;
       width: 100%;
-    }
+    } */
 
     select {
       width: 100%;
