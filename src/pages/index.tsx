@@ -7,12 +7,15 @@ import SearchInput from "@/components/SearchInput";
 import ShowMoreButton from "@/components/ShowMoreButton";
 import Button from "@/components/Button";
 import Select from "@/components/Select";
+import Navbar from "@/components/Navbar";
 import { MaterialSymbol } from "react-material-symbols";
 
 export default function Home() {
   const { width } = useScreenSize();
 
   return (
+    <>
+    <Navbar />
     <Main>
       <div className="title-and-filter">
         <Title>My Study Sessions</Title>
@@ -58,6 +61,7 @@ export default function Home() {
         </StartStudySession>
       </div>
     </Main>
+    </>
   );
 }
 
