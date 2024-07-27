@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import { MaterialSymbol } from "react-material-symbols";
 import StudySessionInfo from "./StudySessionInfo";
 import StudySessionActionButton from "./StudySessionActionButton";
@@ -49,7 +50,7 @@ export default function StudySessionCard({
 const Container = styled.div`
   border-radius: 1rem;
 
-  width: 25rem;
+  width: 24.96rem;
   height: 18.8125rem;
 
   .card-title {
