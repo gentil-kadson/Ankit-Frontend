@@ -7,50 +7,59 @@ import Button from "@/components/Button";
 import { MaterialSymbol } from "react-material-symbols";
 import ProfileInputsArea from "@/components/ProfileInputsArea";
 import Image from "next/image";
+import Navbar from "@/components/Navbar";
 
 export default function Me() {
   return (
-    <Main>
-      <div className="profile-picture">
-        <figure>
-          <ProfilePicture width={150} height={150} src={NoProfilePicture} />
-        </figure>
-        <div className="buttons-container">
-          <Button width="16.4375rem">
-            <MaterialSymbol icon="upload" color="var(--white)" fill size={25} />
-            Upload Picture
-          </Button>
-          <Button width="16.4375rem" $inverted>
-            <MaterialSymbol
-              icon="no_photography"
-              color="var(--blue)"
-              size={25}
-            />
-            Remove Picture
-          </Button>
-        </div>
-      </div>
-      <div className="user-data">
-        <ProfileInputsArea />
-        <div className="action-buttons-container">
-          <div className="left-side-buttons">
-            <Button width="12.375rem" className="danger-button">
-              Deletar Conta
-            </Button>
-            <Button width="12.375rem" $inverted>
-              Remover Link{" "}
-              <Image
-                src={GoogleLogo}
-                width={24}
-                height={24}
-                alt="G com cores da empresa Google"
+    <>
+      <Navbar />
+      <Main>
+        <div className="profile-picture">
+          <figure>
+            <ProfilePicture width={150} height={150} src={NoProfilePicture} />
+          </figure>
+          <div className="buttons-container">
+            <Button width="16.4375rem">
+              <MaterialSymbol
+                icon="upload"
+                color="var(--white)"
+                fill
+                size={25}
               />
+              Upload Picture
+            </Button>
+            <Button width="16.4375rem" $inverted>
+              <MaterialSymbol
+                icon="no_photography"
+                color="var(--blue)"
+                size={25}
+              />
+              Remove Picture
             </Button>
           </div>
-          <Button width="12.0625rem">Save Changes</Button>
         </div>
-      </div>
-    </Main>
+        <div className="user-data">
+          <ProfileInputsArea />
+          <div className="action-buttons-container">
+            <div className="left-side-buttons">
+              <Button width="12.375rem" className="danger-button">
+                Deletar Conta
+              </Button>
+              <Button width="12.375rem" $inverted>
+                Remover Link{" "}
+                <Image
+                  src={GoogleLogo}
+                  width={24}
+                  height={24}
+                  alt="G com cores da empresa Google"
+                />
+              </Button>
+            </div>
+            <Button width="12.0625rem">Save Changes</Button>
+          </div>
+        </div>
+      </Main>
+    </>
   );
 }
 
@@ -58,7 +67,7 @@ const Main = styled.main`
   max-width: 1240px;
   margin: auto;
   padding-top: 3.75rem;
-  padding-bottom: 5.8125rem;
+  padding-bottom: 4rem;
 
   display: flex;
   flex-direction: column;

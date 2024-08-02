@@ -1,20 +1,24 @@
 import styled from "styled-components";
 
+import Navbar from "@/components/Navbar";
 import ChatContainer from "@/components/GPTChat/ChatContainer";
 import UpperPart from "@/components/studySessionOnlyComponents/UpperPart";
 import LowerPart from "@/components/studySessionOnlyComponents/LowerPart";
 
 export default function StudySession() {
   return (
-    <Main>
-      <ChatContainer>
-        <></>
-      </ChatContainer>
-      <form method="POST">
-        <UpperPart />
-        <LowerPart />
-      </form>
-    </Main>
+    <>
+      <Navbar />
+      <Main>
+        <ChatContainer>
+          <></>
+        </ChatContainer>
+        <form method="POST">
+          <UpperPart />
+          <LowerPart />
+        </form>
+      </Main>
+    </>
   );
 }
 
@@ -22,6 +26,7 @@ const Main = styled.main`
   max-width: 58.375rem;
   margin: auto;
   padding-top: 4.75rem;
+  padding-bottom: 4rem;
 
   &,
   form {
