@@ -66,7 +66,7 @@ const Main = styled.main`
   align-items: center;
   gap: 1.25rem;
 
-  padding-top: 2.5rem;
+  padding-top: 4.75rem;
   padding-bottom: 4rem;
 `;
 

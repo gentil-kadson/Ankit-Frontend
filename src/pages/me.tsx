@@ -66,7 +66,7 @@ export default function Me() {
 const Main = styled.main`
   max-width: 1240px;
   margin: auto;
-  padding-top: 3.75rem;
+  padding-top: 4.75rem;
   padding-bottom: 4rem;
 
   display: flex;
