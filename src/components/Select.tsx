@@ -28,4 +28,8 @@ const SelectInput = styled.select<{ width?: string }>`
   background-repeat: no-repeat;
   background-position: right 0.7rem top 50%;
   background-size: 1.5rem auto;
+
+  @media (max-width: 432px) {
+    width: 100%;
+  }
 `;

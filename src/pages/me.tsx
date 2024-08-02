@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import NoProfilePicture from "/public/noProfilePicture.svg";
+import GoogleLogo from "/public/googleLogo.svg";
 
 import ProfilePicture from "@/components/ProfilePicture";
 import Button from "@/components/Button";
 import { MaterialSymbol } from "react-material-symbols";
 import ProfileInputsArea from "@/components/ProfileInputsArea";
+import Image from "next/image";
 
 export default function Me() {
   return (
@@ -30,7 +32,23 @@ export default function Me() {
       </div>
       <div className="user-data">
         <ProfileInputsArea />
-        <Button width="12.0625rem">Save Changes</Button>
+        <div className="action-buttons-container">
+          <div className="left-side-buttons">
+            <Button width="12.375rem" className="danger-button">
+              Deletar Conta
+            </Button>
+            <Button width="12.375rem" $inverted>
+              Remover Link{" "}
+              <Image
+                src={GoogleLogo}
+                width={24}
+                height={24}
+                alt="G com cores da empresa Google"
+              />
+            </Button>
+          </div>
+          <Button width="12.0625rem">Save Changes</Button>
+        </div>
       </div>
     </Main>
   );
@@ -72,8 +90,18 @@ const Main = styled.main`
     align-items: center;
     gap: 7.6875rem;
 
-    button {
-      align-self: flex-end;
+    .action-buttons-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      width: 100%;
+
+      .left-side-buttons {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
     }
   }
 
@@ -91,8 +119,14 @@ const Main = styled.main`
     .user-data {
       width: 100%;
 
-      button {
-        align-self: center;
+      .action-buttons-container {
+        flex-direction: column;
+        gap: 1rem;
+
+        .left-side-buttons {
+          flex-direction: column;
+          width: 100%;
+        }
       }
     }
   }

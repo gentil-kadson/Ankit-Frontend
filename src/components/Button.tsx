@@ -46,6 +46,10 @@ const CustomButton = styled.button<{
   height: ${(props) => (props.height ? props.height : "auto")};
   color: ${(props) => (props.$inverted ? "var(--blue)" : "var(--white)")};
 
+  &.danger-button {
+    background-color: var(--red);
+  }
+
   @media (max-width: 431px) {
     width: 100%;
   }
