@@ -13,7 +13,6 @@ const NavDropdownContainer = styled.nav`
   display: flex;
   flex-direction: column;
   position: absolute;
-  gap: 1.1875rem;
   right: 2.5rem;
   top: 6.25rem;
 
@@ -30,11 +29,11 @@ const NavDropdownContainer = styled.nav`
   }
 
   *:first-child {
-    border-radius: 0.875rem 0px 0px;
+    border-radius: 0.875rem 0.875rem 0rem 0rem;
   }
 
   *:last-child {
-    border-radius: 0px 0px 0.875rem;
+    border-radius: 0rem 0rem 0.875rem 0.875rem;
   }
 
   *:hover {

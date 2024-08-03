@@ -43,7 +43,8 @@ const Main = styled.main`
   gap: 3.125rem;
   max-width: 77.5rem;
   margin: auto;
-  padding: 3.75rem 0px;
+  padding-top: 4.75rem;
+  padding-bottom: 4rem;
 `;
 
 const Header = styled.header`

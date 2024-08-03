@@ -57,6 +57,7 @@ const Main = styled.main`
   max-width: 1240px;
   margin: auto;
   padding-top: 4.75rem;
+  padding-bottom: 4rem;
 
   display: flex;
   flex-direction: column;

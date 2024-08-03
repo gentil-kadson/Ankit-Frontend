@@ -36,9 +36,8 @@ export default function Navbar() {
       />
       {displayDropdown && (
         <NavDropdown>
-          <Link href="#">Texto 1</Link>
-          <Link href="#">Texto 2</Link>
-          <Link href="#">Texto 3</Link>
+          <Link href="/me">Meu perfil</Link>
+          <Link href="/statistics">Estatísticas</Link>
         </NavDropdown>
       )}
     </NavbarContainer>

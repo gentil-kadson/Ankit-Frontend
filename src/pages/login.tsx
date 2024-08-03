@@ -65,6 +65,9 @@ const Main = styled.main`
   justify-content: center;
   align-items: center;
   gap: 1.25rem;
+
+  padding-top: 4.75rem;
+  padding-bottom: 4rem;
 `;
 
 const Header = styled.header`
