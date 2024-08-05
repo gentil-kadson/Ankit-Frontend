@@ -1,9 +1,10 @@
+import styled from "styled-components";
+import { FormEvent, useContext, useRef } from "react";
+import AuthContext from "@/context/AuthContext";
+
 import Image from "next/image";
 import Link from "next/link";
-
 import { MaterialSymbol } from "react-material-symbols";
-import styled from "styled-components";
-
 import Label from "@/components/Label";
 import FormGroup from "@/components/FormGroup";
 import Button from "@/components/Button";
@@ -11,6 +12,17 @@ import Button from "@/components/Button";
 import googleLogo from "/public/googleLogo.svg";
 
 export default function Login() {
+  const { user, loginUser } = useContext(AuthContext);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  async function handleUserLogin(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (emailRef.current && passwordRef.current) {
+      await loginUser(emailRef.current.value, passwordRef.current.value);
+    }
+  }
+
   return (
     <Main>
       <Header>
@@ -27,19 +39,24 @@ export default function Login() {
           Sua ferramenta para aprender idiomas <span>de maneira prática</span>
         </h2>
       </Header>
-      <LoginForm method="post">
+      <LoginForm method="post" onSubmit={(e) => handleUserLogin(e)}>
         <fieldset>
           <FormGroup>
             <Label inputId="email" symbolIcon="email">
               Email
             </Label>
-            <input type="email" name="email" id="email" />
+            <input ref={emailRef} type="email" name="email" id="email" />
           </FormGroup>
           <FormGroup>
             <Label inputId="password" symbolIcon="password">
               Senha
             </Label>
-            <input type="password" name="password" id="password" />
+            <input
+              ref={passwordRef}
+              type="password"
+              name="password"
+              id="password"
+            />
           </FormGroup>
         </fieldset>
         <div id="buttons">
@@ -55,6 +72,7 @@ export default function Login() {
           </Link>
         </span>
       </LoginForm>
+      <p>{!user && user}</p>
     </Main>
   );
 }

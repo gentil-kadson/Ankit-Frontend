@@ -1,17 +1,22 @@
-import Link from "next/link";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { MaterialSymbol } from "react-material-symbols";
+import Router from "next/router";
+import { cookies } from "@/context/AuthContext";
 
+import Link from "next/link";
+import { MaterialSymbol } from "react-material-symbols";
 import ProfilePicture from "./ProfilePicture";
 import NavDropdown from "./NavDropdown";
 
 import brazilFlag from "/public/brazilFlag.svg";
 
 export default function Navbar() {
-  // TODO: Make request or get user data from cookie session to fill src attr
   const [displayDropdown, setDisplayDropDown] = useState<boolean>(false);
+  useEffect(() => {
+    if (!cookies.get("accessToken")) {
+      Router.push("/login");
+    }
+  }, []);
 
   const handleDropdown = () => {
     setDisplayDropDown((prevState) => !displayDropdown);
