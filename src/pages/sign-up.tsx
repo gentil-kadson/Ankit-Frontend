@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 
@@ -9,9 +9,15 @@ import Button from "@/components/Button";
 import Select from "@/components/Select";
 import FormGroup from "@/components/FormGroup";
 import Label from "@/components/Label";
+import ErrorMessage from "@/components/ErrorMessage";
+
+import AuthService from "@/services/AuthService";
+import { HTTP_201_CREATED } from "@/utils/constants";
 
 export default function SignUp() {
   const [currentFormStep, setCurrentFormStep] = useState<number>(1);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [successMessage, setSuccessMessage] = useState<string>("");
   const {
     register,
     watch,
@@ -19,8 +25,22 @@ export default function SignUp() {
     formState: { errors },
   } = useForm();
 
-  function handleUserCreation(data: any) {
-    console.log(data);
+  useEffect(() => {
+    console.log(errorMessages);
+  }, []);
+
+  async function handleUserCreation(data: any) {
+    const authService = new AuthService();
+    const response = await authService.createUser(data);
+    if (response.status === HTTP_201_CREATED) {
+      setSuccessMessage(
+        "Usuário criado com sucesso! Preencha os dados de estudante"
+      );
+      setCurrentFormStep(2);
+    } else {
+      const errors = Object.values(response.data).flat();
+      setErrorMessages(errors as string[]);
+    }
   }
 
   function renderUserDataForm() {
@@ -126,9 +146,6 @@ export default function SignUp() {
             </FormGroup>
           </fieldset>
           <StudentFormButtons>
-            <Button width="59px" onClick={() => setCurrentFormStep(1)}>
-              <MaterialSymbol icon="arrow_back" size={33} />
-            </Button>
             <Button type="submit" width="59px">
               <MaterialSymbol icon="check" size={33} />
             </Button>
@@ -161,6 +178,14 @@ export default function SignUp() {
             experiência no <span>Ankit</span>
           </p>
         </span>
+        {errorMessages && (
+          <ErrorMessages>
+            {errorMessages.map((value, idx) => (
+              <ErrorMessage key={idx}>{value}</ErrorMessage>
+            ))}
+          </ErrorMessages>
+        )}
+        {successMessage && <p>{successMessage}</p>}
       </header>
       {renderForm()}
     </Main>
@@ -280,4 +305,11 @@ const StudentFormButtons = styled.div`
     width: 80%;
     justify-content: center;
   }
+`;
+
+const ErrorMessages = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 40px;
 `;
