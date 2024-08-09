@@ -100,7 +100,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       cookies.set("refreshToken", data.refresh, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
       });
-      Router.push("/");
     } else {
       const err = "Credenciais inválidas.";
       console.log(err);

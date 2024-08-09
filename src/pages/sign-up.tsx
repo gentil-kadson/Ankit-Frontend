@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 
@@ -10,11 +10,13 @@ import Select from "@/components/Select";
 import FormGroup from "@/components/FormGroup";
 import Label from "@/components/Label";
 import ApiMessage from "@/components/ApiMessage";
+import AuthContext from "@/context/AuthContext";
 
 import AuthService from "@/services/AuthService";
 import { HTTP_201_CREATED } from "@/utils/constants";
 
 export default function SignUp() {
+  const { loginUser } = useContext(AuthContext);
   const [currentFormStep, setCurrentFormStep] = useState<number>(1);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string>("");
@@ -33,6 +35,7 @@ export default function SignUp() {
         "Usuário criado com sucesso! Preencha os dados de estudante"
       );
       setCurrentFormStep(2);
+      await loginUser(data.email, data.password1);
     } else {
       const errors = Object.values(response.data).flat();
       setErrorMessages(errors as string[]);
