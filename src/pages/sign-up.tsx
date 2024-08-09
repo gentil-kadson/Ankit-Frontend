@@ -9,7 +9,7 @@ import Button from "@/components/Button";
 import Select from "@/components/Select";
 import FormGroup from "@/components/FormGroup";
 import Label from "@/components/Label";
-import ErrorMessage from "@/components/ErrorMessage";
+import ApiMessage from "@/components/ApiMessage";
 
 import AuthService from "@/services/AuthService";
 import { HTTP_201_CREATED } from "@/utils/constants";
@@ -24,10 +24,6 @@ export default function SignUp() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  useEffect(() => {
-    console.log(errorMessages);
-  }, []);
 
   async function handleUserCreation(data: any) {
     const authService = new AuthService();
@@ -181,11 +177,11 @@ export default function SignUp() {
         {errorMessages && (
           <ErrorMessages>
             {errorMessages.map((value, idx) => (
-              <ErrorMessage key={idx}>{value}</ErrorMessage>
+              <ApiMessage category="error" key={idx}>{value}</ApiMessage>
             ))}
           </ErrorMessages>
         )}
-        {successMessage && <p>{successMessage}</p>}
+        {successMessage && <ApiMessage category="success">{ successMessage }</ApiMessage>}
       </header>
       {renderForm()}
     </Main>

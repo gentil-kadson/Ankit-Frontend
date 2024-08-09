@@ -1,4 +1,3 @@
-import { Axios, AxiosError } from "axios";
 import api from "./api";
 
 type CreateUserData = {
