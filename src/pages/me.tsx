@@ -9,56 +9,78 @@ import ProfileInputsArea from "@/components/ProfileInputsArea";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 
-export default function Me() {
+import UserService from "@/services/UserService";
+import NationalityService from "@/services/NationalityService";
+import { HTTP_200_OK } from "@/utils/constants";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+
+export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
+  const accessToken = ctx.req.cookies.accessToken ? ctx.req.cookies.accessToken : "";
+  const userService = new UserService(accessToken);
+  const response = await userService.getMe();
+  
+  const nationalityService = new NationalityService();
+  const nationalitiesResponse = await nationalityService.getNationalities();
+
+  if (response.status === HTTP_200_OK) {
+    return { props: { user: response.data, nationalities: nationalitiesResponse.data } }
+  } else {
+    return { props: { user: null, nationalities: nationalitiesResponse.data } }
+  }
+});
+
+export default function Me({ user, nationalities }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
       <Navbar />
-      <Main>
-        <div className="profile-picture">
-          <figure>
-            <ProfilePicture width={150} height={150} src={NoProfilePicture} />
-          </figure>
-          <div className="buttons-container">
-            <Button width="16.4375rem">
-              <MaterialSymbol
-                icon="upload"
-                color="var(--white)"
-                fill
-                size={25}
-              />
-              Upload Picture
-            </Button>
-            <Button width="16.4375rem" $inverted>
-              <MaterialSymbol
-                icon="no_photography"
-                color="var(--blue)"
-                size={25}
-              />
-              Remove Picture
-            </Button>
-          </div>
-        </div>
-        <div className="user-data">
-          <ProfileInputsArea />
-          <div className="action-buttons-container">
-            <div className="left-side-buttons">
-              <Button width="12.375rem" className="danger-button">
-                Deletar Conta
-              </Button>
-              <Button width="12.375rem" $inverted>
-                Remover Link{" "}
-                <Image
-                  src={GoogleLogo}
-                  width={24}
-                  height={24}
-                  alt="G com cores da empresa Google"
+      { user && (
+        <Main>
+          <div className="profile-picture">
+            <figure>
+              <ProfilePicture width={150} height={150} src={NoProfilePicture} />
+            </figure>
+            <div className="buttons-container">
+              <Button width="16.4375rem">
+                <MaterialSymbol
+                  icon="upload"
+                  color="var(--white)"
+                  fill
+                  size={25}
                 />
+                Upload Picture
+              </Button>
+              <Button width="16.4375rem" $inverted>
+                <MaterialSymbol
+                  icon="no_photography"
+                  color="var(--blue)"
+                  size={25}
+                />
+                Remove Picture
               </Button>
             </div>
-            <Button width="12.0625rem">Save Changes</Button>
           </div>
-        </div>
-      </Main>
+          <div className="user-data">
+            <ProfileInputsArea user={user} nationalities={nationalities}/>
+            <div className="action-buttons-container">
+              <div className="left-side-buttons">
+                <Button width="12.375rem" className="danger-button">
+                  Deletar Conta
+                </Button>
+                <Button width="12.375rem" $inverted>
+                  Remover Link{" "}
+                  <Image
+                    src={GoogleLogo}
+                    width={24}
+                    height={24}
+                    alt="G com cores da empresa Google"
+                  />
+                </Button>
+              </div>
+              <Button width="12.0625rem">Save Changes</Button>
+            </div>
+          </div>
+        </Main>
+      )}
     </>
   );
 }

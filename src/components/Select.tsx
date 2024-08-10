@@ -7,7 +7,7 @@ type Props = {
   id?: string;
   required?: boolean;
   onChange?: (event?: any) => void;
-  value?: string;
+  value?: string | number;
   width?: string;
 };
 

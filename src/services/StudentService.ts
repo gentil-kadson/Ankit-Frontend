@@ -7,6 +7,17 @@ export type CreateStudentData = {
     nationality: number
 }
 
+export type Student = {
+    first_name: string,
+    last_name: string,
+    educational_level: "Middle School" | "High School" | "University",
+    streak: number,
+    longest_streak: number,
+    nationality: number,
+    total_study_time: string,
+    user: number
+}
+
 export class StudentService {
     private axiosClient = api;
     private baseURL = '/students';
