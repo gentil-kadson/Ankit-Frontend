@@ -1,12 +1,19 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
+import Image from "next/image";
 
 import styled from "styled-components";
 import FormGroup from "./FormGroup";
 import Label from "./Label";
 import Select from "./Select";
+import Button from "./Button";
 
 import { User } from "@/services/UserService";
+import { StudentService } from "@/services/StudentService";
 import { NationalityData } from "@/services/NationalityService";
+import { cookies } from "@/context/AuthContext";
+import { HTTP_200_OK } from "@/utils/constants";
+
+import GoogleLogo from "../../public/googleLogo.svg";
 
 type Props = {
   user: User
@@ -27,6 +34,19 @@ export default function ProfileInputsArea({ user, nationalities }: Props) {
     educational_level: user.student.educational_level,
     nationality: user.student.nationality
   });
+
+  async function handleChangeUserInfo(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const accessToken = cookies.get("accessToken");
+    const studentService = new StudentService(accessToken);
+    const response = await studentService.updateStudent(formData, user.student.id);
+    if (response.status === HTTP_200_OK) {
+      // Show success message
+    } else {
+      // Show error message
+    }
+  }
 
   function handleFirstNameChange(event: ChangeEvent<HTMLInputElement>) {
     setFormData((prevState) => {
@@ -53,6 +73,7 @@ export default function ProfileInputsArea({ user, nationalities }: Props) {
   }
 
   return (
+    <>
     <Container>
       <FormGroup>
         <Label symbolIcon="signature" inputId="first-name">
@@ -87,10 +108,28 @@ export default function ProfileInputsArea({ user, nationalities }: Props) {
         </Select>
       </FormGroup>
     </Container>
+    <ActionButtonsContainer>
+    <div className="left-side-buttons">
+      <Button width="12.375rem" className="danger-button">
+        Deletar Conta
+      </Button>
+      <Button width="12.375rem" $inverted>
+        Remover Link{" "}
+        <Image
+          src={GoogleLogo}
+          width={24}
+          height={24}
+          alt="G com cores da empresa Google"
+        />
+      </Button>
+    </div>
+    <Button width="12.0625rem">Save Changes</Button>
+  </ActionButtonsContainer>
+  </>
   );
 }
 
-const Container = styled.div`
+const Container = styled.form`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 3.75rem;
@@ -110,3 +149,27 @@ const Container = styled.div`
     }
   }
 `;
+
+const ActionButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+
+  .left-side-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  @media(max-width: 1000px) {
+    flex-direction: column;
+    gap: 1rem;
+
+    .left-side-buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+`

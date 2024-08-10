@@ -7,7 +7,10 @@ export type CreateStudentData = {
     nationality: number
 }
 
+export type UpdateStudentData = CreateStudentData;
+
 export type Student = {
+    id: number,
     first_name: string,
     last_name: string,
     educational_level: "Middle School" | "High School" | "University",
@@ -36,6 +39,20 @@ export class StudentService {
                 }
             });
             return response;
+        } catch (error: any) {
+            return error.response;
+        }
+    }
+
+    async updateStudent(data: UpdateStudentData, id: number) {
+        try {
+            const url = `${this.baseURL}/${id}/`;
+            const response = await this.axiosClient.patch(url, data, {
+                headers: {
+                    Authorization: `Bearer ${this.authToken}`
+                }
+            });
+            return response.data;
         } catch (error: any) {
             return error.response;
         }
