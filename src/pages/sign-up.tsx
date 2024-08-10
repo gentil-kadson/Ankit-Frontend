@@ -1,4 +1,5 @@
-import { useState, useContext } from "react";
+import { useState, useContext, FormEvent, useRef } from "react";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 
@@ -12,11 +13,17 @@ import Label from "@/components/Label";
 import ApiMessage from "@/components/ApiMessage";
 import AuthContext from "@/context/AuthContext";
 
+import { CreateStudentData } from "@/services/StudentService";
 import AuthService from "@/services/AuthService";
-import { HTTP_201_CREATED } from "@/utils/constants";
+import NationalityService, { NationalityData } from "@/services/NationalityService";
+import { HTTP_200_OK, HTTP_201_CREATED } from "@/utils/constants";
+
+import { cookies } from "@/context/AuthContext";
+import { StudentService } from "@/services/StudentService";
 
 export default function SignUp() {
   const { loginUser } = useContext(AuthContext);
+  const [nationalities, setNationalities] = useState<NationalityData[]>([]);
   const [currentFormStep, setCurrentFormStep] = useState<number>(1);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string>("");
@@ -26,6 +33,19 @@ export default function SignUp() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
+
+  async function getNationalities() {
+    const nationalityService = new NationalityService();
+    const response = await nationalityService.getNationalities();
+    if (response.status === HTTP_200_OK) {
+      setNationalities(response.data);
+    } else {
+      const errors = Object.values(response.data).flat();
+      setErrorMessages(errors as string[])
+    }
+  }
 
   async function handleUserCreation(data: any) {
     const authService = new AuthService();
@@ -36,6 +56,11 @@ export default function SignUp() {
       );
       setCurrentFormStep(2);
       await loginUser(data.email, data.password1);
+      setErrorMessages([]);
+      getNationalities();
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 5000)
     } else {
       const errors = Object.values(response.data).flat();
       setErrorMessages(errors as string[]);
@@ -105,9 +130,28 @@ export default function SignUp() {
     );
   }
 
+  async function handleStudentCreation(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (formRef.current) {
+      const formData = new FormData(formRef.current);
+      const accessToken = cookies.get("accessToken");
+      const studentService = new StudentService(accessToken);
+  
+      const response = await studentService.createStudent(formData as unknown as CreateStudentData);
+      if (response.status === HTTP_201_CREATED) {
+        setErrorMessages([]);
+        router.push("/");
+      } else {
+        const errors = Object.values(response.data).flat().filter(value => typeof(value) === "string");
+        setErrorMessages(errors as string[]);
+      }
+    }
+
+  }
+
   function renderStudentDataForm() {
     return (
-      <Form id="student-form" action="post">
+      <Form id="student-form" ref={formRef} action="post" onSubmit={handleStudentCreation}>
         <StudentFormFields>
           <fieldset id="fieldset-1">
             <FormGroup>
@@ -127,8 +171,9 @@ export default function SignUp() {
                 Nível Educacional
               </Label>
               <Select name="educational_level" id="educational_level">
-                <option value="brazilian">Ensino Médio</option>
-                <option value="north-american">Ensino Superior</option>
+                <option value="Middle School">Ensino Fundamental II</option>
+                <option value="High School">Ensino Médio</option>
+                <option value="University">Ensino Superior</option>
               </Select>
             </FormGroup>
           </fieldset>
@@ -138,9 +183,11 @@ export default function SignUp() {
                 Nacionalidade
               </Label>
               <Select required name="nationality" id="nationality">
-                <option value="brazilian">Brasileiro</option>
-                <option value="north-american">Estadunidense</option>
-                <option value="french">Francês</option>
+                {nationalities && (
+                  nationalities.map(nationality => {
+                    return <option key={nationality.id} value={nationality.id}>{nationality.name}</option>
+                  })
+                )}
               </Select>
             </FormGroup>
           </fieldset>

@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect } from "react";
-import Router from "next/router";
 import Cookies from "universal-cookie";
 import api from "@/services/api";
 
