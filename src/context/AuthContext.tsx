@@ -60,7 +60,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           return null;
         });
         cookies.set("accessToken", data.access, {
-          maxAge: 30,
+          maxAge: ACCESS_TOKEN_EXPIRE_TIME,
         });
       }
     }
@@ -83,7 +83,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (authTokens) {
         updateToken();
       }
-    }, 1000 * 20);
+    }, 1000 * 60 * 10);
     return () => clearInterval(intervalId);
   }, [authTokens, loading]);
 
