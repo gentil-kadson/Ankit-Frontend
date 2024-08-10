@@ -6,7 +6,7 @@ import StudySessionActionButton from "./StudySessionActionButton";
 
 type Props = {
   title: string;
-  studyTime: number;
+  studyTime: string;
   studiedLanguage: string;
   numberOfCards: number;
 };
@@ -34,7 +34,7 @@ export default function StudySessionCard({
             icon={<MaterialSymbol icon="translate" size={24} />}
           />
           <StudySessionInfo
-            text={`${numberOfCards} min`}
+            text={`${numberOfCards} cards`}
             icon={<MaterialSymbol icon="content_copy" size={24} />}
           />
         </div>

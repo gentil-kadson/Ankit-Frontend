@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import Cookies from "universal-cookie";
 import api from "@/services/api";
+import Router from "next/router";
 
 type AuthProviderProps = {
   children: JSX.Element;
@@ -26,6 +27,9 @@ const AuthContext = createContext<ContextDataProps>({} as ContextDataProps);
 export default AuthContext;
 
 export const cookies = new Cookies();
+
+const ACCESS_TOKEN_EXPIRE_TIME = 60 * 15;
+const REFRESH_TOKEN_EXPIRE_TIME = 60 * 60 * 24 * 3;
 
 export function AuthProvider({ children }: AuthProviderProps) {
   function getInitialTokenData(): { access: string; refresh: string } | null {
@@ -56,7 +60,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           return null;
         });
         cookies.set("accessToken", data.access, {
-          maxAge: 60 * 60 * 30,
+          maxAge: 30,
         });
       }
     }
@@ -66,7 +70,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (authTokens) {
       api
         .get("/users/", {
-          withCredentials: true,
           headers: { Authorization: `Bearer ${authTokens.access}` },
         })
         .then((response) => {
@@ -80,7 +83,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (authTokens) {
         updateToken();
       }
-    }, 1000 * 60 * 28);
+    }, 1000 * 20);
     return () => clearInterval(intervalId);
   }, [authTokens, loading]);
 
@@ -94,11 +97,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setAuthTokens({ access: data.access, refresh: data.refresh });
       setUser(data.user);
       cookies.set("accessToken", data.access, {
-        maxAge: 60 * 60 * 30,
+        maxAge: ACCESS_TOKEN_EXPIRE_TIME,
       });
       cookies.set("refreshToken", data.refresh, {
-        maxAge: 60 * 60 * 24 * 30, // 30 days
+        maxAge: REFRESH_TOKEN_EXPIRE_TIME,
       });
+      Router.push("/");
     } else {
       const err = "Credenciais inválidas.";
       console.log(err);
