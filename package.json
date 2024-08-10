@@ -10,9 +10,10 @@
   },
   "dependencies": {
     "axios": "^1.7.3",
-    "next": "14.2.3",
+    "next": "14.2.4",
     "react": "18.3.1",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.52.2",
     "react-material-symbols": "^4.4.0",
     "styled-components": "^6.1.11",
     "universal-cookie": "^7.2.0"

@@ -1,4 +1,6 @@
-import { useRef, useState } from "react";
+import { useState, useContext, FormEvent, useRef } from "react";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
 import Link from "next/link";
 
 import { MaterialSymbol } from "react-material-symbols";
@@ -8,185 +10,194 @@ import Button from "@/components/Button";
 import Select from "@/components/Select";
 import FormGroup from "@/components/FormGroup";
 import Label from "@/components/Label";
+import ApiMessage from "@/components/ApiMessage";
+import AuthContext from "@/context/AuthContext";
 
-type FormData = {
-  email: string;
-  password1: string;
-  password2: string;
-  first_name: string;
-  last_name: string;
-  educational_level: string;
-  nationality: string;
-};
+import { CreateStudentData } from "@/services/StudentService";
+import AuthService from "@/services/AuthService";
+import NationalityService, { NationalityData } from "@/services/NationalityService";
+import { HTTP_200_OK, HTTP_201_CREATED } from "@/utils/constants";
+
+import { cookies } from "@/context/AuthContext";
+import { StudentService } from "@/services/StudentService";
 
 export default function SignUp() {
+  const { loginUser } = useContext(AuthContext);
+  const [nationalities, setNationalities] = useState<NationalityData[]>([]);
   const [currentFormStep, setCurrentFormStep] = useState<number>(1);
-  const [formData, setFormData] = useState<FormData>({
-    email: "",
-    password1: "",
-    password2: "",
-    first_name: "",
-    last_name: "",
-    educational_level: "",
-    nationality: "",
-  });
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
+
+  async function getNationalities() {
+    const nationalityService = new NationalityService();
+    const response = await nationalityService.getNationalities();
+    if (response.status === HTTP_200_OK) {
+      setNationalities(response.data);
+    } else {
+      const errors = Object.values(response.data).flat();
+      setErrorMessages(errors as string[])
+    }
+  }
+
+  async function handleUserCreation(data: any) {
+    const authService = new AuthService();
+    const response = await authService.createUser(data);
+    if (response.status === HTTP_201_CREATED) {
+      setSuccessMessage(
+        "Usuário criado com sucesso! Preencha os dados de estudante"
+      );
+      setCurrentFormStep(2);
+      await loginUser(data.email, data.password1);
+      setErrorMessages([]);
+      getNationalities();
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 5000)
+    } else {
+      const errors = Object.values(response.data).flat();
+      setErrorMessages(errors as string[]);
+    }
+  }
 
   function renderUserDataForm() {
     return (
-      <fieldset>
-        <FormGroup>
-          <Label inputId="email" symbolIcon="email">
-            Email
-          </Label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            required
-            value={formData.email}
-            onChange={(event) =>
-              setFormData((prevState) => {
-                return { ...prevState, email: event.target.value };
-              })
-            }
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label inputId="password1" symbolIcon="password">
-            Senha
-          </Label>
-          <input
-            type="password"
-            name="password1"
-            id="password1"
-            required
-            value={formData.password1}
-            onChange={(event) =>
-              setFormData((prevState) => {
-                return { ...prevState, password1: event.target.value };
-              })
-            }
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label inputId="password2" symbolIcon="password">
-            Repetir Senha
-          </Label>
-          <input
-            type="password"
-            name="password2"
-            id="password2"
-            required
-            value={formData.password2}
-            onChange={(event) =>
-              setFormData((prevState) => {
-                return { ...prevState, password2: event.target.value };
-              })
-            }
-          />
-        </FormGroup>
-        <Button
-          onClick={() => setCurrentFormStep(2)}
-          id="submit-form-button"
-          width="59px"
-        >
-          <MaterialSymbol icon="arrow_forward" size={33} />
-        </Button>
-      </fieldset>
+      <Form
+        method="post"
+        id="user-form"
+        onSubmit={handleSubmit(handleUserCreation)}
+      >
+        <fieldset>
+          <FormGroup>
+            <Label inputId="email" symbolIcon="email">
+              Email
+            </Label>
+            <input
+              {...register("email")}
+              type="email"
+              name="email"
+              id="email"
+              required
+            />
+          </FormGroup>
+          <FormGroup>
+            {errors.password2 && (
+              <p style={{ color: "var(--red)" }}>As senhas devem ser iguais</p>
+            )}
+            <Label inputId="password1" symbolIcon="password">
+              Senha
+            </Label>
+            <input
+              {...register("password1")}
+              type="password"
+              name="password1"
+              id="password1"
+              defaultValue=""
+              required
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label inputId="password2" symbolIcon="password">
+              Repetir Senha
+            </Label>
+            <input
+              {...register("password2", {
+                validate: (value: string) => {
+                  if (watch("password1") != value) {
+                    return "As senhas não são iguais";
+                  }
+                },
+              })}
+              type="password"
+              name="password2"
+              id="password2"
+              defaultValue=""
+              required
+            />
+          </FormGroup>
+          <Button type="submit" id="submit-form-button" width="59px">
+            <MaterialSymbol icon="arrow_forward" size={33} />
+          </Button>
+        </fieldset>
+      </Form>
     );
+  }
+
+  async function handleStudentCreation(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (formRef.current) {
+      const formData = new FormData(formRef.current);
+      const accessToken = cookies.get("accessToken");
+      const studentService = new StudentService(accessToken);
+  
+      const response = await studentService.createStudent(formData as unknown as CreateStudentData);
+      if (response.status === HTTP_201_CREATED) {
+        setErrorMessages([]);
+        router.push("/");
+      } else {
+        const errors = Object.values(response.data).flat().filter(value => typeof(value) === "string");
+        setErrorMessages(errors as string[]);
+      }
+    }
+
   }
 
   function renderStudentDataForm() {
     return (
-      <StudentFormFields>
-        <fieldset id="fieldset-1">
-          <FormGroup>
-            <Label inputId="first_name" symbolIcon="signature">
-              Nome
-            </Label>
-            <input
-              type="text"
-              name="first_name"
-              id="first_name"
-              required
-              value={formData.first_name}
-              onChange={(event) =>
-                setFormData((prevState) => {
-                  return { ...prevState, first_name: event.target.value };
-                })
-              }
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label inputId="last_name" symbolIcon="signature">
-              Sobrenome
-            </Label>
-            <input
-              type="text"
-              name="last_name"
-              id="last_name"
-              required
-              value={formData.last_name}
-              onChange={(event) =>
-                setFormData((prevState) => {
-                  return { ...prevState, last_name: event.target.value };
-                })
-              }
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label inputId="educational_level" symbolIcon="school">
-              Nível Educacional
-            </Label>
-            <Select
-              value={formData.educational_level}
-              onChange={(event) => {
-                setFormData((prevState) => {
-                  return {
-                    ...prevState,
-                    educational_level: event.target.value,
-                  };
-                });
-              }}
-              name="educational_level"
-              id="educational_level"
-            >
-              <option value="brazilian">Ensino Médio</option>
-              <option value="north-american">Ensino Superior</option>
-            </Select>
-          </FormGroup>
-        </fieldset>
-        <fieldset id="fieldset-2">
-          <FormGroup>
-            <Label inputId="nationality" symbolIcon="crib">
-              Nacionalidade
-            </Label>
-            <Select
-              value={formData.nationality}
-              onChange={(event) =>
-                setFormData((prevState) => {
-                  return { ...prevState, nationality: event.target.value };
-                })
-              }
-              required
-              name="nationality"
-              id="nationality"
-            >
-              <option value="brazilian">Brasileiro</option>
-              <option value="north-american">Estadunidense</option>
-              <option value="french">Francês</option>
-            </Select>
-          </FormGroup>
-        </fieldset>
-        <StudentFormButtons>
-          <Button width="59px" onClick={() => setCurrentFormStep(1)}>
-            <MaterialSymbol icon="arrow_back" size={33} />
-          </Button>
-          <Button $htmlType="submit" width="59px">
-            <MaterialSymbol icon="check" size={33} />
-          </Button>
-        </StudentFormButtons>
-      </StudentFormFields>
+      <Form id="student-form" ref={formRef} action="post" onSubmit={handleStudentCreation}>
+        <StudentFormFields>
+          <fieldset id="fieldset-1">
+            <FormGroup>
+              <Label inputId="first_name" symbolIcon="signature">
+                Nome
+              </Label>
+              <input type="text" name="first_name" id="first_name" required />
+            </FormGroup>
+            <FormGroup>
+              <Label inputId="last_name" symbolIcon="signature">
+                Sobrenome
+              </Label>
+              <input type="text" name="last_name" id="last_name" required />
+            </FormGroup>
+            <FormGroup>
+              <Label inputId="educational_level" symbolIcon="school">
+                Nível Educacional
+              </Label>
+              <Select name="educational_level" id="educational_level">
+                <option value="Middle School">Ensino Fundamental II</option>
+                <option value="High School">Ensino Médio</option>
+                <option value="University">Ensino Superior</option>
+              </Select>
+            </FormGroup>
+          </fieldset>
+          <fieldset id="fieldset-2">
+            <FormGroup>
+              <Label inputId="nationality" symbolIcon="crib">
+                Nacionalidade
+              </Label>
+              <Select required name="nationality" id="nationality">
+                {nationalities && (
+                  nationalities.map(nationality => {
+                    return <option key={nationality.id} value={nationality.id}>{nationality.name}</option>
+                  })
+                )}
+              </Select>
+            </FormGroup>
+          </fieldset>
+          <StudentFormButtons>
+            <Button type="submit" width="59px">
+              <MaterialSymbol icon="check" size={33} />
+            </Button>
+          </StudentFormButtons>
+        </StudentFormFields>
+      </Form>
     );
   }
 
@@ -213,10 +224,16 @@ export default function SignUp() {
             experiência no <span>Ankit</span>
           </p>
         </span>
+        {errorMessages && (
+          <ErrorMessages>
+            {errorMessages.map((value, idx) => (
+              <ApiMessage category="error" key={idx}>{value}</ApiMessage>
+            ))}
+          </ErrorMessages>
+        )}
+        {successMessage && <ApiMessage category="success">{ successMessage }</ApiMessage>}
       </header>
-      <Form action="post" id="user-form">
-        {renderForm()}
-      </Form>
+      {renderForm()}
     </Main>
   );
 }
@@ -334,4 +351,11 @@ const StudentFormButtons = styled.div`
     width: 80%;
     justify-content: center;
   }
+`;
+
+const ErrorMessages = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 40px;
 `;

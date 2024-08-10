@@ -8,7 +8,7 @@ type Props = {
   $inverted?: boolean;
   className?: string;
   id?: string;
-  $htmlType?: string;
+  type?: "button" | "submit" | "reset";
   form?: string;
   height?: string;
 };
