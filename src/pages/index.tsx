@@ -1,15 +1,55 @@
 import styled from "styled-components";
 import useScreenSize from "@/hooks/useScreenSize";
+import api from "@/services/api";
 
 import Title from "@/components/Title";
 import StudySessionCard from "@/components/studySessionCard/StudySessionCard";
-import SearchInput from "@/components/SearchInput";
 import ShowMoreButton from "@/components/ShowMoreButton";
-import Button from "@/components/Button";
-import Select from "@/components/Select";
 import Navbar from "@/components/Navbar";
 import { MaterialSymbol } from "react-material-symbols";
 import HomepageFilters from "@/components/HomepageFilters";
+
+import type {
+  InferGetServerSidePropsType,
+  GetServerSideProps,
+  GetServerSidePropsContext,
+} from "next";
+
+type StudySession = {
+  id: number;
+  duration_in_minutes: string;
+  cards_added: number;
+  csv_file: string;
+  language: string;
+};
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const accessToken = ctx.req.cookies.accessToken;
+  const headersConf = { Authorization: `Bearer ${accessToken}` };
+
+  if (accessToken) {
+    const { data } = await api.get("/study_sessions/", {
+      headers: headersConf,
+    });
+
+    const studySessions: StudySession[] = data;
+
+    for (const session of studySessions) {
+    }
+
+    return {
+      props: { user: studySessions },
+    };
+  }
+
+  return {
+    redirect: {
+      permanent: false,
+      destination: "/login",
+    },
+    props: {},
+  };
+};
 
 export default function Home() {
   const { width } = useScreenSize();
