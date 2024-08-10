@@ -1,18 +1,67 @@
 import styled from "styled-components";
 import useScreenSize from "@/hooks/useScreenSize";
+import api from "@/services/api";
+import { useState } from "react";
 
 import Title from "@/components/Title";
 import StudySessionCard from "@/components/studySessionCard/StudySessionCard";
-import SearchInput from "@/components/SearchInput";
 import ShowMoreButton from "@/components/ShowMoreButton";
-import Button from "@/components/Button";
-import Select from "@/components/Select";
 import Navbar from "@/components/Navbar";
 import { MaterialSymbol } from "react-material-symbols";
 import HomepageFilters from "@/components/HomepageFilters";
 
-export default function Home() {
+import type {
+  InferGetServerSidePropsType,
+  GetServerSideProps,
+  GetServerSidePropsContext,
+} from "next";
+
+type StudySession = {
+  id: number;
+  duration_in_minutes: string;
+  cards_added: number;
+  csv_file: string;
+  name: string;
+  language: string;
+};
+
+export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
+  const accessToken = ctx.req.cookies.accessToken;
+  const headersConf = { Authorization: `Bearer ${accessToken}` };
+
+  if (accessToken) {
+    const { data } = await api.get("/study_sessions/", {
+      headers: headersConf,
+    });
+
+    const studySessions: StudySession[] = data;
+    for (const session of studySessions) {
+      const duration = Number(session.duration_in_minutes.split(":")[2]);
+      const roundDuration = Math.ceil(duration);
+      session.duration_in_minutes = roundDuration.toString();
+    }
+
+    return {
+      props: { studySessions },
+    };
+  }
+
+  return {
+    redirect: {
+      permanent: false,
+      destination: "/login",
+    },
+    props: {},
+  };
+}) satisfies GetServerSideProps<{ studySessions: StudySession[] }>;
+
+export default function Home({
+  studySessions,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { width } = useScreenSize();
+  const [sessions, setSessions] = useState<StudySession[]>(
+    studySessions as StudySession[]
+  );
 
   return (
     <>
@@ -23,24 +72,14 @@ export default function Home() {
           <HomepageFilters />
         </div>
         <div className="cards-container">
-          <StudySessionCard
-            numberOfCards={10}
-            studiedLanguage="Inglês"
-            studyTime={10}
-            title="The Whale"
-          />
-          <StudySessionCard
-            numberOfCards={10}
-            studiedLanguage="Inglês"
-            studyTime={10}
-            title="The Whale"
-          />
-          <StudySessionCard
-            numberOfCards={10}
-            studiedLanguage="Inglês"
-            studyTime={10}
-            title="The Whale"
-          />
+          {sessions?.map((studySession) => (
+            <StudySessionCard
+              studyTime={studySession.duration_in_minutes}
+              numberOfCards={studySession.cards_added}
+              studiedLanguage={studySession.language}
+              title={studySession.name}
+            />
+          ))}
         </div>
         <ShowMoreButton width={width} />
         <div id="sticky-buttons-container">
@@ -67,17 +106,6 @@ const Main = styled.main`
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    /* .filters-container {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .language-filter-container {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    } */
   }
 
   .cards-container {
