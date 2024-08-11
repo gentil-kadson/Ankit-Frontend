@@ -40,7 +40,7 @@ export default function StudySessionCard({
         </div>
         <div className="action-buttons">
           <StudySessionActionButton onClick={() => 2 + 2} icon="csv" />
-          <StudySessionActionButton onClick={() => 1 + 1} icon="delete" />
+          <StudySessionActionButton onClick={() => 2 + 2} icon="delete" />
         </div>
       </div>
     </Container>

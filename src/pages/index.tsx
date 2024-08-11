@@ -2,6 +2,7 @@ import styled from "styled-components";
 import useScreenSize from "@/hooks/useScreenSize";
 import api from "@/services/api";
 import { useState } from "react";
+import { cookies } from "@/context/AuthContext";
 
 import Title from "@/components/Title";
 import StudySessionCard from "@/components/studySessionCard/StudySessionCard";
@@ -67,6 +68,22 @@ export default function Home({
 
   function handleCancelStudySession() {
     setShowModal(false);
+  }
+
+  function handleDeleteStudySession(id: number) {
+    const accessToken = cookies.get("accessToken");
+    api
+      .delete(`/study_sessions/${id}/`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((response) => {
+        setSessions((prevSessions) => {
+          const updatedSessions = prevSessions.filter(
+            (session) => session.id !== id
+          );
+          return updatedSessions;
+        });
+      });
   }
 
   return (
