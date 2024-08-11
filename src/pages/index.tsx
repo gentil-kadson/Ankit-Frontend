@@ -100,11 +100,13 @@ export default function Home({
         <div className="cards-container">
           {sessions?.map((studySession) => (
             <StudySessionCard
+              studySessionId={studySession.id}
               key={studySession.id}
               studyTime={studySession.duration_in_minutes}
               numberOfCards={studySession.cards_added}
               studiedLanguage={studySession.language}
               title={studySession.name}
+              onDeleteClick={handleDeleteStudySession}
             />
           ))}
         </div>

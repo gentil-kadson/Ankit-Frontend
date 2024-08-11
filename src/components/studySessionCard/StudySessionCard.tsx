@@ -9,6 +9,8 @@ type Props = {
   studyTime: string;
   studiedLanguage: string;
   numberOfCards: number;
+  studySessionId: number;
+  onDeleteClick: (id: number) => void;
 };
 
 export default function StudySessionCard({
@@ -16,6 +18,8 @@ export default function StudySessionCard({
   studyTime,
   studiedLanguage,
   numberOfCards,
+  onDeleteClick,
+  studySessionId,
 }: Props) {
   return (
     <Container>
@@ -40,7 +44,10 @@ export default function StudySessionCard({
         </div>
         <div className="action-buttons">
           <StudySessionActionButton onClick={() => 2 + 2} icon="csv" />
-          <StudySessionActionButton onClick={() => 2 + 2} icon="delete" />
+          <StudySessionActionButton
+            onClick={async () => onDeleteClick(studySessionId)}
+            icon="delete"
+          />
         </div>
       </div>
     </Container>
