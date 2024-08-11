@@ -9,6 +9,7 @@ import ShowMoreButton from "@/components/ShowMoreButton";
 import Navbar from "@/components/Navbar";
 import { MaterialSymbol } from "react-material-symbols";
 import HomepageFilters from "@/components/HomepageFilters";
+import CreateStudySessionModal from "@/components/modals/CreateStudySessionModal";
 
 import type {
   InferGetServerSidePropsType,
@@ -62,9 +63,17 @@ export default function Home({
   const [sessions, setSessions] = useState<StudySession[]>(
     studySessions as StudySession[]
   );
+  const [showModal, setShowModal] = useState<boolean>(false);
+
+  function handleCancelStudySession() {
+    setShowModal(false);
+  }
 
   return (
     <>
+      {showModal && (
+        <CreateStudySessionModal onClick={handleCancelStudySession} />
+      )}
       <Navbar />
       <Main>
         <div className="title-and-filter">
@@ -74,6 +83,7 @@ export default function Home({
         <div className="cards-container">
           {sessions?.map((studySession) => (
             <StudySessionCard
+              key={studySession.id}
               studyTime={studySession.duration_in_minutes}
               numberOfCards={studySession.cards_added}
               studiedLanguage={studySession.language}
@@ -83,7 +93,7 @@ export default function Home({
         </div>
         <ShowMoreButton width={width} />
         <div id="sticky-buttons-container">
-          <StartStudySession>
+          <StartStudySession onClick={() => setShowModal(true)}>
             <MaterialSymbol icon="add" color="var(--white)" size={40} />
           </StartStudySession>
         </div>

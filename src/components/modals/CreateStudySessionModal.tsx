@@ -8,18 +8,24 @@ import FormGroup from "../FormGroup";
 const buttonsData = [
   {
     symbolIcon: "note_stack" as SymbolCodepoints,
-    text: "Initiate",
+    text: "Iniciar",
   },
   {
-    text: "Cancel",
+    text: "Cancelar",
   },
 ];
 
-export default function CreateStudySessionModal() {
+type Props = {
+  onClick: () => void;
+};
+
+export default function CreateStudySessionModal({ onClick }: Props) {
   const formInputs = (
     <FormGroup>
-      <Label symbolIcon="g_translate">Select a Language</Label>
-      <Select>
+      <Label inputId="study-session-language" symbolIcon="g_translate">
+        Selecione um Idioma
+      </Label>
+      <Select id="study-session-language">
         <option value="">Selecione</option>
         <option value="Inglês">Inglês</option>
         <option value="Libras">Libras</option>
@@ -30,9 +36,10 @@ export default function CreateStudySessionModal() {
   return (
     <Modal
       mainTitle="Study Session Info"
+      onCancelButton={onClick}
       subtitle={
         <>
-          What <strong>language</strong> are you going to study?
+          Qual <strong> idioma </strong> você vai estudar?
         </>
       }
       actionButtonsContent={buttonsData}
