@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import styled from "styled-components";
 import NoProfilePicture from "/public/noProfilePicture.svg";
 
@@ -6,33 +8,47 @@ import Button from "@/components/Button";
 import { MaterialSymbol } from "react-material-symbols";
 import ProfileInputsArea from "@/components/ProfileInputsArea";
 import Navbar from "@/components/Navbar";
+import ApiMessage from "@/components/ApiMessage";
 
 import UserService from "@/services/UserService";
 import NationalityService from "@/services/NationalityService";
 import { HTTP_200_OK } from "@/utils/constants";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 
-export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
-  const accessToken = ctx.req.cookies.accessToken ? ctx.req.cookies.accessToken : "";
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const accessToken = ctx.req.cookies.accessToken
+    ? ctx.req.cookies.accessToken
+    : "";
   const userService = new UserService(accessToken);
   const response = await userService.getMe();
-  
+
   const nationalityService = new NationalityService();
   const nationalitiesResponse = await nationalityService.getNationalities();
 
   if (response.status === HTTP_200_OK) {
-    return { props: { user: response.data, nationalities: nationalitiesResponse.data } }
+    return {
+      props: { user: response.data, nationalities: nationalitiesResponse.data },
+    };
   } else {
-    return { props: { user: null, nationalities: nationalitiesResponse.data } }
+    return { props: { user: null, nationalities: nationalitiesResponse.data } };
   }
-});
+};
 
-export default function Me({ user, nationalities }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Me({
+  user,
+  nationalities,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+
   return (
     <>
       <Navbar />
-      { user && (
+      {user && (
         <Main>
+          {successMessage && (
+            <ApiMessage category="success">{successMessage}</ApiMessage>
+          )}
           <div className="profile-picture">
             <figure>
               <ProfilePicture width={150} height={150} src={NoProfilePicture} />
@@ -45,7 +61,7 @@ export default function Me({ user, nationalities }: InferGetServerSidePropsType<
                   fill
                   size={25}
                 />
-                Upload Picture
+                Alterar Foto
               </Button>
               <Button width="16.4375rem" $inverted>
                 <MaterialSymbol
@@ -53,12 +69,17 @@ export default function Me({ user, nationalities }: InferGetServerSidePropsType<
                   color="var(--blue)"
                   size={25}
                 />
-                Remove Picture
+                Remover Foto
               </Button>
             </div>
           </div>
           <div className="user-data">
-            <ProfileInputsArea user={user} nationalities={nationalities}/>
+            <ProfileInputsArea
+              setErrorMessages={setErrorMessages}
+              setSuccessMessage={setSuccessMessage}
+              user={user}
+              nationalities={nationalities}
+            />
           </div>
         </Main>
       )}
