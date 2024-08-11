@@ -16,6 +16,8 @@ type Props = {
   modalForm: React.ReactNode;
   actionButtonsContent: ActionButton[];
   onCancelButton: () => void;
+  onMainButton: () => void;
+  errorMessage: string;
 };
 
 export default function Modal({
@@ -23,7 +25,9 @@ export default function Modal({
   subtitle,
   modalForm,
   actionButtonsContent,
+  errorMessage,
   onCancelButton,
+  onMainButton,
 }: Props) {
   return (
     <Section className="modal">
@@ -33,7 +37,7 @@ export default function Modal({
       </div>
       <main>{modalForm}</main>
       <div className="action-buttons">
-        <Button width="11.625rem">
+        <Button width="11.625rem" onClick={onMainButton}>
           {actionButtonsContent[0].symbolIcon && (
             <MaterialSymbol
               icon={actionButtonsContent[0].symbolIcon}
@@ -46,6 +50,7 @@ export default function Modal({
           {actionButtonsContent[1].text}
         </Button>
       </div>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </Section>
   );
 }
@@ -103,6 +108,12 @@ const Section = styled.section`
     align-items: center;
     justify-content: center;
     gap: 4.6875rem;
+  }
+
+  .error-message {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: var(--red);
   }
 
   @media (max-width: 432px) {
