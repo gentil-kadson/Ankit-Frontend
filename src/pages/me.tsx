@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 import styled from "styled-components";
 import NoProfilePicture from "/public/noProfilePicture.svg";
@@ -11,8 +11,10 @@ import Navbar from "@/components/Navbar";
 import ApiMessage from "@/components/ApiMessage";
 
 import UserService from "@/services/UserService";
+import { StudentService } from "@/services/StudentService";
 import NationalityService from "@/services/NationalityService";
-import { HTTP_200_OK } from "@/utils/constants";
+import { HTTP_200_OK, SUCCESS_MESSAGE_TIMEOUT } from "@/utils/constants";
+import { cookies } from "@/context/AuthContext";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -40,6 +42,31 @@ export default function Me({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const uploadPictureRef = useRef<HTMLInputElement>(null);
+
+  async function handleProfilePictureUpload() {
+    if (uploadPictureRef.current && uploadPictureRef.current.files) {
+      const file = uploadPictureRef.current.files[0];
+      const accessToken = cookies.get("accessToken");
+      const studentService = new StudentService(accessToken);
+      const response = await studentService.updateStudent(
+        { profile_picture: file },
+        user.student.id
+      );
+
+      if (response.status === HTTP_200_OK) {
+        setSuccessMessage("Foto atualizada com sucesso!");
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, SUCCESS_MESSAGE_TIMEOUT);
+      } else {
+        const errors = Object.values(response.data)
+          .flat()
+          .filter((value) => typeof value === "string");
+        setErrorMessages(errors);
+      }
+    }
+  }
 
   return (
     <>
@@ -49,20 +76,50 @@ export default function Me({
           {successMessage && (
             <ApiMessage category="success">{successMessage}</ApiMessage>
           )}
+          {errorMessages &&
+            errorMessages.map((message, idx) => {
+              return (
+                <ApiMessage key={idx} category="error">
+                  {message}
+                </ApiMessage>
+              );
+            })}
           <div className="profile-picture">
             <figure>
-              <ProfilePicture width={150} height={150} src={NoProfilePicture} />
+              <ProfilePicture
+                width={150}
+                height={150}
+                src={user.student.profile_picture || NoProfilePicture}
+              />
             </figure>
             <div className="buttons-container">
               <Button width="16.4375rem">
-                <MaterialSymbol
-                  icon="upload"
-                  color="var(--white)"
-                  fill
-                  size={25}
-                />
-                Alterar Foto
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    cursor: "pointer",
+                  }}
+                  htmlFor="profile_picture"
+                >
+                  <MaterialSymbol
+                    icon="upload"
+                    color="var(--white)"
+                    fill
+                    size={25}
+                  />
+                  Adicionar Foto
+                </label>
               </Button>
+              <input
+                style={{ display: "none" }}
+                type="file"
+                name="profile_picture"
+                id="profile_picture"
+                onChange={handleProfilePictureUpload}
+                ref={uploadPictureRef}
+              />
               <Button width="16.4375rem" $inverted>
                 <MaterialSymbol
                   icon="no_photography"

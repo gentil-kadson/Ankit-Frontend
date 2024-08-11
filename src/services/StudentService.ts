@@ -5,9 +5,16 @@ export type CreateStudentData = {
   last_name: string;
   educational_level: "Middle School" | "High School" | "University";
   nationality: number;
+  profile_picture?: File;
 };
 
-export type UpdateStudentData = CreateStudentData;
+export type UpdateStudentData = {
+  first_name?: string;
+  last_name?: string;
+  educational_level?: "Middle School" | "High School" | "University";
+  nationality?: number;
+  profile_picture?: File;
+};
 
 export type Student = {
   id: number;
@@ -18,6 +25,7 @@ export type Student = {
   longest_streak: number;
   nationality: number;
   total_study_time: string;
+  profile_picture: string;
   user: number;
 };
 
@@ -50,6 +58,7 @@ export class StudentService {
       const response = await this.axiosClient.patch(url, data, {
         headers: {
           Authorization: `Bearer ${this.authToken}`,
+          "Content-Type": "multipart/form-data",
         },
       });
       return response;

@@ -3,13 +3,10 @@ import Cookies from "universal-cookie";
 import api from "@/services/api";
 import Router from "next/router";
 
+import { User } from "@/services/UserService";
+
 type AuthProviderProps = {
   children: JSX.Element;
-};
-
-type User = {
-  email: string;
-  password: string;
 };
 
 type AuthTokens = {

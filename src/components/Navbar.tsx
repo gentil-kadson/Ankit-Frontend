@@ -1,17 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import Router from "next/router";
-import { cookies } from "@/context/AuthContext";
+import AuthContext, { cookies } from "@/context/AuthContext";
 
 import Link from "next/link";
 import { MaterialSymbol } from "react-material-symbols";
 import ProfilePicture from "./ProfilePicture";
 import NavDropdown from "./NavDropdown";
 
-import brazilFlag from "/public/brazilFlag.svg";
+import NoProfilePicture from "/public/noProfilePicture.svg";
 
 export default function Navbar() {
   const [displayDropdown, setDisplayDropDown] = useState<boolean>(false);
+  const { user } = useContext(AuthContext);
+
   useEffect(() => {
     if (!cookies.get("accessToken")) {
       Router.push("/login");
@@ -20,6 +22,13 @@ export default function Navbar() {
 
   const handleDropdown = () => {
     setDisplayDropDown((prevState) => !displayDropdown);
+  };
+
+  const handleProfilePicture = () => {
+    if (user) {
+      return user.student.profile_picture;
+    }
+    return NoProfilePicture;
   };
 
   return (
@@ -35,7 +44,7 @@ export default function Navbar() {
       </span>
       <ProfilePicture
         onClick={handleDropdown}
-        src={brazilFlag}
+        src={handleProfilePicture()}
         width={80}
         height={80}
       />
