@@ -1,9 +1,9 @@
 import { createContext, useState, useEffect } from "react";
 import Cookies from "universal-cookie";
 import api from "@/services/api";
-import Router from "next/router";
 
 import { User } from "@/services/UserService";
+import AuthService from "@/services/AuthService";
 
 type AuthProviderProps = {
   children: JSX.Element;
@@ -15,7 +15,7 @@ type AuthTokens = {
 };
 
 type ContextDataProps = {
-  loginUser: (email: string, password: string) => Promise<void>;
+  loginUser: (email: string, password: string) => Promise<{ status: any, message: string }>;
   logoutUser: () => void;
   setUser: (user: User | null) => void;
   user: User | null;
@@ -93,7 +93,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function loginUser(email: string, password: string) {
-    const response = await api.post("/dj_rest_auth/login/", {
+    const authService = new AuthService();
+    const response = await authService.loginUser({
       email,
       password,
     });
@@ -107,9 +108,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       cookies.set("refreshToken", data.refresh, {
         maxAge: REFRESH_TOKEN_EXPIRE_TIME,
       });
+      return { status, message: "Usuário criado com sucesso" }
     } else {
-      const err = "Credenciais inválidas.";
-      console.log(err);
+      return { status, message: "Credenciais inválidas" }
     }
   }
 
