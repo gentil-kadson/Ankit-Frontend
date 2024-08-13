@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useRouter } from "next/router";
 
 import styled from "styled-components";
 import NoProfilePicture from "/public/noProfilePicture.svg";
@@ -43,6 +44,40 @@ export default function Me({
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const uploadPictureRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  function renderProfilePicture() {
+    let src = null;
+    if (user.student.profile_picture) {
+      src = user.student.profile_picture
+    } else {
+      src = NoProfilePicture;
+    }
+    return <ProfilePicture
+    width={150}
+    height={150}
+    src={src}
+  />
+  }
+
+  async function handleProfilePictureRemoval() {
+    const accessToken = cookies.get("accessToken");
+    const studentService = new StudentService(accessToken);
+    const response = await studentService.removeProfilePicture(user.student.id);
+    if (response.status === HTTP_200_OK) {
+      setSuccessMessage("Foto removida com sucesso!");
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, SUCCESS_MESSAGE_TIMEOUT);
+      
+      setTimeout(() => {
+        router.reload();
+      }, 2000);
+    } else {
+      const errors = Object.values(response.data).flat().filter(value => typeof(value) === "string");
+      setErrorMessages(errors);
+    }
+  }
 
   async function handleProfilePictureUpload() {
     if (uploadPictureRef.current && uploadPictureRef.current.files) {
@@ -59,6 +94,10 @@ export default function Me({
         setTimeout(() => {
           setSuccessMessage("");
         }, SUCCESS_MESSAGE_TIMEOUT);
+
+        setTimeout(() => {
+          router.reload();
+        }, 2000);
       } else {
         const errors = Object.values(response.data)
           .flat()
@@ -86,21 +125,11 @@ export default function Me({
             })}
           <div className="profile-picture">
             <figure>
-              <ProfilePicture
-                width={150}
-                height={150}
-                src={user.student.profile_picture || NoProfilePicture}
-              />
+              {renderProfilePicture()}
             </figure>
             <div className="buttons-container">
               <Button width="16.4375rem">
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    cursor: "pointer",
-                  }}
+                <HiddenInputLabel
                   htmlFor="profile_picture"
                 >
                   <MaterialSymbol
@@ -110,7 +139,7 @@ export default function Me({
                     size={25}
                   />
                   Adicionar Foto
-                </label>
+                </HiddenInputLabel>
               </Button>
               <input
                 style={{ display: "none" }}
@@ -120,13 +149,13 @@ export default function Me({
                 onChange={handleProfilePictureUpload}
                 ref={uploadPictureRef}
               />
-              <Button width="16.4375rem" $inverted>
-                <MaterialSymbol
-                  icon="no_photography"
-                  color="var(--blue)"
-                  size={25}
-                />
-                Remover Foto
+              <Button onClick={handleProfilePictureRemoval} width="16.4375rem" $inverted>
+                  <MaterialSymbol
+                    icon="no_photography"
+                    color="var(--blue)"
+                    size={25}
+                  />
+                  Remover Foto
               </Button>
             </div>
           </div>
@@ -197,3 +226,10 @@ const Main = styled.main`
     }
   }
 `;
+
+const HiddenInputLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+`

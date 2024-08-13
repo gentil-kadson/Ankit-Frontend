@@ -13,7 +13,7 @@ export type UpdateStudentData = {
   last_name?: string;
   educational_level?: "Middle School" | "High School" | "University";
   nationality?: number;
-  profile_picture?: File;
+  profile_picture?: File | "remove";
 };
 
 export type Student = {
@@ -60,6 +60,20 @@ export class StudentService {
           Authorization: `Bearer ${this.authToken}`,
           "Content-Type": "multipart/form-data",
         },
+      });
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
+
+  async removeProfilePicture(id: number) {
+    try {
+      const url = `${this.baseURL}/${id}/remove_profile_pic/`;
+      const response = await this.axiosClient.patch(url, {}, {
+        headers: {
+          Authorization: `Bearer ${this.authToken}`
+        }
       });
       return response;
     } catch (error: any) {

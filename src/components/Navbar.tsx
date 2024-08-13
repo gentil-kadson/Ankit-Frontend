@@ -31,6 +31,21 @@ export default function Navbar() {
     return NoProfilePicture;
   };
 
+  const renderProfilePicture = () => {
+    let src = null;
+    if (user && user.student.profile_picture) {
+      src = user.student.profile_picture
+    } else {
+      src = NoProfilePicture;
+    }
+    return <ProfilePicture
+    onClick={handleDropdown}
+    width={80}
+    height={80}
+    src={src}
+  />
+  }
+
   return (
     <NavbarContainer>
       <span className="site-logo">
@@ -42,12 +57,7 @@ export default function Navbar() {
         />
         <span className="site-title">Ankit</span>
       </span>
-      <ProfilePicture
-        onClick={handleDropdown}
-        src={handleProfilePicture()}
-        width={80}
-        height={80}
-      />
+      {renderProfilePicture()}
       {displayDropdown && (
         <NavDropdown>
           <Link href="/me">Meu perfil</Link>
