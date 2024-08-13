@@ -15,6 +15,9 @@ type Props = {
   subtitle: React.ReactNode;
   modalForm: React.ReactNode;
   actionButtonsContent: ActionButton[];
+  onCancelButton: () => void;
+  onMainButton: () => void;
+  errorMessage: string;
 };
 
 export default function Modal({
@@ -22,6 +25,9 @@ export default function Modal({
   subtitle,
   modalForm,
   actionButtonsContent,
+  errorMessage,
+  onCancelButton,
+  onMainButton,
 }: Props) {
   return (
     <Section className="modal">
@@ -31,7 +37,7 @@ export default function Modal({
       </div>
       <main>{modalForm}</main>
       <div className="action-buttons">
-        <Button width="11.625rem">
+        <Button width="11.625rem" onClick={onMainButton}>
           {actionButtonsContent[0].symbolIcon && (
             <MaterialSymbol
               icon={actionButtonsContent[0].symbolIcon}
@@ -40,10 +46,11 @@ export default function Modal({
           )}
           {actionButtonsContent[0].text}
         </Button>
-        <Button width="11.625rem" $inverted>
+        <Button width="11.625rem" $inverted onClick={onCancelButton}>
           {actionButtonsContent[1].text}
         </Button>
       </div>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </Section>
   );
 }
@@ -60,12 +67,14 @@ const Section = styled.section`
   justify-content: space-between;
 
   position: fixed;
-  transform: translateX(100%);
-  background-color: var(--component);
+  transform: translateX(85%);
+  background-color: var(--darker-component);
+  z-index: 3;
+  top: 15%;
 
-  -webkit-box-shadow: 0px 0.375rem 0.3125 0.1875rem rgba(0,0,0,0.43);
-  -moz-box-shadow: 0px 0.375rem 0.3125 0.1875rem rgba(0,0,0,0.43);
-  box-shadow: 0px 0.375rem 0.3125 0.1875rem rgba(0,0,0,0.43);
+  -webkit-box-shadow: 0px 0.375rem 0.3125 0.1875rem rgba(0, 0, 0, 0.43);
+  -moz-box-shadow: 0px 0.375rem 0.3125 0.1875rem rgba(0, 0, 0, 0.43);
+  box-shadow: 0px 0.375rem 0.3125 0.1875rem rgba(0, 0, 0, 0.43);
 
   main {
     display: flex;
@@ -101,9 +110,17 @@ const Section = styled.section`
     gap: 4.6875rem;
   }
 
+  .error-message {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: var(--red);
+  }
+
   @media (max-width: 432px) {
     max-height: 400px;
     max-width: 100%;
+    top: 10%;
+    right: 85%;
 
     .titles {
       h1 {
