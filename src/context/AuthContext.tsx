@@ -99,7 +99,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       cookies.set("refreshToken", data.refresh, {
         maxAge: REFRESH_TOKEN_EXPIRE_TIME,
       });
-      Router.push("/");
     } else {
       const err = "Credenciais inválidas.";
       console.log(err);

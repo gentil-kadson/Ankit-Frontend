@@ -44,15 +44,16 @@ export default function Me({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const uploadPictureRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   function renderProfilePicture() {
-    let src = null;
-    if (user.student.profile_picture) {
-      src = user.student.profile_picture
-    } else {
-      src = NoProfilePicture;
+    let src = NoProfilePicture;
+    if (user) {
+      if (user.student.profile_picture) {
+        src = user.student.profile_picture;
+      }
     }
     return <ProfilePicture
     width={150}
@@ -111,9 +112,11 @@ export default function Me({
   return (
     <>
       <Navbar />
+      {showModal && (
+        <DeleteAccountModal onCancelButtonClick={() => setShowModal(false)} />
+      )}
       {user && (
         <Main>
-          <DeleteAccountModal />
           {successMessage && (
             <ApiMessage category="success">{successMessage}</ApiMessage>
           )}
@@ -163,6 +166,7 @@ export default function Me({
           </div>
           <div className="user-data">
             <ProfileInputsArea
+              setShowModal={setShowModal}
               setErrorMessages={setErrorMessages}
               setSuccessMessage={setSuccessMessage}
               user={user}

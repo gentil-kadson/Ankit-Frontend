@@ -20,6 +20,7 @@ type Props = {
   nationalities: NationalityData[];
   setSuccessMessage: (message: string) => void;
   setErrorMessages: (messages: string[]) => void;
+  setShowModal: (showModal: boolean) => void;
 };
 
 type FormData = {
@@ -34,6 +35,7 @@ export default function ProfileInputsArea({
   nationalities,
   setErrorMessages,
   setSuccessMessage,
+  setShowModal
 }: Props) {
   const [formData, setFormData] = useState<FormData>({
     first_name: user.student.first_name,
@@ -51,7 +53,6 @@ export default function ProfileInputsArea({
       formData,
       user.student.id
     );
-    console.log(response.status);
     if (response.status === HTTP_200_OK) {
       setSuccessMessage("Alterações feitas com sucesso!");
       setTimeout(() => {
@@ -155,7 +156,7 @@ export default function ProfileInputsArea({
       </Container>
       <ActionButtonsContainer>
         <div className="left-side-buttons">
-          <Button width="12.375rem" className="danger-button">
+          <Button onClick={() => setShowModal(true)} width="12.375rem" className="danger-button">
             Deletar Conta
           </Button>
           <Button width="12.375rem" $inverted>

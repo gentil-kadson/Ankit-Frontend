@@ -24,20 +24,14 @@ export default function Navbar() {
     setDisplayDropDown((prevState) => !displayDropdown);
   };
 
-  const handleProfilePicture = () => {
-    if (user) {
-      return user.student.profile_picture;
-    }
-    return NoProfilePicture;
-  };
-
   const renderProfilePicture = () => {
-    let src = null;
-    if (user && user.student.profile_picture) {
-      src = user.student.profile_picture
-    } else {
-      src = NoProfilePicture;
+    let src = NoProfilePicture;
+    if (user) {
+      if (user.student.profile_picture) {
+        src = user.student.profile_picture;
+      }
     }
+
     return <ProfilePicture
     onClick={handleDropdown}
     width={80}

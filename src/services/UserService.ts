@@ -30,4 +30,18 @@ export default class UserService {
             return error.response;
         }
     }
+
+    async delete(id: string) { // Because someone typed the id string in the AuthContext
+        try {
+            const url = `${this.baseURL}/${id}/`;
+            const response = await this.axiosClient.delete(url, {
+                headers: {
+                    Authorization: `Bearer ${this.authToken}`
+                }
+            });
+            return response;
+        } catch (error: any) {
+            return error.response;
+        }
+    }
 }
