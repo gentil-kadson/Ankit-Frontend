@@ -112,7 +112,9 @@ export default function CreateStudySessionModal({ onClick }: Props) {
             },
           }
         )
-        .then((response) => Router.push("/study-session"));
+        .then((response) => {
+          Router.push(`/study-session/${response.data.id}`);
+        });
     }
   }
 
