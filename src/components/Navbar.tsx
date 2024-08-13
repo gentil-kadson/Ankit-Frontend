@@ -12,13 +12,18 @@ import NoProfilePicture from "/public/noProfilePicture.svg";
 
 export default function Navbar() {
   const [displayDropdown, setDisplayDropDown] = useState<boolean>(false);
-  const { user } = useContext(AuthContext);
+  const { user, logoutUser } = useContext(AuthContext);
 
   useEffect(() => {
     if (!cookies.get("accessToken")) {
       Router.push("/login");
     }
   }, []);
+
+  const handleLogout = () => {
+    logoutUser();
+    Router.push("/");
+  }
 
   const handleDropdown = () => {
     setDisplayDropDown((prevState) => !displayDropdown);
@@ -56,6 +61,7 @@ export default function Navbar() {
         <NavDropdown>
           <Link href="/me">Meu perfil</Link>
           <Link href="/statistics">Estatísticas</Link>
+          <Link href="/" onClick={handleLogout}>Sair</Link>
         </NavDropdown>
       )}
     </NavbarContainer>

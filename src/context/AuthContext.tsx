@@ -16,6 +16,7 @@ type AuthTokens = {
 
 type ContextDataProps = {
   loginUser: (email: string, password: string) => Promise<void>;
+  logoutUser: () => void;
   user: User | null;
 };
 
@@ -84,6 +85,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return () => clearInterval(intervalId);
   }, [authTokens, loading]);
 
+  function logoutUser() {
+    cookies.remove("accessToken");
+    cookies.remove("refreshToken");
+    setUser(null);
+  }
+
   async function loginUser(email: string, password: string) {
     const response = await api.post("/dj_rest_auth/login/", {
       email,
@@ -108,6 +115,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const contextData = {
     user,
     loginUser,
+    logoutUser
   };
 
   return (
