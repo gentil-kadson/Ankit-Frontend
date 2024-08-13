@@ -47,7 +47,7 @@ export default function Navbar() {
 
   return (
     <NavbarContainer>
-      <span className="site-logo">
+      <SiteLogoContainer onClick={() => Router.push("/")}>
         <MaterialSymbol
           icon="package_2"
           weight={700}
@@ -55,7 +55,7 @@ export default function Navbar() {
           size={86.12}
         />
         <span className="site-title">Ankit</span>
-      </span>
+      </SiteLogoContainer>
       {renderProfilePicture()}
       {displayDropdown && (
         <NavDropdown>
@@ -79,12 +79,6 @@ const NavbarContainer = styled.nav`
 
   background-color: var(--component);
 
-  .site-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-  }
-
   .site-title {
     font-size: 3rem;
     font-weight: bold;
@@ -95,4 +89,11 @@ const NavbarContainer = styled.nav`
       display: none;
     }
   }
+`;
+
+const SiteLogoContainer = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  cursor: pointer;
 `;

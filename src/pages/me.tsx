@@ -67,7 +67,7 @@ export default function Me({
     const studentService = new StudentService(accessToken);
     const response = await studentService.removeProfilePicture(user.student.id);
     if (response.status === HTTP_200_OK) {
-      setSuccessMessage("Foto removida com sucesso!");
+      setSuccessMessage("Removendo foto...");
       setTimeout(() => {
         setSuccessMessage("");
       }, SUCCESS_MESSAGE_TIMEOUT);
@@ -92,7 +92,7 @@ export default function Me({
       );
 
       if (response.status === HTTP_200_OK) {
-        setSuccessMessage("Foto atualizada com sucesso!");
+        setSuccessMessage("Atualizando foto...");
         setTimeout(() => {
           setSuccessMessage("");
         }, SUCCESS_MESSAGE_TIMEOUT);
