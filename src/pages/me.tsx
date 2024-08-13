@@ -10,6 +10,7 @@ import { MaterialSymbol } from "react-material-symbols";
 import ProfileInputsArea from "@/components/ProfileInputsArea";
 import Navbar from "@/components/Navbar";
 import ApiMessage from "@/components/ApiMessage";
+import DeleteAccountModal from "@/components/modals/DeleteAccountModal";
 
 import UserService from "@/services/UserService";
 import { StudentService } from "@/services/StudentService";
@@ -112,6 +113,7 @@ export default function Me({
       <Navbar />
       {user && (
         <Main>
+          <DeleteAccountModal />
           {successMessage && (
             <ApiMessage category="success">{successMessage}</ApiMessage>
           )}

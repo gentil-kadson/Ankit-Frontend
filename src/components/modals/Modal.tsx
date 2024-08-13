@@ -7,6 +7,7 @@ import Button from "../Button";
 
 type ActionButton = {
   symbolIcon?: SymbolCodepoints;
+  className?: string;
   text: string;
 };
 
@@ -31,7 +32,7 @@ export default function Modal({
       </div>
       <main>{modalForm}</main>
       <div className="action-buttons">
-        <Button width="11.625rem">
+        <Button width="11.625rem" className={actionButtonsContent[0].className ? actionButtonsContent[0].className : ""}>
           {actionButtonsContent[0].symbolIcon && (
             <MaterialSymbol
               icon={actionButtonsContent[0].symbolIcon}
