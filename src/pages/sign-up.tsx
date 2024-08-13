@@ -20,9 +20,10 @@ import { HTTP_200_OK, HTTP_201_CREATED } from "@/utils/constants";
 
 import { cookies } from "@/context/AuthContext";
 import { StudentService } from "@/services/StudentService";
+import UserService from "@/services/UserService";
 
 export default function SignUp() {
-  const { loginUser } = useContext(AuthContext);
+  const { loginUser, setUser } = useContext(AuthContext);
   const [nationalities, setNationalities] = useState<NationalityData[]>([]);
   const [currentFormStep, setCurrentFormStep] = useState<number>(1);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
@@ -139,8 +140,17 @@ export default function SignUp() {
   
       const response = await studentService.createStudent(formData as unknown as CreateStudentData);
       if (response.status === HTTP_201_CREATED) {
-        setErrorMessages([]);
-        router.push("/");
+        const userService = new UserService(accessToken);
+        const response = await userService.getMe();
+
+        if (response.status === HTTP_200_OK) {
+          setUser(response.data);
+          setErrorMessages([]);
+          router.push("/");
+        } else {
+          const errors = Object.values(response.data).flat().filter(value => typeof(value) === "string");
+          setErrorMessages(errors as string[]);
+        }
       } else {
         const errors = Object.values(response.data).flat().filter(value => typeof(value) === "string");
         setErrorMessages(errors as string[]);

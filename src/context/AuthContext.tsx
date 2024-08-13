@@ -17,6 +17,7 @@ type AuthTokens = {
 type ContextDataProps = {
   loginUser: (email: string, password: string) => Promise<void>;
   logoutUser: () => void;
+  setUser: (user: User | null) => void;
   user: User | null;
 };
 
@@ -114,6 +115,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const contextData = {
     user,
+    setUser,
     loginUser,
     logoutUser
   };

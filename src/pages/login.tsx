@@ -10,6 +10,7 @@ import FormGroup from "@/components/FormGroup";
 import Button from "@/components/Button";
 
 import googleLogo from "/public/googleLogo.svg";
+import Router from "next/router";
 
 export default function Login() {
   const { user, loginUser } = useContext(AuthContext);
@@ -20,6 +21,7 @@ export default function Login() {
     e.preventDefault();
     if (emailRef.current && passwordRef.current) {
       await loginUser(emailRef.current.value, passwordRef.current.value);
+      Router.push("/");
     }
   }
 
