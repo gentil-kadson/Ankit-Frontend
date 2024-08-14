@@ -15,12 +15,19 @@ import { FormEvent, useRef } from "react";
 type Props = {
   languages: Language[];
   setSessions: (sessions: StudySession[]) => void;
+  setCurrentPage: (currentPage: number) => void;
 };
 
-export default function HomepageFilters({ languages, setSessions }: Props) {
+export default function HomepageFilters({
+  languages,
+  setSessions,
+  setCurrentPage,
+}: Props) {
   const filterFormRef = useRef<HTMLFormElement>(null);
 
   async function handleStudySessionsFilter(event: FormEvent<HTMLFormElement>) {
+    // TODO: Keep query params in URL without reloading page
+    // So that parent component can keep their values when trying to get other pages
     event.preventDefault();
     if (filterFormRef.current) {
       const accessToken = cookies.get("accessToken");
@@ -35,11 +42,12 @@ export default function HomepageFilters({ languages, setSessions }: Props) {
         name: studySessionNameInput.value,
       });
 
-      for (const session of data) {
+      for (const session of data.results) {
         session.duration_in_minutes =
           studySessionService.getDisplayDuration(session);
       }
-      setSessions(data);
+      setSessions(data.results);
+      setCurrentPage(1);
     }
   }
 

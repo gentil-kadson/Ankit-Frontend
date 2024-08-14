@@ -5,13 +5,14 @@ import SelectArrow from "/public/selectArrow.svg";
 
 type Props = {
   width: number;
+  onClick: () => void;
 };
 
-export default function ShowMoreButton({ width }: Props) {
+export default function ShowMoreButton({ width, onClick }: Props) {
   const showMoreElement =
     width <= 431 ? (
       <MobileButtonContainer>
-        <button id="mobile-show-more">
+        <button onClick={onClick} id="mobile-show-more">
           <Image
             src={SelectArrow}
             width={40}
@@ -21,7 +22,7 @@ export default function ShowMoreButton({ width }: Props) {
         </button>
       </MobileButtonContainer>
     ) : (
-      <Button>Mostar mais</Button>
+      <Button onClick={onClick}>Mostar mais</Button>
     );
 
   return showMoreElement;

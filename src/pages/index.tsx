@@ -35,7 +35,7 @@ export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
       language,
     });
 
-    const studySessions: StudySession[] = data;
+    const studySessions: StudySession[] = data.results;
     for (const session of studySessions) {
       session.duration_in_minutes =
         studySessionService.getDisplayDuration(session);
@@ -70,6 +70,7 @@ export default function Home({
     studySessions as StudySession[]
   );
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   function handleCancelStudySession() {
     setShowModal(false);
@@ -91,6 +92,18 @@ export default function Home({
     });
   }
 
+  async function handleShowMore() {
+    const accessToken = cookies.get("accessToken");
+    const studySessionService = new StudySessionService(accessToken);
+    const { data } = await studySessionService.getStudySessions({
+      page: currentPage + 1,
+    });
+    if (data.results) {
+      setSessions((prevSessions) => [...prevSessions, ...data.results]);
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  }
+
   return (
     <>
       {showModal && (
@@ -100,7 +113,11 @@ export default function Home({
       <Main>
         <div className="title-and-filter">
           <Title>My Study Sessions</Title>
-          <HomepageFilters languages={languages} setSessions={setSessions} />
+          <HomepageFilters
+            languages={languages}
+            setSessions={setSessions}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
         <div className="cards-container">
           {sessions &&
@@ -116,7 +133,7 @@ export default function Home({
               />
             ))}
         </div>
-        <ShowMoreButton width={width} />
+        <ShowMoreButton width={width} onClick={handleShowMore} />
         <div id="sticky-buttons-container">
           <StartStudySession onClick={() => setShowModal(true)}>
             <MaterialSymbol icon="add" color="var(--white)" size={40} />

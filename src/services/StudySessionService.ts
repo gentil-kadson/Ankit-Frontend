@@ -3,6 +3,7 @@ import api from "./api";
 export type StudySessionQueryParams = {
   language: number;
   name: string;
+  page: number;
 };
 
 export type StudySession = {
