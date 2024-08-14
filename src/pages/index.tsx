@@ -12,39 +12,40 @@ import { MaterialSymbol } from "react-material-symbols";
 import HomepageFilters from "@/components/HomepageFilters";
 import CreateStudySessionModal from "@/components/modals/CreateStudySessionModal";
 
+import StudySessionService, {
+  StudySession,
+} from "@/services/StudySessionService";
+import { StudySessionQueryParams } from "@/services/StudySessionService";
+import LanguageService, { Language } from "@/services/LanguageService";
+
 import type {
   InferGetServerSidePropsType,
   GetServerSideProps,
   GetServerSidePropsContext,
 } from "next";
 
-type StudySession = {
-  id: number;
-  duration_in_minutes: string;
-  cards_added: number;
-  csv_file: string;
-  name: string;
-  language: string;
-};
-
 export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
   const accessToken = ctx.req.cookies.accessToken;
-  const headersConf = { Authorization: `Bearer ${accessToken}` };
 
   if (accessToken) {
-    const { data } = await api.get("/study_sessions/", {
-      headers: headersConf,
+    const { name, language } = ctx.query as unknown as StudySessionQueryParams;
+    const studySessionService = new StudySessionService(accessToken);
+    const { data } = await studySessionService.getStudySessions({
+      name,
+      language,
     });
 
     const studySessions: StudySession[] = data;
     for (const session of studySessions) {
-      const duration = Number(session.duration_in_minutes.split(":")[2]);
-      const roundDuration = Math.ceil(duration);
-      session.duration_in_minutes = roundDuration.toString();
+      session.duration_in_minutes =
+        studySessionService.getDisplayDuration(session);
     }
 
+    const languageService = new LanguageService();
+    const { data: languages } = await languageService.getLanguages();
+
     return {
-      props: { studySessions },
+      props: { studySessions, languages },
     };
   }
 
@@ -55,10 +56,14 @@ export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
     },
     props: {},
   };
-}) satisfies GetServerSideProps<{ studySessions: StudySession[] }>;
+}) satisfies GetServerSideProps<{
+  studySessions: StudySession[];
+  languages: Language[];
+}>;
 
 export default function Home({
   studySessions,
+  languages,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { width } = useScreenSize();
   const [sessions, setSessions] = useState<StudySession[]>(
@@ -95,20 +100,21 @@ export default function Home({
       <Main>
         <div className="title-and-filter">
           <Title>My Study Sessions</Title>
-          <HomepageFilters />
+          <HomepageFilters languages={languages} setSessions={setSessions} />
         </div>
         <div className="cards-container">
-          {sessions?.map((studySession) => (
-            <StudySessionCard
-              studySessionId={studySession.id}
-              key={studySession.id}
-              studyTime={studySession.duration_in_minutes}
-              numberOfCards={studySession.cards_added}
-              studiedLanguage={studySession.language}
-              title={studySession.name}
-              onDeleteClick={handleDeleteStudySession}
-            />
-          ))}
+          {sessions &&
+            sessions.map((studySession) => (
+              <StudySessionCard
+                studySessionId={studySession.id}
+                key={studySession.id}
+                studyTime={studySession.duration_in_minutes}
+                numberOfCards={studySession.cards_added}
+                studiedLanguage={studySession.language}
+                title={studySession.name}
+                onDeleteClick={handleDeleteStudySession}
+              />
+            ))}
         </div>
         <ShowMoreButton width={width} />
         <div id="sticky-buttons-container">
