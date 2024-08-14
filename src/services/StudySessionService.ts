@@ -1,56 +1,61 @@
 import api from "./api";
 
-type Language = {
-  id: number;
+export type StudySessionQueryParams = {
+  language: number;
   name: string;
-  icon: string | null;
+  page: number;
 };
 
-export type VocabularyBuilderObj = {
-  language: Language;
+export type StudySession = {
+  id: number;
+  duration_in_minutes: string;
+  cards_added: number;
+  csv_file: string;
   name: string;
-  topic: boolean;
-  card_type: "basic" | "intermediate" | "advanced";
+  language: string;
 };
 
 export default class StudySessionService {
   private axiosClient = api;
+  private baseURL = "/study_sessions";
   private authToken = "";
-  private studySessionId = 0;
 
-  constructor(authToken: string, studySessionId: number) {
+  constructor(authToken: string) {
     this.authToken = authToken;
-    this.studySessionId = studySessionId;
   }
 
-  async getVocabulary(data: VocabularyBuilderObj) {
-    const { data: cards } = await this.axiosClient.post(
-      "/vocabulary_builder/",
-      {
-        ...data,
-      },
-      {
+  getDisplayDuration(studySession: StudySession) {
+    const duration = Number(studySession.duration_in_minutes.split(":")[2]);
+    const roundDuration = Math.ceil(duration);
+    return roundDuration.toString();
+  }
+
+  async getStudySessions(query_params: Partial<StudySessionQueryParams> = {}) {
+    try {
+      const url = `${this.baseURL}/`;
+      const response = await this.axiosClient.get(url, {
+        params: { ...query_params },
         headers: {
           Authorization: `Bearer ${this.authToken}`,
         },
-      }
-    );
-
-    return cards;
+      });
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
   }
 
-  async finishStudySession() {
-    await this.axiosClient
-      .post(
-        `/study_sessions/${this.studySessionId}/finish/`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${this.authToken}`,
-          },
-        }
-      )
-      .then((response) => response.data)
-      .catch((err) => err);
+  async delete(id: number) {
+    try {
+      const url = `${this.baseURL}/${id}/`;
+      const response = await this.axiosClient.delete(url, {
+        headers: {
+          Authorization: `Bearer ${this.authToken}`,
+        },
+      });
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
   }
 }

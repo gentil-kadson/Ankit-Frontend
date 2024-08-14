@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FormEvent, useContext, useRef } from "react";
+import { FormEvent, useContext, useRef, useState } from "react";
 import AuthContext from "@/context/AuthContext";
 
 import Image from "next/image";
@@ -8,18 +8,26 @@ import { MaterialSymbol } from "react-material-symbols";
 import Label from "@/components/Label";
 import FormGroup from "@/components/FormGroup";
 import Button from "@/components/Button";
+import ApiMessage from "@/components/ApiMessage";
 
 import googleLogo from "/public/googleLogo.svg";
+import Router from "next/router";
 
 export default function Login() {
   const { user, loginUser } = useContext(AuthContext);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   async function handleUserLogin(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (emailRef.current && passwordRef.current) {
-      await loginUser(emailRef.current.value, passwordRef.current.value);
+      const response = await loginUser(emailRef.current.value, passwordRef.current.value);
+      if (response.status === 200) {
+        Router.push("/");
+      } else {
+        setErrorMessage(response.message);
+      }
     }
   }
 
@@ -38,6 +46,11 @@ export default function Login() {
         <h2>
           Sua ferramenta para aprender idiomas <span>de maneira prática</span>
         </h2>
+        { errorMessage && (
+          <ErrorMessageContainer>
+            <ApiMessage category="error">{ errorMessage }</ApiMessage>
+          </ErrorMessageContainer>
+        ) }
       </Header>
       <LoginForm method="post" onSubmit={(e) => handleUserLogin(e)}>
         <fieldset>
@@ -167,3 +180,7 @@ const LoginForm = styled.form`
     }
   }
 `;
+
+const ErrorMessageContainer = styled.div`
+  margin-top: 2rem;
+`

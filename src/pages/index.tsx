@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import useScreenSize from "@/hooks/useScreenSize";
-import api from "@/services/api";
 import { useState } from "react";
 import { cookies } from "@/context/AuthContext";
+import { useRouter } from "next/router";
 
 import Title from "@/components/Title";
 import StudySessionCard from "@/components/studySessionCard/StudySessionCard";
@@ -12,39 +12,45 @@ import { MaterialSymbol } from "react-material-symbols";
 import HomepageFilters from "@/components/HomepageFilters";
 import CreateStudySessionModal from "@/components/modals/CreateStudySessionModal";
 
+import StudySessionService, {
+  StudySession,
+} from "@/services/StudySessionService";
+import { StudySessionQueryParams } from "@/services/StudySessionService";
+import LanguageService, { Language } from "@/services/LanguageService";
+
 import type {
   InferGetServerSidePropsType,
   GetServerSideProps,
   GetServerSidePropsContext,
 } from "next";
-
-type StudySession = {
-  id: number;
-  duration_in_minutes: string;
-  cards_added: number;
-  csv_file: string;
-  name: string;
-  language: string;
-};
+import { HTTP_204_NO_CONTENT } from "@/utils/constants";
 
 export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
   const accessToken = ctx.req.cookies.accessToken;
-  const headersConf = { Authorization: `Bearer ${accessToken}` };
 
   if (accessToken) {
-    const { data } = await api.get("/study_sessions/", {
-      headers: headersConf,
+    const { name, language } = ctx.query as unknown as StudySessionQueryParams;
+    const studySessionService = new StudySessionService(accessToken);
+    const { data } = await studySessionService.getStudySessions({
+      name,
+      language,
     });
 
-    const studySessions: StudySession[] = data;
+    const studySessions: StudySession[] = data.results;
     for (const session of studySessions) {
-      const duration = Number(session.duration_in_minutes.split(":")[2]);
-      const roundDuration = Math.ceil(duration);
-      session.duration_in_minutes = roundDuration.toString();
+      session.duration_in_minutes =
+        studySessionService.getDisplayDuration(session);
     }
 
+    const languageService = new LanguageService();
+    const { data: languages } = await languageService.getLanguages();
+
     return {
-      props: { studySessions },
+      props: {
+        studySessions,
+        languages,
+        initialShowMoreButton: data.next ? true : false,
+      },
     };
   }
 
@@ -55,16 +61,27 @@ export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
     },
     props: {},
   };
-}) satisfies GetServerSideProps<{ studySessions: StudySession[] }>;
+}) satisfies GetServerSideProps<{
+  studySessions: StudySession[];
+  languages: Language[];
+  initialShowMoreButton: boolean;
+}>;
 
 export default function Home({
   studySessions,
+  languages,
+  initialShowMoreButton,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { width } = useScreenSize();
   const [sessions, setSessions] = useState<StudySession[]>(
     studySessions as StudySession[]
   );
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [displayShowMoreButton, setDisplayShowMoreButton] = useState<boolean>(
+    initialShowMoreButton as boolean
+  );
+  const router = useRouter();
 
   function handleCancelStudySession() {
     setShowModal(false);
@@ -72,18 +89,37 @@ export default function Home({
 
   function handleDeleteStudySession(id: number) {
     const accessToken = cookies.get("accessToken");
-    api
-      .delete(`/study_sessions/${id}/`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
-      .then((response) => {
+    const studySessionService = new StudySessionService(accessToken);
+
+    studySessionService.delete(id).then((response) => {
+      if (response.status === HTTP_204_NO_CONTENT) {
         setSessions((prevSessions) => {
           const updatedSessions = prevSessions.filter(
             (session) => session.id !== id
           );
           return updatedSessions;
         });
-      });
+      }
+    });
+  }
+
+  async function handleShowMore() {
+    const accessToken = cookies.get("accessToken");
+    const studySessionService = new StudySessionService(accessToken);
+    const { data } = await studySessionService.getStudySessions({
+      page: currentPage + 1,
+      name: router.query.name as string,
+      language: router.query.language as unknown as number,
+    });
+    if (data.results) {
+      setSessions((prevSessions) => [...prevSessions, ...data.results]);
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+    if (!data.next) {
+      setDisplayShowMoreButton(false);
+    } else {
+      setDisplayShowMoreButton(true);
+    }
   }
 
   return (
@@ -95,22 +131,30 @@ export default function Home({
       <Main>
         <div className="title-and-filter">
           <Title>My Study Sessions</Title>
-          <HomepageFilters />
+          <HomepageFilters
+            languages={languages}
+            setSessions={setSessions}
+            setCurrentPage={setCurrentPage}
+            setDisplayShowMoreButton={setDisplayShowMoreButton}
+          />
         </div>
         <div className="cards-container">
-          {sessions?.map((studySession) => (
-            <StudySessionCard
-              studySessionId={studySession.id}
-              key={studySession.id}
-              studyTime={studySession.duration_in_minutes}
-              numberOfCards={studySession.cards_added}
-              studiedLanguage={studySession.language}
-              title={studySession.name}
-              onDeleteClick={handleDeleteStudySession}
-            />
-          ))}
+          {sessions &&
+            sessions.map((studySession) => (
+              <StudySessionCard
+                studySessionId={studySession.id}
+                key={studySession.id}
+                studyTime={studySession.duration_in_minutes}
+                numberOfCards={studySession.cards_added}
+                studiedLanguage={studySession.language}
+                title={studySession.name}
+                onDeleteClick={handleDeleteStudySession}
+              />
+            ))}
         </div>
-        <ShowMoreButton width={width} />
+        {displayShowMoreButton && (
+          <ShowMoreButton width={width} onClick={handleShowMore} />
+        )}
         <div id="sticky-buttons-container">
           <StartStudySession onClick={() => setShowModal(true)}>
             <MaterialSymbol icon="add" color="var(--white)" size={40} />

@@ -7,8 +7,8 @@ export default function SearchInput() {
     <Container>
       <input
         type="text"
-        name="search-ss"
-        id="search-ss"
+        name="study_session_name"
+        id="study_session_name"
         placeholder="The Whale..."
       />
       <div className="search-icon-container">

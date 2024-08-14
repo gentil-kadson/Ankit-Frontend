@@ -12,13 +12,18 @@ import NoProfilePicture from "/public/noProfilePicture.svg";
 
 export default function Navbar() {
   const [displayDropdown, setDisplayDropDown] = useState<boolean>(false);
-  const { user } = useContext(AuthContext);
+  const { user, logoutUser } = useContext(AuthContext);
 
   useEffect(() => {
     if (!cookies.get("accessToken")) {
       Router.push("/login");
     }
   }, []);
+
+  const handleLogout = () => {
+    logoutUser();
+    Router.push("/");
+  }
 
   const handleDropdown = () => {
     setDisplayDropDown((prevState) => !displayDropdown);
@@ -42,7 +47,7 @@ export default function Navbar() {
 
   return (
     <NavbarContainer>
-      <span className="site-logo">
+      <SiteLogoContainer onClick={() => Router.push("/")}>
         <MaterialSymbol
           icon="package_2"
           weight={700}
@@ -50,12 +55,13 @@ export default function Navbar() {
           size={86.12}
         />
         <span className="site-title">Ankit</span>
-      </span>
+      </SiteLogoContainer>
       {renderProfilePicture()}
       {displayDropdown && (
         <NavDropdown>
           <Link href="/me">Meu perfil</Link>
           <Link href="/statistics">Estatísticas</Link>
+          <Link href="/" onClick={handleLogout}>Sair</Link>
         </NavDropdown>
       )}
     </NavbarContainer>
@@ -73,12 +79,6 @@ const NavbarContainer = styled.nav`
 
   background-color: var(--component);
 
-  .site-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-  }
-
   .site-title {
     font-size: 3rem;
     font-weight: bold;
@@ -89,4 +89,11 @@ const NavbarContainer = styled.nav`
       display: none;
     }
   }
+`;
+
+const SiteLogoContainer = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  cursor: pointer;
 `;
