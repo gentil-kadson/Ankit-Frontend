@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 import SearchInput from "./SearchInput";
 import Select from "./Select";
@@ -24,6 +25,7 @@ export default function HomepageFilters({
   setCurrentPage,
 }: Props) {
   const filterFormRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
 
   async function handleStudySessionsFilter(event: FormEvent<HTMLFormElement>) {
     // TODO: Keep query params in URL without reloading page
@@ -48,6 +50,9 @@ export default function HomepageFilters({
       }
       setSessions(data.results);
       setCurrentPage(1);
+      router.query.language = languageInput.value;
+      router.query.name = studySessionNameInput.value;
+      router.push(router);
     }
   }
 
