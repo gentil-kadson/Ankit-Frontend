@@ -2,6 +2,7 @@ import styled from "styled-components";
 import useScreenSize from "@/hooks/useScreenSize";
 import { useState } from "react";
 import { cookies } from "@/context/AuthContext";
+import { useRouter } from "next/router";
 
 import Title from "@/components/Title";
 import StudySessionCard from "@/components/studySessionCard/StudySessionCard";
@@ -45,7 +46,11 @@ export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
     const { data: languages } = await languageService.getLanguages();
 
     return {
-      props: { studySessions, languages },
+      props: {
+        studySessions,
+        languages,
+        initialShowMoreButton: data.next ? true : false,
+      },
     };
   }
 
@@ -59,11 +64,13 @@ export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
 }) satisfies GetServerSideProps<{
   studySessions: StudySession[];
   languages: Language[];
+  initialShowMoreButton: boolean;
 }>;
 
 export default function Home({
   studySessions,
   languages,
+  initialShowMoreButton,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { width } = useScreenSize();
   const [sessions, setSessions] = useState<StudySession[]>(
@@ -71,6 +78,10 @@ export default function Home({
   );
   const [showModal, setShowModal] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [displayShowMoreButton, setDisplayShowMoreButton] = useState<boolean>(
+    initialShowMoreButton as boolean
+  );
+  const router = useRouter();
 
   function handleCancelStudySession() {
     setShowModal(false);
@@ -97,10 +108,17 @@ export default function Home({
     const studySessionService = new StudySessionService(accessToken);
     const { data } = await studySessionService.getStudySessions({
       page: currentPage + 1,
+      name: router.query.name as string,
+      language: router.query.language as unknown as number,
     });
     if (data.results) {
       setSessions((prevSessions) => [...prevSessions, ...data.results]);
       setCurrentPage((prevPage) => prevPage + 1);
+    }
+    if (!data.next) {
+      setDisplayShowMoreButton(false);
+    } else {
+      setDisplayShowMoreButton(true);
     }
   }
 
@@ -117,6 +135,7 @@ export default function Home({
             languages={languages}
             setSessions={setSessions}
             setCurrentPage={setCurrentPage}
+            setDisplayShowMoreButton={setDisplayShowMoreButton}
           />
         </div>
         <div className="cards-container">
@@ -133,7 +152,9 @@ export default function Home({
               />
             ))}
         </div>
-        <ShowMoreButton width={width} onClick={handleShowMore} />
+        {displayShowMoreButton && (
+          <ShowMoreButton width={width} onClick={handleShowMore} />
+        )}
         <div id="sticky-buttons-container">
           <StartStudySession onClick={() => setShowModal(true)}>
             <MaterialSymbol icon="add" color="var(--white)" size={40} />

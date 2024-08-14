@@ -17,12 +17,14 @@ type Props = {
   languages: Language[];
   setSessions: (sessions: StudySession[]) => void;
   setCurrentPage: (currentPage: number) => void;
+  setDisplayShowMoreButton: (displayShowMoreButton: boolean) => void;
 };
 
 export default function HomepageFilters({
   languages,
   setSessions,
   setCurrentPage,
+  setDisplayShowMoreButton,
 }: Props) {
   const filterFormRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
@@ -53,6 +55,12 @@ export default function HomepageFilters({
       router.query.language = languageInput.value;
       router.query.name = studySessionNameInput.value;
       router.push(router);
+
+      if (!data.next) {
+        setDisplayShowMoreButton(false);
+      } else {
+        setDisplayShowMoreButton(true);
+      }
     }
   }
 
