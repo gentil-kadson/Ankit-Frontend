@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import useScreenSize from "@/hooks/useScreenSize";
-import api from "@/services/api";
 import { useState } from "react";
 import { cookies } from "@/context/AuthContext";
 
@@ -23,6 +22,7 @@ import type {
   GetServerSideProps,
   GetServerSidePropsContext,
 } from "next";
+import { HTTP_204_NO_CONTENT } from "@/utils/constants";
 
 export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
   const accessToken = ctx.req.cookies.accessToken;
@@ -77,18 +77,18 @@ export default function Home({
 
   function handleDeleteStudySession(id: number) {
     const accessToken = cookies.get("accessToken");
-    api
-      .delete(`/study_sessions/${id}/`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
-      .then((response) => {
+    const studySessionService = new StudySessionService(accessToken);
+
+    studySessionService.delete(id).then((response) => {
+      if (response.status === HTTP_204_NO_CONTENT) {
         setSessions((prevSessions) => {
           const updatedSessions = prevSessions.filter(
             (session) => session.id !== id
           );
           return updatedSessions;
         });
-      });
+      }
+    });
   }
 
   return (

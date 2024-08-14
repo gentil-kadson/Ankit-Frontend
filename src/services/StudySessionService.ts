@@ -43,4 +43,18 @@ export default class StudySessionService {
       return error.response;
     }
   }
+
+  async delete(id: number) {
+    try {
+      const url = `${this.baseURL}/${id}/`;
+      const response = await this.axiosClient.delete(url, {
+        headers: {
+          Authorization: `Bearer ${this.authToken}`,
+        },
+      });
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
 }
