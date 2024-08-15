@@ -9,7 +9,7 @@ type CreateUserData = {
 type LoginData = {
   email: string;
   password: string;
-}
+};
 
 export default class AuthService {
   private axiosClient = api;
@@ -29,6 +29,17 @@ export default class AuthService {
     try {
       const url = `${this.baseURL}/login/`;
       const response = await this.axiosClient.post(url, data);
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
+
+  async loginUserByGoogle(code: string) {
+    try {
+      const url = `${this.baseURL}/google/`;
+      console.log(code);
+      const response = await this.axiosClient.post(url, { code: code });
       return response;
     } catch (error: any) {
       return error.response;

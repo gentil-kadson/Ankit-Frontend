@@ -4,6 +4,7 @@ import api from "@/services/api";
 
 import { User } from "@/services/UserService";
 import AuthService from "@/services/AuthService";
+import { HTTP_200_OK, HTTP_201_CREATED } from "@/utils/constants";
 
 type AuthProviderProps = {
   children: JSX.Element;
@@ -15,7 +16,13 @@ type AuthTokens = {
 };
 
 type ContextDataProps = {
-  loginUser: (email: string, password: string) => Promise<{ status: any, message: string }>;
+  loginUser: (
+    email: string,
+    password: string
+  ) => Promise<{ status: any; message: string }>;
+  loginUserByGoogle: (
+    code: string
+  ) => Promise<{ status: any; message: string }>;
   logoutUser: () => void;
   setUser: (user: User | null) => void;
   user: User | null;
@@ -92,6 +99,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(null);
   }
 
+  async function loginUserByGoogle(code: string) {
+    const authService = new AuthService();
+    const response = await authService.loginUserByGoogle(code);
+    const { data, status } = response;
+
+    if (status === HTTP_201_CREATED || status === HTTP_200_OK) {
+      setAuthTokens({ access: data.access, refresh: data.refresh });
+      setUser(data.user);
+      cookies.set("accessToken", data.access, {
+        maxAge: ACCESS_TOKEN_EXPIRE_TIME,
+      });
+      cookies.set("refreshToken", data.refresh, {
+        maxAge: REFRESH_TOKEN_EXPIRE_TIME,
+      });
+      return { status, message: "Usuário criado com sucesso" };
+    } else {
+      return { status, message: "Credenciais inválidas" };
+    }
+  }
+
   async function loginUser(email: string, password: string) {
     const authService = new AuthService();
     const response = await authService.loginUser({
@@ -108,9 +135,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       cookies.set("refreshToken", data.refresh, {
         maxAge: REFRESH_TOKEN_EXPIRE_TIME,
       });
-      return { status, message: "Usuário criado com sucesso" }
+      return { status, message: "Usuário criado com sucesso" };
     } else {
-      return { status, message: "Credenciais inválidas" }
+      return { status, message: "Credenciais inválidas" };
     }
   }
 
@@ -118,7 +145,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     user,
     setUser,
     loginUser,
-    logoutUser
+    loginUserByGoogle,
+    logoutUser,
   };
 
   return (

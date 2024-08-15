@@ -50,16 +50,12 @@ export default function Me({
 
   function renderProfilePicture() {
     let src = NoProfilePicture;
-    if (user) {
+    if (user && user.student) {
       if (user.student.profile_picture) {
         src = user.student.profile_picture;
       }
     }
-    return <ProfilePicture
-    width={150}
-    height={150}
-    src={src}
-  />
+    return <ProfilePicture width={150} height={150} src={src} />;
   }
 
   async function handleProfilePictureRemoval() {
@@ -71,12 +67,14 @@ export default function Me({
       setTimeout(() => {
         setSuccessMessage("");
       }, SUCCESS_MESSAGE_TIMEOUT);
-      
+
       setTimeout(() => {
         router.reload();
       }, 2000);
     } else {
-      const errors = Object.values(response.data).flat().filter(value => typeof(value) === "string");
+      const errors = Object.values(response.data)
+        .flat()
+        .filter((value) => typeof value === "string");
       setErrorMessages(errors);
     }
   }
@@ -129,14 +127,10 @@ export default function Me({
               );
             })}
           <div className="profile-picture">
-            <figure>
-              {renderProfilePicture()}
-            </figure>
+            <figure>{renderProfilePicture()}</figure>
             <div className="buttons-container">
               <Button width="16.4375rem">
-                <HiddenInputLabel
-                  htmlFor="profile_picture"
-                >
+                <HiddenInputLabel htmlFor="profile_picture">
                   <MaterialSymbol
                     icon="upload"
                     color="var(--white)"
@@ -154,13 +148,17 @@ export default function Me({
                 onChange={handleProfilePictureUpload}
                 ref={uploadPictureRef}
               />
-              <Button onClick={handleProfilePictureRemoval} width="16.4375rem" $inverted>
-                  <MaterialSymbol
-                    icon="no_photography"
-                    color="var(--blue)"
-                    size={25}
-                  />
-                  Remover Foto
+              <Button
+                onClick={handleProfilePictureRemoval}
+                width="16.4375rem"
+                $inverted
+              >
+                <MaterialSymbol
+                  icon="no_photography"
+                  color="var(--blue)"
+                  size={25}
+                />
+                Remover Foto
               </Button>
             </div>
           </div>
@@ -238,4 +236,4 @@ const HiddenInputLabel = styled.label`
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-`
+`;
