@@ -20,9 +20,7 @@ type ContextDataProps = {
     email: string,
     password: string
   ) => Promise<{ status: any; message: string }>;
-  loginUserByGoogle: (
-    code: string
-  ) => Promise<{ status: any; message: string }>;
+  loginUserByGoogle: (code: string) => Promise<any>;
   logoutUser: () => void;
   setUser: (user: User | null) => void;
   user: User | null;
@@ -102,21 +100,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function loginUserByGoogle(code: string) {
     const authService = new AuthService();
     const response = await authService.loginUserByGoogle(code);
-    const { data, status } = response;
 
-    if (status === HTTP_201_CREATED || status === HTTP_200_OK) {
-      setAuthTokens({ access: data.access, refresh: data.refresh });
-      setUser(data.user);
-      cookies.set("accessToken", data.access, {
+    if (
+      response.status === HTTP_201_CREATED ||
+      response.status === HTTP_200_OK
+    ) {
+      setAuthTokens({
+        access: response.data.access,
+        refresh: response.data.refresh,
+      });
+      setUser(response.data.user);
+      cookies.set("accessToken", response.data.access, {
         maxAge: ACCESS_TOKEN_EXPIRE_TIME,
       });
-      cookies.set("refreshToken", data.refresh, {
+      cookies.set("refreshToken", response.data.refresh, {
         maxAge: REFRESH_TOKEN_EXPIRE_TIME,
       });
-      return { status, message: "Usuário criado com sucesso" };
-    } else {
-      return { status, message: "Credenciais inválidas" };
     }
+    return response;
   }
 
   async function loginUser(email: string, password: string) {

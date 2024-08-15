@@ -1,4 +1,4 @@
-import { useState, useContext, FormEvent, useRef } from "react";
+import { useState, useContext, FormEvent, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
@@ -15,7 +15,9 @@ import AuthContext from "@/context/AuthContext";
 
 import { CreateStudentData } from "@/services/StudentService";
 import AuthService from "@/services/AuthService";
-import NationalityService, { NationalityData } from "@/services/NationalityService";
+import NationalityService, {
+  NationalityData,
+} from "@/services/NationalityService";
 import { HTTP_200_OK, HTTP_201_CREATED } from "@/utils/constants";
 
 import { cookies } from "@/context/AuthContext";
@@ -25,7 +27,7 @@ import UserService from "@/services/UserService";
 export default function SignUp() {
   const { loginUser, setUser } = useContext(AuthContext);
   const [nationalities, setNationalities] = useState<NationalityData[]>([]);
-  const [currentFormStep, setCurrentFormStep] = useState<number>(1);
+  const [currentFormStep, setCurrentFormStep] = useState<number>(0);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string>("");
   const {
@@ -37,6 +39,23 @@ export default function SignUp() {
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
 
+  useEffect(() => {
+    setFormInitialStep();
+  }, [router.query]);
+
+  useEffect(() => {
+    getNationalities();
+  }, []);
+
+  function setFormInitialStep() {
+    console.log(router.query.code);
+    if (router.query.code) {
+      setCurrentFormStep(2);
+    } else {
+      setCurrentFormStep(1);
+    }
+  }
+
   async function getNationalities() {
     const nationalityService = new NationalityService();
     const response = await nationalityService.getNationalities();
@@ -44,7 +63,7 @@ export default function SignUp() {
       setNationalities(response.data);
     } else {
       const errors = Object.values(response.data).flat();
-      setErrorMessages(errors as string[])
+      setErrorMessages(errors as string[]);
     }
   }
 
@@ -58,10 +77,9 @@ export default function SignUp() {
       setCurrentFormStep(2);
       await loginUser(data.email, data.password1);
       setErrorMessages([]);
-      getNationalities();
       setTimeout(() => {
         setSuccessMessage("");
-      }, 5000)
+      }, 5000);
     } else {
       const errors = Object.values(response.data).flat();
       setErrorMessages(errors as string[]);
@@ -137,8 +155,10 @@ export default function SignUp() {
       const formData = new FormData(formRef.current);
       const accessToken = cookies.get("accessToken");
       const studentService = new StudentService(accessToken);
-  
-      const response = await studentService.createStudent(formData as unknown as CreateStudentData);
+
+      const response = await studentService.createStudent(
+        formData as unknown as CreateStudentData
+      );
       if (response.status === HTTP_201_CREATED) {
         const userService = new UserService(accessToken);
         const response = await userService.getMe();
@@ -148,20 +168,28 @@ export default function SignUp() {
           setErrorMessages([]);
           router.push("/");
         } else {
-          const errors = Object.values(response.data).flat().filter(value => typeof(value) === "string");
+          const errors = Object.values(response.data)
+            .flat()
+            .filter((value) => typeof value === "string");
           setErrorMessages(errors as string[]);
         }
       } else {
-        const errors = Object.values(response.data).flat().filter(value => typeof(value) === "string");
+        const errors = Object.values(response.data)
+          .flat()
+          .filter((value) => typeof value === "string");
         setErrorMessages(errors as string[]);
       }
     }
-
   }
 
   function renderStudentDataForm() {
     return (
-      <Form id="student-form" ref={formRef} action="post" onSubmit={handleStudentCreation}>
+      <Form
+        id="student-form"
+        ref={formRef}
+        action="post"
+        onSubmit={handleStudentCreation}
+      >
         <StudentFormFields>
           <fieldset id="fieldset-1">
             <FormGroup>
@@ -193,11 +221,14 @@ export default function SignUp() {
                 Nacionalidade
               </Label>
               <Select required name="nationality" id="nationality">
-                {nationalities && (
-                  nationalities.map(nationality => {
-                    return <option key={nationality.id} value={nationality.id}>{nationality.name}</option>
-                  })
-                )}
+                {nationalities &&
+                  nationalities.map((nationality) => {
+                    return (
+                      <option key={nationality.id} value={nationality.id}>
+                        {nationality.name}
+                      </option>
+                    );
+                  })}
               </Select>
             </FormGroup>
           </fieldset>
@@ -237,11 +268,15 @@ export default function SignUp() {
         {errorMessages && (
           <ErrorMessages>
             {errorMessages.map((value, idx) => (
-              <ApiMessage category="error" key={idx}>{value}</ApiMessage>
+              <ApiMessage category="error" key={idx}>
+                {value}
+              </ApiMessage>
             ))}
           </ErrorMessages>
         )}
-        {successMessage && <ApiMessage category="success">{ successMessage }</ApiMessage>}
+        {successMessage && (
+          <ApiMessage category="success">{successMessage}</ApiMessage>
+        )}
       </header>
       {renderForm()}
     </Main>

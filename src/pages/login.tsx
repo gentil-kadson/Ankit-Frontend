@@ -29,7 +29,11 @@ export default function Login() {
       if (router.query.code) {
         const response = await loginUserByGoogle(router.query.code as string);
         if (response.status === HTTP_200_OK || HTTP_201_CREATED) {
-          Router.push("/");
+          if (response.data.user.student) {
+            Router.push("/");
+          } else {
+            Router.push(`sign-up?code=${router.query.code}`);
+          }
         } else {
           setErrorMessage(
             "Houve um erro ao logar com a Google. Tente novamente"
