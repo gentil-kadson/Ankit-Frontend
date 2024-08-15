@@ -12,7 +12,7 @@ export type StudySession = {
   cards_added: number;
   csv_file: string;
   name: string;
-  language: string;
+  language: { id: number; name: string };
 };
 
 export default class StudySessionService {
@@ -22,6 +22,12 @@ export default class StudySessionService {
 
   constructor(authToken: string) {
     this.authToken = authToken;
+  }
+
+  async getStudySessionLanguageId(sessionId: number): Promise<number> {
+    return await this.axiosClient
+      .get(`${this.baseURL}/${sessionId}`)
+      .then((response) => response.data.language.id);
   }
 
   getDisplayDuration(studySession: StudySession) {

@@ -13,16 +13,17 @@ const buttonsData = [
 
 export default function FinishStudySessionModal() {
   return (
-    <Modal
-      actionButtonsContent={buttonsData}
-      mainTitle="End Study Session"
-      subtitle={
-        <>
-          If you download the vocabulary file, your study session will end, and
-          you'll <strong>lose access</strong> to the session. Are you sure?
-        </>
-      }
-      modalForm={<></>}
-    />
+    <div>Hello word</div>
+    // <Modal
+    //   actionButtonsContent={buttonsData}
+    //   mainTitle="End Study Session"
+    //   subtitle={
+    //     <>
+    //       If you download the vocabulary file, your study session will end, and
+    //       you'll <strong>lose access</strong> to the session. Are you sure?
+    //     </>
+    //   }
+    //   modalForm={<></>}
+    // />
   );
 }

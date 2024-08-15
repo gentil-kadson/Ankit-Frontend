@@ -13,7 +13,7 @@ export type VocabularyBuilderObj = {
   card_type: "basic" | "intermediate" | "advanced";
 };
 
-export default class StudySessionService {
+export default class StudySessionRoomService {
   private axiosClient = api;
   private authToken = "";
   private studySessionId = 0;

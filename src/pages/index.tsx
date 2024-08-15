@@ -146,7 +146,7 @@ export default function Home({
                 key={studySession.id}
                 studyTime={studySession.duration_in_minutes}
                 numberOfCards={studySession.cards_added}
-                studiedLanguage={studySession.language}
+                studiedLanguage={studySession.language.name}
                 title={studySession.name}
                 onDeleteClick={handleDeleteStudySession}
               />
