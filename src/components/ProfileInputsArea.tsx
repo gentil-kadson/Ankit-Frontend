@@ -1,4 +1,5 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 
 import styled from "styled-components";
@@ -9,6 +10,7 @@ import Button from "./Button";
 
 import { User } from "@/services/UserService";
 import { StudentService } from "@/services/StudentService";
+import AuthService from "@/services/AuthService";
 import { NationalityData } from "@/services/NationalityService";
 import { cookies } from "@/context/AuthContext";
 import { HTTP_200_OK, SUCCESS_MESSAGE_TIMEOUT } from "@/utils/constants";
@@ -35,7 +37,7 @@ export default function ProfileInputsArea({
   nationalities,
   setErrorMessages,
   setSuccessMessage,
-  setShowModal
+  setShowModal,
 }: Props) {
   const [formData, setFormData] = useState<FormData>({
     first_name: user.student.first_name,
@@ -43,6 +45,32 @@ export default function ProfileInputsArea({
     educational_level: user.student.educational_level,
     nationality: user.student.nationality,
   });
+  const [linkGoogleButtonText, setLinkGoogleButtonText] =
+    useState<string>("Vincular");
+  const router = useRouter();
+
+  useEffect(() => {
+    getGoogleLinkAccountText();
+  }, []);
+
+  useEffect(() => {
+    async function linkGoogleUser() {
+      if (router.query.code) {
+        const authService = new AuthService();
+        const response = await authService.connectUserToGoogle(
+          router.query.code as string,
+          cookies.get("accessToken")
+        );
+        if (response.status === 200) {
+          setLinkGoogleButtonText("Desvincular");
+          router.push("/me");
+          setSuccessMessage("Conta vinculada com sucesso!");
+        }
+      }
+    }
+
+    linkGoogleUser();
+  }, [router.query]);
 
   async function handleChangeStudentInfo(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -94,6 +122,41 @@ export default function ProfileInputsArea({
           | "University",
       };
     });
+  }
+
+  async function getGoogleLinkAccountText() {
+    const authService = new AuthService();
+    const response = await authService.getUserSocialAccounts(
+      cookies.get("accessToken")
+    );
+    const userHasNoSocialAccounts = response.data.length === 0;
+    if (userHasNoSocialAccounts) {
+      setLinkGoogleButtonText("Vincular");
+    } else {
+      setLinkGoogleButtonText("Desvincular");
+    }
+  }
+
+  async function handleGoogleLinkButton() {
+    const authService = new AuthService();
+    const response = await authService.getUserSocialAccounts(
+      cookies.get("accessToken")
+    );
+    if (response.data.length === 0) {
+      router.push(process.env.NEXT_PUBLIC_GOOGLE_LINK_URL as string);
+    } else {
+      const disconnectResponse = await authService.disconnectUserFromGoogle(
+        response.data[0].id,
+        cookies.get("accessToken")
+      );
+      if (disconnectResponse.status === 200) {
+        setLinkGoogleButtonText("Vincular");
+        setSuccessMessage("Conta desvinculada com sucesso!");
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, SUCCESS_MESSAGE_TIMEOUT);
+      }
+    }
   }
 
   return (
@@ -156,11 +219,19 @@ export default function ProfileInputsArea({
       </Container>
       <ActionButtonsContainer>
         <div className="left-side-buttons">
-          <Button onClick={() => setShowModal(true)} width="12.375rem" className="danger-button">
+          <Button
+            onClick={() => setShowModal(true)}
+            width="12.375rem"
+            className="danger-button"
+          >
             Deletar Conta
           </Button>
-          <Button width="12.375rem" $inverted>
-            Remover Link{" "}
+          <Button
+            onClick={() => handleGoogleLinkButton()}
+            width="12.375rem"
+            $inverted
+          >
+            {linkGoogleButtonText}
             <Image
               src={GoogleLogo}
               width={24}

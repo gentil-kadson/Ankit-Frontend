@@ -31,10 +31,18 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
   if (response.status === HTTP_200_OK) {
     return {
-      props: { user: response.data, nationalities: nationalitiesResponse.data },
+      props: {
+        user: response.data,
+        nationalities: nationalitiesResponse.data,
+      },
     };
   } else {
-    return { props: { user: null, nationalities: nationalitiesResponse.data } };
+    return {
+      props: {
+        user: null,
+        nationalities: nationalitiesResponse.data,
+      },
+    };
   }
 };
 
