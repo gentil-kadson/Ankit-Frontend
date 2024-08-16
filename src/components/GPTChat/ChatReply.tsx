@@ -1,15 +1,13 @@
 import styled from "styled-components";
 
 type Props = {
-  term: string;
   frontPhrase: string;
   backPhrase: string;
 };
 
-export default function ChatReply({ term, frontPhrase, backPhrase }: Props) {
+export default function ChatReply({ frontPhrase, backPhrase }: Props) {
   return (
     <Container>
-      <h1>{term}</h1>
       <p>{frontPhrase}</p>
       <p>{backPhrase}</p>
     </Container>

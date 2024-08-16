@@ -11,6 +11,11 @@ type ActionButton = {
   text: string;
 };
 
+type Message = {
+  type: "success" | "error";
+  message: string;
+};
+
 type Props = {
   mainTitle: string;
   subtitle: React.ReactNode;
@@ -18,7 +23,7 @@ type Props = {
   actionButtonsContent: ActionButton[];
   onCancelButton: () => void;
   onMainButton: () => void;
-  errorMessage: string;
+  messageObj: Message;
 };
 
 export default function Modal({
@@ -26,19 +31,30 @@ export default function Modal({
   subtitle,
   modalForm,
   actionButtonsContent,
-  errorMessage,
+  messageObj,
   onCancelButton,
   onMainButton,
 }: Props) {
   return (
     <Section className="modal">
+      {messageObj.type === "success" && messageObj.message && (
+        <p className="success-message">{messageObj.message}</p>
+      )}
       <div className="titles">
         <h1>{mainTitle}</h1>
         <h2>{subtitle}</h2>
       </div>
       <main>{modalForm}</main>
       <div className="action-buttons">
-        <Button width="11.625rem" onClick={onMainButton} className={actionButtonsContent[0].className ? actionButtonsContent[0].className : ""}>
+        <Button
+          width="11.625rem"
+          onClick={onMainButton}
+          className={
+            actionButtonsContent[0].className
+              ? actionButtonsContent[0].className
+              : ""
+          }
+        >
           {actionButtonsContent[0].symbolIcon && (
             <MaterialSymbol
               icon={actionButtonsContent[0].symbolIcon}
@@ -51,7 +67,9 @@ export default function Modal({
           {actionButtonsContent[1].text}
         </Button>
       </div>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {messageObj.type === "error" && messageObj.message && (
+        <p className="error-message">{messageObj.message}</p>
+      )}
     </Section>
   );
 }
@@ -115,6 +133,12 @@ const Section = styled.section`
     padding: 0.5rem;
     border-radius: 0.5rem;
     background: var(--red);
+  }
+
+  .success-message {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: var(--green);
   }
 
   @media (max-width: 432px) {

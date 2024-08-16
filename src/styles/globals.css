@@ -22,6 +22,10 @@
   font-family: "Inter";
 }
 
+a {
+  text-decoration: none;
+}
+
 body {
   height: 100vh;
   background: var(--background);

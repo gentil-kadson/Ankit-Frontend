@@ -11,6 +11,7 @@ import Navbar from "@/components/Navbar";
 import { MaterialSymbol } from "react-material-symbols";
 import HomepageFilters from "@/components/HomepageFilters";
 import CreateStudySessionModal from "@/components/modals/CreateStudySessionModal";
+import Link from "next/link";
 
 import StudySessionService, {
   StudySession,
@@ -76,6 +77,7 @@ export default function Home({
   const [sessions, setSessions] = useState<StudySession[]>(
     studySessions as StudySession[]
   );
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [displayShowMoreButton, setDisplayShowMoreButton] = useState<boolean>(
@@ -141,15 +143,19 @@ export default function Home({
         <div className="cards-container">
           {sessions &&
             sessions.map((studySession) => (
-              <StudySessionCard
-                studySessionId={studySession.id}
-                key={studySession.id}
-                studyTime={studySession.duration_in_minutes}
-                numberOfCards={studySession.cards_added}
-                studiedLanguage={studySession.language}
-                title={studySession.name}
-                onDeleteClick={handleDeleteStudySession}
-              />
+              <Link
+                href={
+                  studySession.csv_file
+                    ? `/`
+                    : `/study-session/${studySession.id}`
+                }
+              >
+                <StudySessionCard
+                  session={studySession}
+                  key={studySession.id}
+                  onDeleteClick={handleDeleteStudySession}
+                />
+              </Link>
             ))}
         </div>
         {displayShowMoreButton && (
@@ -205,12 +211,6 @@ const Main = styled.main`
       align-items: flex-start;
       gap: 1rem;
     }
-
-    /* .filters-container,
-    .language-filter-container {
-      flex-direction: column;
-      width: 100%;
-    } */
 
     select {
       width: 100%;

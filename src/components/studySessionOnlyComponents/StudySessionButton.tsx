@@ -4,15 +4,17 @@ type Props = {
   children: React.ReactNode;
   $black?: boolean;
   width: string;
+  onClick: () => void;
 };
 
 export default function StudySessionButton({
   children,
   width,
+  onClick,
   ...props
 }: Props) {
   return (
-    <Button width={width} {...props}>
+    <Button type="button" onClick={onClick} width={width} {...props}>
       {children}
     </Button>
   );
