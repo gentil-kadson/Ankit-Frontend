@@ -1,51 +1,54 @@
 import styled from "styled-components";
+import { downloadFile } from "@/utils/utilityFunctions";
 
 import { MaterialSymbol } from "react-material-symbols";
 import StudySessionInfo from "./StudySessionInfo";
 import StudySessionActionButton from "./StudySessionActionButton";
 
+type StudySession = {
+  id: number;
+  name: string;
+  duration_in_minutes: string;
+  language: { name: string; id: number };
+  cards_added: number;
+  csv_file: string | null;
+};
+
 type Props = {
-  title: string;
-  studyTime: string;
-  studiedLanguage: string;
-  numberOfCards: number;
-  studySessionId: number;
+  session: StudySession;
   onDeleteClick: (id: number) => void;
 };
 
-export default function StudySessionCard({
-  title,
-  studyTime,
-  studiedLanguage,
-  numberOfCards,
-  onDeleteClick,
-  studySessionId,
-}: Props) {
+export default function StudySessionCard({ session, onDeleteClick }: Props) {
   return (
-    <Container>
+    <Container csv_path={session.csv_file}>
       <div className="card-title">
         <MaterialSymbol icon="dictionary" size={24} />
-        <h3>{title}</h3>
+        <h3>{session.name}</h3>
       </div>
       <div className="study-session-data-actions">
         <div className="study-session-info">
           <StudySessionInfo
-            text={`${studyTime} min`}
+            text={`${session.duration_in_minutes} min`}
             icon={<MaterialSymbol icon="alarm" size={24} />}
           />
           <StudySessionInfo
-            text={studiedLanguage}
+            text={session.language.name}
             icon={<MaterialSymbol icon="translate" size={24} />}
           />
           <StudySessionInfo
-            text={`${numberOfCards} cards`}
+            text={`${session.cards_added} cards`}
             icon={<MaterialSymbol icon="content_copy" size={24} />}
           />
         </div>
         <div className="action-buttons">
-          <StudySessionActionButton onClick={() => 2 + 2} icon="csv" />
           <StudySessionActionButton
-            onClick={async () => onDeleteClick(studySessionId)}
+            disabled={!session.csv_file}
+            onClick={() => downloadFile(session.csv_file as string)}
+            icon="csv"
+          />
+          <StudySessionActionButton
+            onClick={async () => onDeleteClick(session.id)}
             icon="delete"
           />
         </div>
@@ -54,11 +57,17 @@ export default function StudySessionCard({
   );
 }
 
-const Container = styled.div`
+const Container = styled.div<{ csv_path: string | null }>`
   border-radius: 1rem;
 
   width: 24.96rem;
   height: 18.8125rem;
+
+  filter: brightness(${(props) => (props.csv_path ? 0.75 : 1)});
+
+  &:hover {
+    cursor: ${(props) => (props.csv_path ? "not-allowed" : "pointer")};
+  }
 
   .card-title {
     h3 {

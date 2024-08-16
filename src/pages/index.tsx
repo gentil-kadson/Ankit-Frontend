@@ -76,6 +76,7 @@ export default function Home({
   const [sessions, setSessions] = useState<StudySession[]>(
     studySessions as StudySession[]
   );
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [displayShowMoreButton, setDisplayShowMoreButton] = useState<boolean>(
@@ -142,12 +143,8 @@ export default function Home({
           {sessions &&
             sessions.map((studySession) => (
               <StudySessionCard
-                studySessionId={studySession.id}
+                session={studySession}
                 key={studySession.id}
-                studyTime={studySession.duration_in_minutes}
-                numberOfCards={studySession.cards_added}
-                studiedLanguage={studySession.language.name}
-                title={studySession.name}
                 onDeleteClick={handleDeleteStudySession}
               />
             ))}

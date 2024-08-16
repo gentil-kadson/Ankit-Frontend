@@ -44,17 +44,18 @@ export default class StudySessionRoomService {
     }
   }
 
-  async finishStudySession() {
+  async finishStudySession(cards: ResponseCard[]) {
     try {
-      await this.axiosClient.post(
+      const response = await this.axiosClient.post(
         `/study_sessions/${this.studySessionId}/finish/`,
-        {},
+        cards,
         {
           headers: {
             Authorization: `Bearer ${this.authToken}`,
           },
         }
       );
+      return response;
     } catch (err: any) {
       return err.response;
     }

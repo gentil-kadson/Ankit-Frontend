@@ -4,11 +4,16 @@ import { MaterialSymbol, SymbolCodepoints } from "react-material-symbols";
 type Props = {
   onClick: () => {};
   icon: SymbolCodepoints;
+  disabled?: boolean;
 };
 
-export default function StudySessionActionButton({ onClick, icon }: Props) {
+export default function StudySessionActionButton({
+  onClick,
+  icon,
+  ...props
+}: Props) {
   return (
-    <Button onClick={onClick}>
+    <Button onClick={onClick} {...props}>
       <MaterialSymbol icon={icon} size={24} fill />
     </Button>
   );

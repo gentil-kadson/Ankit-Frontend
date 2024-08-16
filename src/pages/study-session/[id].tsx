@@ -3,6 +3,7 @@ import StudySessionRoomService from "@/services/StudySessionRoomService";
 import StudySessionService from "@/services/StudySessionService";
 import { ChangeEvent, FormEvent, useState } from "react";
 import Router from "next/router";
+import { downloadFile } from "@/utils/utilityFunctions";
 
 import type {
   InferGetServerSidePropsType,
@@ -129,29 +130,31 @@ export default function StudySession({
   ) {
     if (cards.length > 0) {
       await studySessionRoomService
-        .finishStudySession()
-        .then((successResponse) => {
-          handleMessage({
-            message: "Sessão encerrada com sucesso",
-            type: "success",
-          });
-          setTimeout(() => {
-            Router.push("/");
-          }, 3000);
-        })
-        .catch((err) => {
-          setErrorMessage({
-            show: true,
-            message:
-              "Ocorreu um erro ao tentar encerrar a sessão de estudos. Por favor, tente novamente",
-          });
-
-          setTimeout(() => {
-            setErrorMessage({
-              show: false,
-              message: "",
+        .finishStudySession(cards)
+        .then((response) => {
+          if (response.status === 200) {
+            handleMessage({
+              message: "Sessão encerrada com sucesso",
+              type: "success",
             });
-          }, 3000);
+            downloadFile("http://localhost:7000" + response.data.csv_file);
+            setTimeout(() => {
+              Router.push("/");
+            }, 3000);
+          } else {
+            setErrorMessage({
+              show: true,
+              message:
+                "Ocorreu um erro ao tentar encerrar a sessão de estudos. Por favor, tente novamente",
+            });
+
+            setTimeout(() => {
+              setErrorMessage({
+                show: false,
+                message: "",
+              });
+            }, 3000);
+          }
         });
     } else {
       setShowModal(false);
