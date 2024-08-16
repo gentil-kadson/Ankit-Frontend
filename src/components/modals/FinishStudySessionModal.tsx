@@ -4,26 +4,38 @@ import Modal from "./Modal";
 const buttonsData = [
   {
     symbolIcon: "exit_to_app" as SymbolCodepoints,
-    text: "Yes",
+    text: "Sim",
   },
   {
-    text: "No",
+    text: "Não",
   },
 ];
 
-export default function FinishStudySessionModal() {
+type Props = {
+  onCancelButtonClick: () => void;
+  onFinishStudySession: () => void;
+};
+
+export default function FinishStudySessionModal({
+  onCancelButtonClick,
+  onFinishStudySession,
+}: Props) {
   return (
-    <div>Hello word</div>
-    // <Modal
-    //   actionButtonsContent={buttonsData}
-    //   mainTitle="End Study Session"
-    //   subtitle={
-    //     <>
-    //       If you download the vocabulary file, your study session will end, and
-    //       you'll <strong>lose access</strong> to the session. Are you sure?
-    //     </>
-    //   }
-    //   modalForm={<></>}
-    // />
+    <Modal
+      actionButtonsContent={buttonsData}
+      mainTitle="Encerrar Sessão de Estudos"
+      subtitle={
+        <>
+          Se você encerrar sua sessão, você baixará o arquivo CSV com os cards,
+          mas <strong>perderá o acesso</strong> a esta sessão. Tem certeza que
+          deseja encerrar (você também pode baixar o arquivo CSV na tela
+          principal)?
+        </>
+      }
+      onCancelButton={onCancelButtonClick}
+      modalForm={<></>}
+      onMainButton={onFinishStudySession}
+      errorMessage=""
+    />
   );
 }

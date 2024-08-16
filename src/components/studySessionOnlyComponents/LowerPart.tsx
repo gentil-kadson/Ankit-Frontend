@@ -8,9 +8,13 @@ type Props = {
   handleCardLevelChange: (
     cardLevel: "basic" | "intermediate" | "advanced"
   ) => void;
+  handleShowSessionEndModal: () => void;
 };
 
-export default function LowerPart({ handleCardLevelChange }: Props) {
+export default function LowerPart({
+  handleCardLevelChange,
+  handleShowSessionEndModal,
+}: Props) {
   return (
     <Container>
       <section id="card-levels">
@@ -37,7 +41,7 @@ export default function LowerPart({ handleCardLevelChange }: Props) {
           />
         </div>
       </section>
-      <StudySessionButton onClick={() => {}} width="11.375rem">
+      <StudySessionButton onClick={handleShowSessionEndModal} width="11.375rem">
         <MaterialSymbol icon="download" size={35} color="var(--white)" />
         Vocabulário
       </StudySessionButton>

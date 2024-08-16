@@ -8,16 +8,19 @@ import type {
   GetServerSideProps,
   GetServerSidePropsContext,
 } from "next";
+
 type FormData = {
   language: number;
   name: string;
   topic: boolean;
   card_type: "basic" | "intermediate" | "advanced";
 };
+
 type Cookie = {
   accessToken: string;
   refreshToken: string;
 };
+
 type ResponseCard = {
   front: string;
   back: string;
@@ -28,6 +31,7 @@ import ChatContainer from "@/components/GPTChat/ChatContainer";
 import ChatReply from "@/components/GPTChat/ChatReply";
 import UpperPart from "@/components/studySessionOnlyComponents/UpperPart";
 import LowerPart from "@/components/studySessionOnlyComponents/LowerPart";
+import FinishStudySessionModal from "@/components/modals/FinishStudySessionModal";
 
 export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
   const cookies = ctx.req.cookies.accessToken;
@@ -77,6 +81,7 @@ export default function StudySession({
     card_type: "basic",
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   function handleChangeName(e: ChangeEvent<HTMLInputElement>) {
     setFormData((prevForm) => {
@@ -112,6 +117,14 @@ export default function StudySession({
       });
   }
 
+  function handleStayInStudySession() {
+    setShowModal(false);
+  }
+
+  function handleShowModal() {
+    setShowModal(true);
+  }
+
   async function handleVocabularyBuilding(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
@@ -134,6 +147,12 @@ export default function StudySession({
 
   return (
     <>
+      {showModal && (
+        <FinishStudySessionModal
+          onCancelButtonClick={handleStayInStudySession}
+          onFinishStudySession={handleFinishStudySession}
+        />
+      )}
       <Navbar />
       <Main>
         <ChatContainer>
@@ -154,7 +173,10 @@ export default function StudySession({
             handleChangeToWord={handleChangeToWord}
             isTopic={formData.topic}
           />
-          <LowerPart handleCardLevelChange={handleCardLevelChange} />
+          <LowerPart
+            handleShowSessionEndModal={handleShowModal}
+            handleCardLevelChange={handleCardLevelChange}
+          />
         </form>
       </Main>
     </>
