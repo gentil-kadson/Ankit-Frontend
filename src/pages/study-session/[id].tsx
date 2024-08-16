@@ -177,6 +177,12 @@ export default function StudySession({
       )}
       <Navbar />
       <Main>
+        {showErrorMessage && (
+          <ErrorParagraph className="error-message">
+            Ocorreu um erro ao tentar resgatar o vocabulário. Por favor, tente
+            novamente
+          </ErrorParagraph>
+        )}
         <ChatContainer>
           {cards.map((card) => (
             <ChatReply
@@ -204,6 +210,15 @@ export default function StudySession({
     </>
   );
 }
+
+const ErrorParagraph = styled.p`
+  font-size: 1.2rem;
+
+  margin: auto;
+  padding: 1rem;
+  background-color: var(--red);
+  border-radius: 0.5rem;
+`;
 
 const Main = styled.main`
   max-width: 58.375rem;
