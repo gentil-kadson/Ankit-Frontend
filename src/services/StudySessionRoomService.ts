@@ -25,19 +25,23 @@ export default class StudySessionRoomService {
   async getVocabulary(
     data: VocabularyBuilderObj
   ): Promise<{ cards: ResponseCard[] }> {
-    const { data: cards } = await this.axiosClient.post(
-      "/vocabulary_builder/",
-      {
-        ...data,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${this.authToken}`,
+    try {
+      const { data: cards } = await this.axiosClient.post(
+        "/vocabulary_builder/",
+        {
+          ...data,
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${this.authToken}`,
+          },
+        }
+      );
 
-    return cards;
+      return cards;
+    } catch (error: any) {
+      return error.response;
+    }
   }
 
   async finishStudySession() {

@@ -88,6 +88,7 @@ export default function StudySession({
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
 
   function handleChangeName(e: ChangeEvent<HTMLInputElement>) {
     setFormData((prevForm) => {
@@ -149,17 +150,21 @@ export default function StudySession({
       topic: formData.topic,
     });
 
-    console.log("olha os cards");
-    console.log(cards);
+    if (cards) {
+      setCards((prevCards) => {
+        return [...prevCards, ...cards];
+      });
+      setFormData((prevForm) => {
+        return { ...prevForm, name: "" };
+      });
 
-    setCards((prevCards) => {
-      return [...prevCards, ...cards];
-    });
-    setFormData((prevForm) => {
-      return { ...prevForm, name: "" };
-    });
-
-    setIsLoading(false);
+      setIsLoading(false);
+    } else {
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        setShowErrorMessage(false);
+      }, 3000);
+    }
   }
 
   return (
