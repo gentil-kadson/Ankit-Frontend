@@ -120,7 +120,7 @@ export default function CreateStudySessionModal({ onClick }: Props) {
 
   return (
     <Modal
-      errorMessage={errorMessage}
+      messageObj={{ type: "error", message: errorMessage }}
       mainTitle="Sessão de Estudos"
       onCancelButton={onClick}
       onMainButton={handleStudySessionCreation}

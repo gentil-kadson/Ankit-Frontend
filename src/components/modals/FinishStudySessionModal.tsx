@@ -1,5 +1,8 @@
 import { SymbolCodepoints } from "react-material-symbols";
+
 import Modal from "./Modal";
+
+import { useState } from "react";
 
 const buttonsData = [
   {
@@ -11,15 +14,32 @@ const buttonsData = [
   },
 ];
 
+type Message = {
+  type: "success" | "error";
+  message: string;
+};
+
 type Props = {
   onCancelButtonClick: () => void;
-  onFinishStudySession: () => void;
+  onFinishStudySession: (handleMessage: (obj: Message) => void) => void;
 };
 
 export default function FinishStudySessionModal({
   onCancelButtonClick,
   onFinishStudySession,
 }: Props) {
+  const [message, setMessage] = useState<Message>({
+    type: "success",
+    message: "",
+  });
+
+  function handleMessage(msgObj: Message) {
+    setMessage({
+      type: msgObj.type,
+      message: msgObj.message,
+    });
+  }
+
   return (
     <Modal
       actionButtonsContent={buttonsData}
@@ -34,8 +54,8 @@ export default function FinishStudySessionModal({
       }
       onCancelButton={onCancelButtonClick}
       modalForm={<></>}
-      onMainButton={onFinishStudySession}
-      errorMessage=""
+      messageObj={message}
+      onMainButton={() => onFinishStudySession(handleMessage)}
     />
   );
 }

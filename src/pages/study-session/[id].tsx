@@ -2,6 +2,7 @@ import styled from "styled-components";
 import StudySessionRoomService from "@/services/StudySessionRoomService";
 import StudySessionService from "@/services/StudySessionService";
 import { ChangeEvent, FormEvent, useState } from "react";
+import Router from "next/router";
 
 import type {
   InferGetServerSidePropsType,
@@ -24,6 +25,11 @@ type Cookie = {
 type ResponseCard = {
   front: string;
   back: string;
+};
+
+type Message = {
+  type: "success" | "error";
+  message: string;
 };
 
 import Navbar from "@/components/Navbar";
@@ -109,11 +115,19 @@ export default function StudySession({
     });
   }
 
-  async function handleFinishStudySession() {
+  async function handleFinishStudySession(
+    handleMessage: (msgObj: Message) => void
+  ) {
     await studySessionRoomService
       .finishStudySession()
       .then((successResponse) => {
-        console.log("globbit");
+        handleMessage({
+          message: "Sessão encerrada com sucesso",
+          type: "success",
+        });
+        setTimeout(() => {
+          Router.push("/");
+        }, 3000);
       });
   }
 
@@ -134,6 +148,9 @@ export default function StudySession({
       language: formData.language,
       topic: formData.topic,
     });
+
+    console.log("olha os cards");
+    console.log(cards);
 
     setCards((prevCards) => {
       return [...prevCards, ...cards];
