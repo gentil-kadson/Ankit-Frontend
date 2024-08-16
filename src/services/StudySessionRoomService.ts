@@ -22,11 +22,9 @@ export default class StudySessionRoomService {
     this.studySessionId = studySessionId;
   }
 
-  async getVocabulary(
-    data: VocabularyBuilderObj
-  ): Promise<{ cards: ResponseCard[] }> {
+  async getVocabulary(data: VocabularyBuilderObj) {
     try {
-      const { data: cards } = await this.axiosClient.post(
+      const response = await this.axiosClient.post(
         "/vocabulary_builder/",
         {
           ...data,
@@ -38,7 +36,7 @@ export default class StudySessionRoomService {
         }
       );
 
-      return cards;
+      return response;
     } catch (error: any) {
       return error.response;
     }

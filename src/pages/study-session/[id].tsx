@@ -183,16 +183,16 @@ export default function StudySession({
   async function handleVocabularyBuilding(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
-    const { cards } = await studySessionRoomService.getVocabulary({
+    const response = await studySessionRoomService.getVocabulary({
       name: formData.name,
       card_type: formData.card_type,
       language: formData.language,
       topic: formData.topic,
     });
 
-    if (cards) {
+    if (response.status === 200) {
       setCards((prevCards) => {
-        return [...prevCards, ...cards];
+        return [...prevCards, ...response.data.cards];
       });
       setFormData((prevForm) => {
         return { ...prevForm, name: "" };
