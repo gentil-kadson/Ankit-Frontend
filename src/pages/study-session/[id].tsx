@@ -32,6 +32,11 @@ type Message = {
   message: string;
 };
 
+type StudySessionErrorMessage = {
+  message: string;
+  show: boolean;
+};
+
 import Navbar from "@/components/Navbar";
 import ChatContainer from "@/components/GPTChat/ChatContainer";
 import ChatReply from "@/components/GPTChat/ChatReply";
@@ -88,7 +93,10 @@ export default function StudySession({
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<StudySessionErrorMessage>({
+    show: false,
+    message: "",
+  });
 
   function handleChangeName(e: ChangeEvent<HTMLInputElement>) {
     setFormData((prevForm) => {
@@ -119,17 +127,46 @@ export default function StudySession({
   async function handleFinishStudySession(
     handleMessage: (msgObj: Message) => void
   ) {
-    await studySessionRoomService
-      .finishStudySession()
-      .then((successResponse) => {
-        handleMessage({
-          message: "Sessão encerrada com sucesso",
-          type: "success",
+    if (cards.length > 0) {
+      await studySessionRoomService
+        .finishStudySession()
+        .then((successResponse) => {
+          handleMessage({
+            message: "Sessão encerrada com sucesso",
+            type: "success",
+          });
+          setTimeout(() => {
+            Router.push("/");
+          }, 3000);
+        })
+        .catch((err) => {
+          setErrorMessage({
+            show: true,
+            message:
+              "Ocorreu um erro ao tentar encerrar a sessão de estudos. Por favor, tente novamente",
+          });
+
+          setTimeout(() => {
+            setErrorMessage({
+              show: false,
+              message: "",
+            });
+          }, 3000);
         });
-        setTimeout(() => {
-          Router.push("/");
-        }, 3000);
+    } else {
+      setShowModal(false);
+      setErrorMessage({
+        show: true,
+        message: "Não há como encerrar uma sessão sem pelo menos 1 palavra.",
       });
+
+      setTimeout(() => {
+        setErrorMessage({
+          show: false,
+          message: "",
+        });
+      }, 3000);
+    }
   }
 
   function handleStayInStudySession() {
@@ -160,9 +197,17 @@ export default function StudySession({
 
       setIsLoading(false);
     } else {
-      setShowErrorMessage(true);
+      setIsLoading(false);
+      setErrorMessage({
+        show: true,
+        message:
+          "Ocorreu um erro ao tentar buscar vocabulário. Por favor, tente novamente",
+      });
       setTimeout(() => {
-        setShowErrorMessage(false);
+        setErrorMessage({
+          show: false,
+          message: "",
+        });
       }, 3000);
     }
   }
@@ -177,10 +222,9 @@ export default function StudySession({
       )}
       <Navbar />
       <Main>
-        {showErrorMessage && (
+        {errorMessage.show && (
           <ErrorParagraph className="error-message">
-            Ocorreu um erro ao tentar resgatar o vocabulário. Por favor, tente
-            novamente
+            {errorMessage.message}
           </ErrorParagraph>
         )}
         <ChatContainer>
