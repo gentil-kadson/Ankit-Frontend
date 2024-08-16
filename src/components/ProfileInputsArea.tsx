@@ -159,6 +159,21 @@ export default function ProfileInputsArea({
     }
   }
 
+  async function handleResetPasswordButton() {
+    const authService = new AuthService();
+    const response = await authService.resetPassword(user.email);
+    if (response.status === HTTP_200_OK) {
+      setSuccessMessage("Um email com as instruções foi enviado para você");
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, SUCCESS_MESSAGE_TIMEOUT);
+    } else {
+      setErrorMessages([
+        "Não foi possível enviar o email para troca de senha. Tente novamente mais tarde",
+      ]);
+    }
+  }
+
   return (
     <>
       <Container id="student-update-form" onSubmit={handleChangeStudentInfo}>
@@ -240,9 +255,19 @@ export default function ProfileInputsArea({
             />
           </Button>
         </div>
-        <Button form="student-update-form" type="submit" width="12.0625rem">
-          Salvar Alterações
-        </Button>
+        <div className="right-side-buttons">
+          <Button
+            onClick={() => handleResetPasswordButton()}
+            type="button"
+            width="12.0625rem"
+            $inverted
+          >
+            Resetar Senha
+          </Button>
+          <Button form="student-update-form" type="submit" width="12.0625rem">
+            Salvar Alterações
+          </Button>
+        </div>
       </ActionButtonsContainer>
     </>
   );
@@ -276,7 +301,8 @@ const ActionButtonsContainer = styled.div`
 
   width: 100%;
 
-  .left-side-buttons {
+  .left-side-buttons,
+  .right-side-buttons {
     display: flex;
     align-items: center;
     gap: 1rem;

@@ -102,4 +102,14 @@ export default class AuthService {
       return error.response;
     }
   }
+
+  async resetPassword(email: string) {
+    try {
+      const url = `${this.baseURL}/password/reset/`;
+      const response = await this.axiosClient.post(url, { email });
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
 }
