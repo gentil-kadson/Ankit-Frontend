@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { FormEvent, useContext, useRef, useState } from "react";
+import { FormEvent, useContext, useRef, useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import AuthContext from "@/context/AuthContext";
 
 import Image from "next/image";
@@ -12,17 +13,45 @@ import ApiMessage from "@/components/ApiMessage";
 
 import googleLogo from "/public/googleLogo.svg";
 import Router from "next/router";
+import { HTTP_200_OK, HTTP_201_CREATED } from "@/utils/constants";
+
+const googleLoginURL = process.env.NEXT_PUBLIC_GOOGLE_LOGIN_URL || "";
 
 export default function Login() {
-  const { user, loginUser } = useContext(AuthContext);
+  const { user, loginUser, loginUserByGoogle } = useContext(AuthContext);
+  const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    async function logUserInByGoogle() {
+      if (router.query.code) {
+        const response = await loginUserByGoogle(router.query.code as string);
+        if (response.status === HTTP_200_OK || HTTP_201_CREATED) {
+          if (response.data.user.student) {
+            Router.push("/");
+          } else {
+            Router.push(`sign-up?code=${router.query.code}`);
+          }
+        } else {
+          setErrorMessage(
+            "Houve um erro ao logar com a Google. Tente novamente"
+          );
+        }
+      }
+    }
+
+    logUserInByGoogle();
+  }, [router.query]);
+
   async function handleUserLogin(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (emailRef.current && passwordRef.current) {
-      const response = await loginUser(emailRef.current.value, passwordRef.current.value);
+      const response = await loginUser(
+        emailRef.current.value,
+        passwordRef.current.value
+      );
       if (response.status === 200) {
         Router.push("/");
       } else {
@@ -46,11 +75,11 @@ export default function Login() {
         <h2>
           Sua ferramenta para aprender idiomas <span>de maneira prática</span>
         </h2>
-        { errorMessage && (
+        {errorMessage && (
           <ErrorMessageContainer>
-            <ApiMessage category="error">{ errorMessage }</ApiMessage>
+            <ApiMessage category="error">{errorMessage}</ApiMessage>
           </ErrorMessageContainer>
-        ) }
+        )}
       </Header>
       <LoginForm method="post" onSubmit={(e) => handleUserLogin(e)}>
         <fieldset>
@@ -74,9 +103,11 @@ export default function Login() {
         </fieldset>
         <div id="buttons">
           <Button width="25.9375rem">Entrar</Button>
-          <Button width="25.9375rem" $inverted>
-            <Image src={googleLogo} alt="G from Google" />
-          </Button>
+          <Link href={googleLoginURL}>
+            <Button type="button" width="25.9375rem" $inverted>
+              <Image src={googleLogo} alt="G from Google" />
+            </Button>
+          </Link>
         </div>
         <span id="sign-up-link">
           Não possui conta?
@@ -183,4 +214,4 @@ const LoginForm = styled.form`
 
 const ErrorMessageContainer = styled.div`
   margin-top: 2rem;
-`
+`;

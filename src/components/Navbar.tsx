@@ -23,7 +23,7 @@ export default function Navbar() {
   const handleLogout = () => {
     logoutUser();
     Router.push("/");
-  }
+  };
 
   const handleDropdown = () => {
     setDisplayDropDown((prevState) => !displayDropdown);
@@ -31,19 +31,21 @@ export default function Navbar() {
 
   const renderProfilePicture = () => {
     let src = NoProfilePicture;
-    if (user) {
+    if (user && user.student) {
       if (user.student.profile_picture) {
         src = user.student.profile_picture;
       }
     }
 
-    return <ProfilePicture
-    onClick={handleDropdown}
-    width={80}
-    height={80}
-    src={src}
-  />
-  }
+    return (
+      <ProfilePicture
+        onClick={handleDropdown}
+        width={80}
+        height={80}
+        src={src}
+      />
+    );
+  };
 
   return (
     <NavbarContainer>
@@ -61,7 +63,9 @@ export default function Navbar() {
         <NavDropdown>
           <Link href="/me">Meu perfil</Link>
           <Link href="/statistics">Estatísticas</Link>
-          <Link href="/" onClick={handleLogout}>Sair</Link>
+          <Link href="/" onClick={handleLogout}>
+            Sair
+          </Link>
         </NavDropdown>
       )}
     </NavbarContainer>
