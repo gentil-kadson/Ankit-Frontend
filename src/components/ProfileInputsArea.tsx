@@ -312,7 +312,7 @@ const ActionButtonsContainer = styled.div`
     flex-direction: column;
     gap: 1rem;
 
-    .left-side-buttons {
+    .left-side-buttons, .right-side-buttons {
       flex-direction: column;
       width: 100%;
     }

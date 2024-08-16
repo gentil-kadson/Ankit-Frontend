@@ -19,6 +19,13 @@ export type SocialAccount = {
   date_joined: string;
 };
 
+type ConfirmResetPasswordData = {
+  new_password1: string;
+  new_password2: string;
+  uid: string;
+  token: string;
+}
+
 export default class AuthService {
   private axiosClient = api;
   private baseURL = "/dj_rest_auth";
@@ -107,6 +114,16 @@ export default class AuthService {
     try {
       const url = `${this.baseURL}/password/reset/`;
       const response = await this.axiosClient.post(url, { email });
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
+
+  async confirmResetPassword(data: ConfirmResetPasswordData) {
+    try {
+      const url = `${this.baseURL}/password/reset/confirm/`;
+      const response = await this.axiosClient.post(url, data);
       return response;
     } catch (error: any) {
       return error.response;
