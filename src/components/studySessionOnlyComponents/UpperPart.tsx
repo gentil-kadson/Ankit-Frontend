@@ -1,19 +1,28 @@
 import styled from "styled-components";
+import { useState } from "react";
+
+import { ChangeEvent } from "react";
+
 import Button from "../Button";
 import { MaterialSymbol } from "react-material-symbols";
 import StudySessionButton from "./StudySessionButton";
-import { ChangeEvent } from "react";
 
 type Props = {
   handleChangeName: (e: ChangeEvent<HTMLInputElement>) => void;
   handleChangeToTopic: () => void;
   handleChangeToWord: () => void;
+  isTopic: boolean;
+  textName: string;
+  isLoading: boolean;
 };
 
 export default function UpperPart({
   handleChangeName,
   handleChangeToTopic,
   handleChangeToWord,
+  isTopic,
+  isLoading,
+  textName,
 }: Props) {
   return (
     <Container>
@@ -23,17 +32,35 @@ export default function UpperPart({
           type="text"
           name="word-topic"
           id="word-topic"
+          required
+          value={textName}
         />
         <Button width="3.75rem">
-          <MaterialSymbol icon="arrow_upward" color="var(--white)" size={30} />
+          {isLoading ? (
+            <MaterialSymbol icon="schedule" color="var(--white)" size={30} />
+          ) : (
+            <MaterialSymbol
+              icon="arrow_upward"
+              color="var(--white)"
+              size={30}
+            />
+          )}
         </Button>
       </div>
       <div className="right-side">
-        <StudySessionButton onClick={handleChangeToTopic} width="9.25rem">
+        <StudySessionButton
+          onClick={handleChangeToTopic}
+          $black={!isTopic}
+          width="9.25rem"
+        >
           <MaterialSymbol icon="topic" size={35} color="var(--white)" />
           Tópico
         </StudySessionButton>
-        <StudySessionButton onClick={handleChangeToWord} width="9.25rem" $black>
+        <StudySessionButton
+          onClick={handleChangeToWord}
+          width="9.25rem"
+          $black={isTopic}
+        >
           <MaterialSymbol icon="dictionary" size={35} color="var(--white)" />
           Palavra
         </StudySessionButton>

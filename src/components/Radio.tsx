@@ -4,12 +4,25 @@ type Props = {
   labelText: string;
   id: string;
   name: string;
+  onClick?: () => void;
+  defaultChecked?: boolean;
 };
 
-export default function Radio({ labelText, id, ...props }: Props) {
+export default function Radio({
+  labelText,
+  id,
+  onClick,
+  defaultChecked,
+  ...props
+}: Props) {
   return (
-    <RadioGroup>
-      <CustomRadio type="radio" id={id} {...props} />
+    <RadioGroup onClick={onClick && onClick}>
+      <CustomRadio
+        type="radio"
+        id={id}
+        {...props}
+        defaultChecked={defaultChecked ? true : false}
+      />
       <CustomRadioLabel htmlFor={id}>{labelText}</CustomRadioLabel>
     </RadioGroup>
   );

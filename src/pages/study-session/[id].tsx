@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import StudySessionRoomService from "@/services/StudySessionRoomService";
 import StudySessionService from "@/services/StudySessionService";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 import type {
   InferGetServerSidePropsType,
@@ -76,6 +76,7 @@ export default function StudySession({
     language: languageId,
     card_type: "basic",
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   function handleChangeName(e: ChangeEvent<HTMLInputElement>) {
     setFormData((prevForm) => {
@@ -103,6 +104,34 @@ export default function StudySession({
     });
   }
 
+  async function handleFinishStudySession() {
+    await studySessionRoomService
+      .finishStudySession()
+      .then((successResponse) => {
+        console.log("globbit");
+      });
+  }
+
+  async function handleVocabularyBuilding(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsLoading(true);
+    const { cards } = await studySessionRoomService.getVocabulary({
+      name: formData.name,
+      card_type: formData.card_type,
+      language: formData.language,
+      topic: formData.topic,
+    });
+
+    setCards((prevCards) => {
+      return [...prevCards, ...cards];
+    });
+    setFormData((prevForm) => {
+      return { ...prevForm, name: "" };
+    });
+
+    setIsLoading(false);
+  }
+
   return (
     <>
       <Navbar />
@@ -113,17 +142,19 @@ export default function StudySession({
               key={card.front}
               frontPhrase={card.front}
               backPhrase={card.back}
-              term={formData.name}
             />
           ))}
         </ChatContainer>
-        <form method="POST">
+        <form method="post" onSubmit={(e) => handleVocabularyBuilding(e)}>
           <UpperPart
+            isLoading={isLoading}
+            textName={formData.name}
             handleChangeName={handleChangeName}
             handleChangeToTopic={handleChangeToTopic}
             handleChangeToWord={handleChangeToWord}
+            isTopic={formData.topic}
           />
-          <LowerPart />
+          <LowerPart handleCardLevelChange={handleCardLevelChange} />
         </form>
       </Main>
     </>

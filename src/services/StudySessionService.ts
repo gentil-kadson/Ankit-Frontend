@@ -26,7 +26,11 @@ export default class StudySessionService {
 
   async getStudySessionLanguageId(sessionId: number): Promise<number> {
     return await this.axiosClient
-      .get(`${this.baseURL}/${sessionId}`)
+      .get(`${this.baseURL}/${sessionId}`, {
+        headers: {
+          Authorization: `Bearer ${this.authToken}`,
+        },
+      })
       .then((response) => response.data.language.id);
   }
 

@@ -14,7 +14,7 @@ export default function StudySessionButton({
   ...props
 }: Props) {
   return (
-    <Button onClick={onClick} width={width} {...props}>
+    <Button type="button" onClick={onClick} width={width} {...props}>
       {children}
     </Button>
   );

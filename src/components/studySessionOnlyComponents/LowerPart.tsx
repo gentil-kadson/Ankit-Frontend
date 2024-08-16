@@ -4,22 +4,40 @@ import Radio from "../Radio";
 import StudySessionButton from "./StudySessionButton";
 import { MaterialSymbol } from "react-material-symbols";
 
-export default function LowerPart() {
+type Props = {
+  handleCardLevelChange: (
+    cardLevel: "basic" | "intermediate" | "advanced"
+  ) => void;
+};
+
+export default function LowerPart({ handleCardLevelChange }: Props) {
   return (
     <Container>
       <section id="card-levels">
         <h2>Nível de Card</h2>
         <div className="radios-container">
-          <Radio id="basic" labelText="Basic" name="card-level-radio" />
           <Radio
+            onClick={() => handleCardLevelChange("basic")}
+            id="basic"
+            labelText="Basic"
+            name="card-level-radio"
+            defaultChecked
+          />
+          <Radio
+            onClick={() => handleCardLevelChange("intermediate")}
             id="intermediate"
             labelText="Intermediário"
             name="card-level-radio"
           />
-          <Radio id="advanced" labelText="Avançado" name="card-level-radio" />
+          <Radio
+            onClick={() => handleCardLevelChange("advanced")}
+            id="advanced"
+            labelText="Avançado"
+            name="card-level-radio"
+          />
         </div>
       </section>
-      <StudySessionButton width="11.375rem">
+      <StudySessionButton onClick={() => {}} width="11.375rem">
         <MaterialSymbol icon="download" size={35} color="var(--white)" />
         Vocabulário
       </StudySessionButton>

@@ -1,16 +1,15 @@
 import api from "./api";
 
-type Language = {
-  id: number;
-  name: string;
-  icon: string | null;
-};
-
 export type VocabularyBuilderObj = {
-  language: Language;
+  language: number;
   name: string;
   topic: boolean;
   card_type: "basic" | "intermediate" | "advanced";
+};
+
+type ResponseCard = {
+  front: string;
+  back: string;
 };
 
 export default class StudySessionRoomService {
@@ -23,7 +22,9 @@ export default class StudySessionRoomService {
     this.studySessionId = studySessionId;
   }
 
-  async getVocabulary(data: VocabularyBuilderObj) {
+  async getVocabulary(
+    data: VocabularyBuilderObj
+  ): Promise<{ cards: ResponseCard[] }> {
     const { data: cards } = await this.axiosClient.post(
       "/vocabulary_builder/",
       {
@@ -50,7 +51,7 @@ export default class StudySessionRoomService {
           },
         }
       )
-      .then((response) => response.data)
+      .then((response) => response)
       .catch((err) => err);
   }
 }
