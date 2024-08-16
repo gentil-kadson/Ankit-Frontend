@@ -11,6 +11,7 @@ import Navbar from "@/components/Navbar";
 import { MaterialSymbol } from "react-material-symbols";
 import HomepageFilters from "@/components/HomepageFilters";
 import CreateStudySessionModal from "@/components/modals/CreateStudySessionModal";
+import Link from "next/link";
 
 import StudySessionService, {
   StudySession,
@@ -142,11 +143,19 @@ export default function Home({
         <div className="cards-container">
           {sessions &&
             sessions.map((studySession) => (
-              <StudySessionCard
-                session={studySession}
-                key={studySession.id}
-                onDeleteClick={handleDeleteStudySession}
-              />
+              <Link
+                href={
+                  studySession.csv_file
+                    ? `/`
+                    : `/study-session/${studySession.id}`
+                }
+              >
+                <StudySessionCard
+                  session={studySession}
+                  key={studySession.id}
+                  onDeleteClick={handleDeleteStudySession}
+                />
+              </Link>
             ))}
         </div>
         {displayShowMoreButton && (
@@ -202,12 +211,6 @@ const Main = styled.main`
       align-items: flex-start;
       gap: 1rem;
     }
-
-    /* .filters-container,
-    .language-filter-container {
-      flex-direction: column;
-      width: 100%;
-    } */
 
     select {
       width: 100%;

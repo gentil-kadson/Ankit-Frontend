@@ -42,11 +42,14 @@ export default function StudySessionCard({ session, onDeleteClick }: Props) {
           />
         </div>
         <div className="action-buttons">
-          <StudySessionActionButton
-            disabled={!session.csv_file}
-            onClick={() => downloadFile(session.csv_file as string)}
-            icon="csv"
-          />
+          {session.csv_file && (
+            <StudySessionActionButton
+              disabled={!session.csv_file}
+              onClick={() => downloadFile(session.csv_file as string)}
+              icon="csv"
+            />
+          )}
+
           <StudySessionActionButton
             onClick={async () => onDeleteClick(session.id)}
             icon="delete"
