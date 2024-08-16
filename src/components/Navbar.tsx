@@ -63,7 +63,7 @@ export default function Navbar() {
         <NavDropdown>
           <Link href="/me">Meu perfil</Link>
           <Link href="/statistics">Estatísticas</Link>
-          <Link href="/" onClick={handleLogout}>
+          <Link href="/login" onClick={handleLogout}>
             Sair
           </Link>
         </NavDropdown>

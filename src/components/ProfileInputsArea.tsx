@@ -155,6 +155,8 @@ export default function ProfileInputsArea({
         setTimeout(() => {
           setSuccessMessage("");
         }, SUCCESS_MESSAGE_TIMEOUT);
+      } else {
+        setErrorMessages(["Você precisa definir uma senha para desvincular a conta"]);
       }
     }
   }
