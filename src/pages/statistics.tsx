@@ -1,6 +1,9 @@
 import styled from "styled-components";
-import { MaterialSymbol } from "react-material-symbols";
+import StatisticsService from "@/services/StatisticsService";
+import { useState, useContext } from "react";
+import AuthContext from "@/context/AuthContext";
 
+import { MaterialSymbol } from "react-material-symbols";
 import Navbar from "@/components/Navbar";
 import Button from "@/components/Button";
 import FormGroup from "@/components/FormGroup";
@@ -13,14 +16,58 @@ import type {
   GetServerSideProps,
   GetServerSidePropsContext,
 } from "next";
+import {
+  StudySessionStats,
+  CardsAddedStats,
+} from "@/services/StatisticsService";
 
-export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
   const token = ctx.req.cookies.accessToken;
   if (token) {
-  }
-};
+    const statsService = new StatisticsService(token);
+    const cardsAddedResponse = await statsService.getCardsAddedByLanguage();
+    const studySessionsResponse =
+      await statsService.getStudySessionsByLanguage();
+    const cardsAddedStats: CardsAddedStats[] = [];
+    const studySessionStats: StudySessionStats[] = [];
 
-export default function Statistics() {
+    if (cardsAddedResponse.status === 200) {
+      cardsAddedStats.push(cardsAddedResponse.data);
+    }
+
+    if (studySessionsResponse.status === 200) {
+      studySessionStats.push(studySessionsResponse.data);
+    }
+
+    return {
+      props: {
+        studySessionStats,
+        cardsAddedStats,
+      },
+    };
+  }
+
+  return {
+    redirect: {
+      permanent: false,
+      destination: "/login",
+    },
+  };
+}) satisfies GetServerSideProps<{
+  studySessionStats: StudySessionStats[];
+  cardsAddedStats: CardsAddedStats[];
+}>;
+
+export default function Statistics({
+  cardsAddedStats,
+  studySessionStats,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [cards, setCards] = useState<CardsAddedStats[]>(cardsAddedStats);
+  const [studySessions, setStudySessions] =
+    useState<StudySessionStats[]>(studySessionStats);
+
+  const { user } = useContext(AuthContext);
+
   return (
     <>
       <Navbar />

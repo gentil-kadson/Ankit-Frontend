@@ -33,7 +33,7 @@ export default class StatisticsService {
 
       return response;
     } catch (e: any) {
-      console.log(e.response);
+      return e.response;
     }
   }
 
@@ -47,7 +47,7 @@ export default class StatisticsService {
 
       return response;
     } catch (e: any) {
-      console.log(e.response);
+      return e.response;
     }
   }
 }
