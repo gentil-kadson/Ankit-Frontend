@@ -20,6 +20,7 @@ import {
   StudySessionStats,
   CardsAddedStats,
 } from "@/services/StatisticsService";
+import { User } from "@/services/UserService";
 
 export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
   const token = ctx.req.cookies.accessToken;
@@ -89,7 +90,7 @@ export default function Statistics({
             </Button>
           </form>
         </Header>
-        <StreakHoursSection />
+        <StreakHoursSection student={(user as User).student} />
         <LanguageStatisticsSection />
       </Main>
     </>

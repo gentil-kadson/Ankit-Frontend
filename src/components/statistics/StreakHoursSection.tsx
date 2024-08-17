@@ -4,24 +4,46 @@ import ProfilePicture from "../ProfilePicture";
 import StatisticsCard from "./StatisticsCard";
 import StreakStudyRow from "./StreakStudy";
 
-import brazilFlag from "/public/brazilFlag.svg";
+import NoProfilePicture from "/public/noProfilePicture.svg";
 
-export default function StreakHoursSection() {
+import { Student } from "@/services/StudentService";
+
+type Props = {
+  student: Student;
+};
+
+export default function StreakHoursSection({ student }: Props) {
+  const renderProfilePicture = () => {
+    let src = NoProfilePicture;
+    if (student.profile_picture) {
+      src = student.profile_picture;
+    }
+
+    return src;
+  };
+
+  const duration = Number(student.total_study_time.split(":")[1]);
+  const roundDuration = Math.ceil(duration);
+
   return (
     <Container>
-      <ProfilePicture src={brazilFlag} width={194} height={194} />
+      <ProfilePicture src={renderProfilePicture()} width={194} height={194} />
       <StatisticsCard>
         <StreakStudyRow
           icon="trending_flat"
           text="Maior Ofensiva"
-          number={25}
+          number={student.longest_streak}
         />
         <StreakStudyRow
           icon="local_fire_department"
           text="Ofensiva Atual"
-          number={25}
+          number={student.streak}
         />
-        <StreakStudyRow icon="alarm" text="Tempo de Estudo (min)" number={25} />
+        <StreakStudyRow
+          icon="alarm"
+          text="Tempo de Estudo (min)"
+          number={roundDuration}
+        />
       </StatisticsCard>
     </Container>
   );
