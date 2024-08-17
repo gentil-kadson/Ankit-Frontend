@@ -21,6 +21,8 @@ const StatisticsSection = styled.section`
   max-width: 30.625rem;
   background-color: var(--component);
   border-radius: 10px;
+  max-height: 30.625rem;
+  overflow-y: auto;
 
   h2 {
     color: var(--blue);

@@ -22,56 +22,26 @@ export default function LanguageStatisticsSection({
   return (
     <Container>
       <StatisticsCard title="Quantidade de Cards por Idioma">
-        <LanguageStatisticRow
-          flagSrc={brazilFlag}
-          alt="brazil-flag"
-          language="Portuguese"
-          number={25}
-        />
-        <LanguageStatisticRow
-          flagSrc={brazilFlag}
-          alt="brazil-flag"
-          language="Portuguese"
-          number={25}
-        />
-        <LanguageStatisticRow
-          flagSrc={brazilFlag}
-          alt="brazil-flag"
-          language="Portuguese"
-          number={25}
-        />
-        <LanguageStatisticRow
-          flagSrc={brazilFlag}
-          alt="brazil-flag"
-          language="Portuguese"
-          number={25}
-        />
+        {cardsAddedPerLanguage.map((card) => (
+          <LanguageStatisticRow
+            flagSrc={brazilFlag}
+            alt="brazil-flag"
+            language={card.name}
+            number={card.cards_added}
+            key={`${card.id}-${card.name}`}
+          />
+        ))}
       </StatisticsCard>
       <StatisticsCard title="Sessões de Estudo por Idioma">
-        <LanguageStatisticRow
-          flagSrc={brazilFlag}
-          alt="brazil-flag"
-          language="Portuguese"
-          number={25}
-        />
-        <LanguageStatisticRow
-          flagSrc={brazilFlag}
-          alt="brazil-flag"
-          language="Portuguese"
-          number={25}
-        />
-        <LanguageStatisticRow
-          flagSrc={brazilFlag}
-          alt="brazil-flag"
-          language="Portuguese"
-          number={25}
-        />
-        <LanguageStatisticRow
-          flagSrc={brazilFlag}
-          alt="brazil-flag"
-          language="Portuguese"
-          number={25}
-        />
+        {studySessionsPerLanguage.map((studySession) => (
+          <LanguageStatisticRow
+            flagSrc={brazilFlag}
+            alt="brazil-flag"
+            key={`${studySession.name}-${studySession.id}`}
+            language={studySession.name}
+            number={studySession.study_sessions_count}
+          />
+        ))}
       </StatisticsCard>
     </Container>
   );

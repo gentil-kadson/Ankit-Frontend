@@ -91,7 +91,7 @@ export default function Statistics({
             </Button>
           </form>
         </Header>
-        {user && <StreakHoursSection user={user as User} />}
+        {user && <StreakHoursSection user={user} />}
         <LanguageStatisticsSection
           cardsAddedPerLanguage={cards}
           studySessionsPerLanguage={studySessions}
