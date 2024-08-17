@@ -21,6 +21,7 @@ import {
   CardsAddedStats,
 } from "@/services/StatisticsService";
 import { User } from "@/services/UserService";
+import { Student } from "@/services/StudentService";
 
 export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
   const token = ctx.req.cookies.accessToken;
@@ -33,11 +34,11 @@ export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
     const studySessionStats: StudySessionStats[] = [];
 
     if (cardsAddedResponse.status === 200) {
-      cardsAddedStats.push(cardsAddedResponse.data);
+      cardsAddedStats.push(...cardsAddedResponse.data);
     }
 
     if (studySessionsResponse.status === 200) {
-      studySessionStats.push(studySessionsResponse.data);
+      studySessionStats.push(...studySessionsResponse.data);
     }
 
     return {
@@ -90,8 +91,11 @@ export default function Statistics({
             </Button>
           </form>
         </Header>
-        <StreakHoursSection student={(user as User).student} />
-        <LanguageStatisticsSection />
+        {user && <StreakHoursSection user={user as User} />}
+        <LanguageStatisticsSection
+          cardsAddedPerLanguage={cards}
+          studySessionsPerLanguage={studySessions}
+        />
       </Main>
     </>
   );

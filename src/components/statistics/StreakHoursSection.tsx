@@ -6,13 +6,15 @@ import StreakStudyRow from "./StreakStudy";
 
 import NoProfilePicture from "/public/noProfilePicture.svg";
 
-import { Student } from "@/services/StudentService";
+import { User } from "@/services/UserService";
 
 type Props = {
-  student: Student;
+  user: User;
 };
 
-export default function StreakHoursSection({ student }: Props) {
+export default function StreakHoursSection({ user }: Props) {
+  const student = user.student;
+
   const renderProfilePicture = () => {
     let src = NoProfilePicture;
     if (student.profile_picture) {
