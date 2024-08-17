@@ -8,6 +8,18 @@ import Select from "@/components/Select";
 import LanguageStatisticsSection from "@/components/statistics/LanguageStatisticsSection";
 import StreakHoursSection from "@/components/statistics/StreakHoursSection";
 
+import type {
+  InferGetServerSidePropsType,
+  GetServerSideProps,
+  GetServerSidePropsContext,
+} from "next";
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const token = ctx.req.cookies.accessToken;
+  if (token) {
+  }
+};
+
 export default function Statistics() {
   return (
     <>
