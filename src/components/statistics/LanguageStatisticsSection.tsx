@@ -55,5 +55,6 @@ const Container = styled.div`
   @media (max-width: 875px) {
     flex-direction: column;
     align-items: center;
+    gap: 1rem;
   }
 `;

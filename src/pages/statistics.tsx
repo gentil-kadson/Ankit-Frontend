@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import StatisticsService from "@/services/StatisticsService";
-import { useState, useContext } from "react";
+import { useState, useContext, FormEvent, useRef } from "react";
 import AuthContext from "@/context/AuthContext";
+import { subMonths, subYears } from "date-fns";
+import { getISODate } from "@/utils/utilityFunctions";
 
 import { MaterialSymbol } from "react-material-symbols";
 import Navbar from "@/components/Navbar";
@@ -20,8 +22,11 @@ import {
   StudySessionStats,
   CardsAddedStats,
 } from "@/services/StatisticsService";
-import { User } from "@/services/UserService";
-import { Student } from "@/services/StudentService";
+type Message = {
+  type: "error" | "filter";
+  message: string;
+  show: boolean;
+};
 
 export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
   const token = ctx.req.cookies.accessToken;
@@ -45,6 +50,7 @@ export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
       props: {
         studySessionStats,
         cardsAddedStats,
+        accessToken: ctx.req.cookies.accessToken as string,
       },
     };
   }
@@ -58,31 +64,107 @@ export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
 }) satisfies GetServerSideProps<{
   studySessionStats: StudySessionStats[];
   cardsAddedStats: CardsAddedStats[];
+  accessToken: string;
 }>;
 
 export default function Statistics({
   cardsAddedStats,
   studySessionStats,
+  accessToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [cards, setCards] = useState<CardsAddedStats[]>(cardsAddedStats);
   const [studySessions, setStudySessions] =
     useState<StudySessionStats[]>(studySessionStats);
+  const [message, setMessage] = useState<Message>({
+    type: "error",
+    message: "",
+    show: false,
+  });
+
+  const filtersFormRef = useRef<HTMLFormElement>(null);
+
+  const statisticsService = new StatisticsService(accessToken);
 
   const { user } = useContext(AuthContext);
+  const currentDate = getISODate(new Date());
+  const sixMonthsAgoDate = getISODate(subMonths(currentDate, 6));
+  const oneYearAgoDate = getISODate(subYears(currentDate, 1));
+  const oneMonthAgoDate = getISODate(subMonths(currentDate, 1));
+
+  const handleFilters = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const filterDate = filtersFormRef.current?.history_date_after.value;
+
+    const cardsAddedResponse = await statisticsService.getCardsAddedByLanguage(
+      currentDate,
+      filterDate
+    );
+    const studySessionsResponse =
+      await statisticsService.getStudySessionsByLanguage(
+        currentDate,
+        filterDate
+      );
+
+    if (
+      cardsAddedResponse.status === 200 &&
+      studySessionsResponse.status === 200
+    ) {
+      setCards(cardsAddedResponse.data);
+      setStudySessions(studySessionsResponse.data);
+
+      const successFilterMessage = filterDate
+        ? "Filtro aplicado com sucesso."
+        : "Filtros removidos.";
+
+      setMessage({
+        type: "filter",
+        message: successFilterMessage,
+        show: true,
+      });
+
+      setTimeout(() => {
+        setMessage({
+          message: "",
+          show: false,
+          type: "error",
+        });
+      }, 3000);
+    } else {
+      setMessage({
+        type: "error",
+        message:
+          "Não foi possível aplicar o filtro. Por favor, tente novamente",
+        show: true,
+      });
+
+      setTimeout(() => {
+        setMessage({
+          message: "",
+          show: false,
+          type: "error",
+        });
+      }, 3000);
+    }
+  };
 
   return (
     <>
       <Navbar />
       <Main>
         <Header>
-          <h2>Statistics</h2>
-          <form method="get">
+          <h2>Estatísticas</h2>
+          <form
+            ref={filtersFormRef}
+            method="get"
+            onSubmit={(e) => handleFilters(e)}
+          >
             <FormGroup>
-              <Select>
-                <option value="">Neste mês</option>
-                <option value="">Últimos 6 meses</option>
-                <option value="">Ano passado</option>
+              <Select name="history_date_after">
                 <option value="">Nenhum</option>
+                <option value={oneMonthAgoDate}>Neste mês</option>
+                <option value={sixMonthsAgoDate}>Últimos 6 meses</option>
+                <option value={oneYearAgoDate}>Ano passado</option>
               </Select>
             </FormGroup>
             <Button width="125px">
@@ -91,6 +173,9 @@ export default function Statistics({
             </Button>
           </form>
         </Header>
+        {message.show && (
+          <p className={`alert ${message.type}`}>{message.message}</p>
+        )}
         {user && <StreakHoursSection user={user} />}
         <LanguageStatisticsSection
           cardsAddedPerLanguage={cards}
@@ -109,6 +194,22 @@ const Main = styled.main`
   margin: auto;
   padding-top: 4.75rem;
   padding-bottom: 4rem;
+
+  p.alert {
+    padding: 1rem;
+    border-radius: 0.625rem;
+    width: fit-content;
+    text-align: center;
+    align-self: center;
+  }
+
+  p.alert.error {
+    background: var(--red);
+  }
+
+  p.alert.filter {
+    background: var(--blue);
+  }
 `;
 
 const Header = styled.header`
@@ -130,6 +231,7 @@ const Header = styled.header`
 
     @media (max-width: 875px) {
       flex-direction: column;
+      width: 100%;
     }
   }
 `;

@@ -6,3 +6,7 @@ export async function downloadFile(url: string) {
   link.click();
   link.remove();
 }
+
+export function getISODate(date: Date) {
+  return date.toISOString().split("T")[0];
+}
