@@ -35,7 +35,7 @@ export default class StudySessionService {
   }
 
   getDisplayDuration(studySession: StudySession) {
-    const duration = Number(studySession.duration_in_minutes.split(":")[2]);
+    const duration = Number(studySession.duration_in_minutes.split(":")[1]);
     const roundDuration = Math.ceil(duration);
     return roundDuration.toString();
   }
