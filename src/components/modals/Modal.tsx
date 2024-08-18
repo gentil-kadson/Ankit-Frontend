@@ -76,7 +76,7 @@ export default function Modal({
 
 const Section = styled.section`
   max-width: 646px;
-  min-height: 604px;
+  max-height: 604px;
   border-radius: 1.25rem;
   padding: 2.8125rem;
 
@@ -86,10 +86,14 @@ const Section = styled.section`
   justify-content: space-between;
 
   position: fixed;
-  transform: translateX(85%);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+
   background-color: var(--darker-component);
   z-index: 3;
-  top: 15%;
 
   -webkit-box-shadow: 0px 0.375rem 0.3125 0.1875rem rgba(0, 0, 0, 0.43);
   -moz-box-shadow: 0px 0.375rem 0.3125 0.1875rem rgba(0, 0, 0, 0.43);
@@ -142,7 +146,6 @@ const Section = styled.section`
   }
 
   @media (max-width: 432px) {
-    max-height: 400px;
     max-width: 100%;
     top: 10%;
     right: 85%;

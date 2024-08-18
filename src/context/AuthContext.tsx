@@ -32,7 +32,7 @@ export default AuthContext;
 
 export const cookies = new Cookies();
 
-const ACCESS_TOKEN_EXPIRE_TIME = 60 * 15;
+const ACCESS_TOKEN_EXPIRE_TIME = 60 * 30;
 const REFRESH_TOKEN_EXPIRE_TIME = 60 * 60 * 24 * 3;
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -87,7 +87,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (authTokens) {
         updateToken();
       }
-    }, 1000 * 60 * 10);
+    }, 1000 * 60 * 20);
     return () => clearInterval(intervalId);
   }, [authTokens, loading]);
 

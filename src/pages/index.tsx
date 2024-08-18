@@ -144,6 +144,7 @@ export default function Home({
           {sessions &&
             sessions.map((studySession) => (
               <Link
+                key={studySession.id}
                 href={
                   studySession.csv_file
                     ? `/`
@@ -152,7 +153,6 @@ export default function Home({
               >
                 <StudySessionCard
                   session={studySession}
-                  key={studySession.id}
                   onDeleteClick={handleDeleteStudySession}
                 />
               </Link>
@@ -176,6 +176,7 @@ const Main = styled.main`
   margin: auto;
   padding-top: 4.75rem;
   padding-bottom: 4rem;
+  min-height: 800px;
 
   display: flex;
   flex-direction: column;
@@ -199,13 +200,28 @@ const Main = styled.main`
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
-    align-items: center;
-
+    align-items: flex-end;
     position: sticky;
     bottom: 0.625rem;
+    height: 100%;
   }
 
   @media (max-width: 432px) {
+    min-height: auto;
+
+    #sticky-buttons-container {
+      align-items: center;
+      height: auto;
+    }
+
+    .cards-container {
+      width: 100%;
+
+      a {
+        width: 100%;
+      }
+    }
+
     .title-and-filter {
       flex-direction: column;
       align-items: flex-start;

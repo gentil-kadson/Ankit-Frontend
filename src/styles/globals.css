@@ -29,6 +29,14 @@ a {
 body {
   height: 100vh;
   background: var(--background);
+  display: flex;
+  flex-direction: column;
+}
+
+#__next {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .blue-text {
