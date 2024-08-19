@@ -22,19 +22,16 @@ export default class StatisticsService {
     this.authToken = authToken;
   }
 
-  async getStudySessionsByLanguage(
-    history_date_before?: string,
-    history_date_after?: string
-  ) {
+  async getStudySessionsByLanguage(date_before?: string, date_after?: string) {
     try {
       const response = await this.axiosClient.get(
         "/study_sessions_by_language/",
         {
           params:
-            history_date_after && history_date_before
+            date_after && date_before
               ? {
-                  history_date_after,
-                  history_date_before,
+                  date_after,
+                  date_before,
                 }
               : {},
           headers: {
@@ -49,17 +46,14 @@ export default class StatisticsService {
     }
   }
 
-  async getCardsAddedByLanguage(
-    history_date_before?: string,
-    history_date_after?: string
-  ) {
+  async getCardsAddedByLanguage(date_before?: string, date_after?: string) {
     try {
       const response = await this.axiosClient.get("/cards_added_by_language", {
         params:
-          history_date_after && history_date_before
+          date_after && date_before
             ? {
-                history_date_after,
-                history_date_before,
+                date_after,
+                date_before,
               }
             : {},
         headers: {

@@ -2,8 +2,7 @@ import styled from "styled-components";
 import StatisticsService from "@/services/StatisticsService";
 import { useState, useContext, FormEvent, useRef } from "react";
 import AuthContext from "@/context/AuthContext";
-import { subMonths, subYears } from "date-fns";
-import { getISODate } from "@/utils/utilityFunctions";
+import { prepareFiltersDate } from "@/utils/utilityFunctions";
 
 import { MaterialSymbol } from "react-material-symbols";
 import Navbar from "@/components/Navbar";
@@ -86,23 +85,23 @@ export default function Statistics({
   const statisticsService = new StatisticsService(accessToken);
 
   const { user } = useContext(AuthContext);
-  const currentDate = getISODate(new Date());
-  const sixMonthsAgoDate = getISODate(subMonths(currentDate, 6));
-  const oneYearAgoDate = getISODate(subYears(currentDate, 1));
-  const oneMonthAgoDate = getISODate(subMonths(currentDate, 1));
+  const { dateBefore, dateAfter } = prepareFiltersDate();
 
   const handleFilters = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    console.log("data atual: ", dateBefore);
+
     const filterDate = filtersFormRef.current?.history_date_after.value;
+    console.log("data depois: ", filterDate);
 
     const cardsAddedResponse = await statisticsService.getCardsAddedByLanguage(
-      currentDate,
+      dateBefore,
       filterDate
     );
     const studySessionsResponse =
       await statisticsService.getStudySessionsByLanguage(
-        currentDate,
+        dateBefore,
         filterDate
       );
 
@@ -112,6 +111,8 @@ export default function Statistics({
     ) {
       setCards(cardsAddedResponse.data);
       setStudySessions(studySessionsResponse.data);
+
+      console.log("cards:", cardsAddedResponse.data);
 
       const successFilterMessage = filterDate
         ? "Filtro aplicado com sucesso."
@@ -162,9 +163,9 @@ export default function Statistics({
             <FormGroup>
               <Select name="history_date_after">
                 <option value="">Nenhum</option>
-                <option value={oneMonthAgoDate}>Neste mês</option>
-                <option value={sixMonthsAgoDate}>Últimos 6 meses</option>
-                <option value={oneYearAgoDate}>Ano passado</option>
+                <option value={dateAfter.oneMonthAgo}>Neste mês</option>
+                <option value={dateAfter.sixMonthsAgo}>Últimos 6 meses</option>
+                <option value={dateAfter.oneYearAgo}>Ano passado</option>
               </Select>
             </FormGroup>
             <Button width="125px">

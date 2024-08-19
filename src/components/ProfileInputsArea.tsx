@@ -156,7 +156,9 @@ export default function ProfileInputsArea({
           setSuccessMessage("");
         }, SUCCESS_MESSAGE_TIMEOUT);
       } else {
-        setErrorMessages(["Você precisa definir uma senha para desvincular a conta"]);
+        setErrorMessages([
+          "Você precisa definir uma senha para desvincular a conta",
+        ]);
       }
     }
   }
@@ -314,7 +316,8 @@ const ActionButtonsContainer = styled.div`
     flex-direction: column;
     gap: 1rem;
 
-    .left-side-buttons, .right-side-buttons {
+    .left-side-buttons,
+    .right-side-buttons {
       flex-direction: column;
       width: 100%;
     }
