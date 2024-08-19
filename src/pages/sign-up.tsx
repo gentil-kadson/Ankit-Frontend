@@ -48,7 +48,6 @@ export default function SignUp() {
   }, []);
 
   function setFormInitialStep() {
-    console.log(router.query.code);
     if (router.query.code) {
       setCurrentFormStep(2);
     } else {

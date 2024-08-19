@@ -5,6 +5,7 @@ import { cookies } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 
 import Title from "@/components/Title";
+import Head from "next/head";
 import StudySessionCard from "@/components/studySessionCard/StudySessionCard";
 import ShowMoreButton from "@/components/ShowMoreButton";
 import Navbar from "@/components/Navbar";
@@ -126,6 +127,9 @@ export default function Home({
 
   return (
     <>
+      <Head>
+        <title>Home</title>
+      </Head>
       {showModal && (
         <CreateStudySessionModal onClick={handleCancelStudySession} />
       )}

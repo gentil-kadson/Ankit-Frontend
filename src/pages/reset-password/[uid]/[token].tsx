@@ -27,14 +27,13 @@ export default function ResetPassword() {
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   async function handleChangePasswordForm(data: any) {
-    console.log(router.query.uid);
     // Change password or display errors
-    const changePasswordData = { 
+    const changePasswordData = {
       new_password1: data.new_password1 as string,
       new_password2: data.new_password2 as string,
       token: router.query.token as string,
-      uid: router.query.uid as string
-    }
+      uid: router.query.uid as string,
+    };
     const response = await authService.confirmResetPassword(changePasswordData);
     if (response.status === HTTP_200_OK) {
       setSuccessMessage("Senha alterada com sucesso! Redirecionando...");
@@ -42,7 +41,9 @@ export default function ResetPassword() {
         router.push("/me");
       }, SUCCESS_MESSAGE_TIMEOUT);
     } else {
-      const errors = Object.values(response.data).flat().filter(value => typeof(value) === "string");
+      const errors = Object.values(response.data)
+        .flat()
+        .filter((value) => typeof value === "string");
       setErrorMessages(errors);
     }
   }
@@ -55,15 +56,17 @@ export default function ResetPassword() {
           <h1>Resete Sua Senha</h1>
         </header>
 
-        { successMessage && <ApiMessage category="success">{ successMessage }</ApiMessage> }
+        {successMessage && (
+          <ApiMessage category="success">{successMessage}</ApiMessage>
+        )}
 
-        { errorMessages && (
+        {errorMessages && (
           <div className="error-messages">
-            {errorMessages.map(message => {
-              return <ApiMessage category="error">{ message }</ApiMessage>
+            {errorMessages.map((message) => {
+              return <ApiMessage category="error">{message}</ApiMessage>;
             })}
           </div>
-        ) }
+        )}
 
         <form onSubmit={handleSubmit(handleChangePasswordForm)}>
           {errors.new_password2 && (

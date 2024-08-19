@@ -6,6 +6,7 @@ import NoProfilePicture from "/public/noProfilePicture.svg";
 
 import ProfilePicture from "@/components/ProfilePicture";
 import Button from "@/components/Button";
+import Head from "next/head";
 import { MaterialSymbol } from "react-material-symbols";
 import ProfileInputsArea from "@/components/ProfileInputsArea";
 import Navbar from "@/components/Navbar";
@@ -117,6 +118,9 @@ export default function Me({
 
   return (
     <>
+      <Head>
+        <title>Meu Perfil</title>
+      </Head>
       <Navbar />
       {showModal && (
         <DeleteAccountModal onCancelButtonClick={() => setShowModal(false)} />

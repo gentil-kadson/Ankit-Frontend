@@ -90,10 +90,7 @@ export default function Statistics({
   const handleFilters = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log("data atual: ", dateBefore);
-
     const filterDate = filtersFormRef.current?.history_date_after.value;
-    console.log("data depois: ", filterDate);
 
     const cardsAddedResponse = await statisticsService.getCardsAddedByLanguage(
       dateBefore,
@@ -111,8 +108,6 @@ export default function Statistics({
     ) {
       setCards(cardsAddedResponse.data);
       setStudySessions(studySessionsResponse.data);
-
-      console.log("cards:", cardsAddedResponse.data);
 
       const successFilterMessage = filterDate
         ? "Filtro aplicado com sucesso."

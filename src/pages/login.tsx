@@ -10,6 +10,7 @@ import Label from "@/components/Label";
 import FormGroup from "@/components/FormGroup";
 import Button from "@/components/Button";
 import ApiMessage from "@/components/ApiMessage";
+import Head from "next/head";
 
 import googleLogo from "/public/googleLogo.svg";
 import Router from "next/router";
@@ -61,63 +62,68 @@ export default function Login() {
   }
 
   return (
-    <Main>
-      <Header>
-        <span className="main-heading">
-          <h1>Ankit</h1>
-          <MaterialSymbol
-            size={135}
-            icon="package_2"
-            weight={700}
-            color="var(--blue)"
-          />
-        </span>
-        <h2>
-          Sua ferramenta para aprender idiomas <span>de maneira prática</span>
-        </h2>
-        {errorMessage && (
-          <ErrorMessageContainer>
-            <ApiMessage category="error">{errorMessage}</ApiMessage>
-          </ErrorMessageContainer>
-        )}
-      </Header>
-      <LoginForm method="post" onSubmit={(e) => handleUserLogin(e)}>
-        <fieldset>
-          <FormGroup>
-            <Label inputId="email" symbolIcon="email">
-              Email
-            </Label>
-            <input ref={emailRef} type="email" name="email" id="email" />
-          </FormGroup>
-          <FormGroup>
-            <Label inputId="password" symbolIcon="password">
-              Senha
-            </Label>
-            <input
-              ref={passwordRef}
-              type="password"
-              name="password"
-              id="password"
+    <>
+      <Head>
+        <title>Login</title>
+      </Head>
+      <Main>
+        <Header>
+          <span className="main-heading">
+            <h1>Ankit</h1>
+            <MaterialSymbol
+              size={135}
+              icon="package_2"
+              weight={700}
+              color="var(--blue)"
             />
-          </FormGroup>
-        </fieldset>
-        <div id="buttons">
-          <Button width="25.9375rem">Entrar</Button>
-          <Link href={googleLoginURL}>
-            <Button type="button" width="25.9375rem" $inverted>
-              <Image src={googleLogo} alt="G from Google" />
-            </Button>
-          </Link>
-        </div>
-        <span id="sign-up-link">
-          Não possui conta?
-          <Link id="sign-up-link" href="/sign-up">
-            <span> Crie agora mesmo</span>
-          </Link>
-        </span>
-      </LoginForm>
-      <p>{!user && user}</p>
-    </Main>
+          </span>
+          <h2>
+            Sua ferramenta para aprender idiomas <span>de maneira prática</span>
+          </h2>
+          {errorMessage && (
+            <ErrorMessageContainer>
+              <ApiMessage category="error">{errorMessage}</ApiMessage>
+            </ErrorMessageContainer>
+          )}
+        </Header>
+        <LoginForm method="post" onSubmit={(e) => handleUserLogin(e)}>
+          <fieldset>
+            <FormGroup>
+              <Label inputId="email" symbolIcon="email">
+                Email
+              </Label>
+              <input ref={emailRef} type="email" name="email" id="email" />
+            </FormGroup>
+            <FormGroup>
+              <Label inputId="password" symbolIcon="password">
+                Senha
+              </Label>
+              <input
+                ref={passwordRef}
+                type="password"
+                name="password"
+                id="password"
+              />
+            </FormGroup>
+          </fieldset>
+          <div id="buttons">
+            <Button width="25.9375rem">Entrar</Button>
+            <Link href={googleLoginURL}>
+              <Button type="button" width="25.9375rem" $inverted>
+                <Image src={googleLogo} alt="G from Google" />
+              </Button>
+            </Link>
+          </div>
+          <span id="sign-up-link">
+            Não possui conta?
+            <Link id="sign-up-link" href="/sign-up">
+              <span> Crie agora mesmo</span>
+            </Link>
+          </span>
+        </LoginForm>
+        <p>{!user && user}</p>
+      </Main>
+    </>
   );
 }
 
