@@ -4,12 +4,14 @@ export type StudySessionStats = {
   id: number;
   name: string;
   study_sessions_count: number;
+  icon: string;
 };
 
 export type CardsAddedStats = {
   id: number;
   name: string;
   cards_added: number;
+  icon: string;
 };
 
 export default class StatisticsService {

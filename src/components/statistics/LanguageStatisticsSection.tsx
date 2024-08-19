@@ -24,7 +24,7 @@ export default function LanguageStatisticsSection({
       <StatisticsCard title="Quantidade de Cards por Idioma">
         {cardsAddedPerLanguage.map((card) => (
           <LanguageStatisticRow
-            flagSrc={brazilFlag}
+            flagSrc={card.icon}
             alt="brazil-flag"
             language={card.name}
             number={card.cards_added}
@@ -35,7 +35,7 @@ export default function LanguageStatisticsSection({
       <StatisticsCard title="Sessões de Estudo por Idioma">
         {studySessionsPerLanguage.map((studySession) => (
           <LanguageStatisticRow
-            flagSrc={brazilFlag}
+            flagSrc={studySession.icon}
             alt="brazil-flag"
             key={`${studySession.name}-${studySession.id}`}
             language={studySession.name}
