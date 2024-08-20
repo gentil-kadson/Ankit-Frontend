@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/router";
 
 import styled from "styled-components";
-import NoProfilePicture from "/public/noProfilePicture.svg";
+import NoProfilePicture from "/public/images/noProfilePicture.svg";
 
 import ProfilePicture from "@/components/ProfilePicture";
 import Button from "@/components/Button";

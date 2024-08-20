@@ -8,7 +8,7 @@ import { MaterialSymbol } from "react-material-symbols";
 import ProfilePicture from "./ProfilePicture";
 import NavDropdown from "./NavDropdown";
 
-import NoProfilePicture from "/public/noProfilePicture.svg";
+import NoProfilePicture from "/public/images/noProfilePicture.svg";
 
 export default function Navbar() {
   const [displayDropdown, setDisplayDropDown] = useState<boolean>(false);

@@ -4,9 +4,9 @@ import useScreenSize from "@/hooks/useScreenSize";
 import { MaterialSymbol } from "react-material-symbols";
 import Image from "next/image";
 
-import FacebookLogo from "/public/FacebookLogo.png";
-import InstagramLogo from "/public/InstagramLogo.png";
-import XLogo from "/public/XLogo.png";
+import FacebookLogo from "/public/images/FacebookLogo.png";
+import InstagramLogo from "/public/images/InstagramLogo.png";
+import XLogo from "/public/images/XLogo.png";
 
 export default function Footer() {
   const { width } = useScreenSize();

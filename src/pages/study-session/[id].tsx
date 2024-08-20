@@ -5,6 +5,8 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import Router from "next/router";
 import { downloadFile } from "@/utils/utilityFunctions";
 
+import Head from "next/head";
+
 import type {
   InferGetServerSidePropsType,
   GetServerSideProps,
@@ -51,14 +53,16 @@ export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
   if (cookies && ctx.params) {
     const cookies = ctx.req.cookies as Cookie;
     const id = Number(ctx.params.id);
-
     const studySessionService = new StudySessionService(cookies.accessToken);
     const languageId = await studySessionService.getStudySessionLanguageId(id);
+    const name = await studySessionService.getStudySessionName(id);
+
     return {
       props: {
         cookie: cookies,
         sessionId: id,
         languageId,
+        name,
       },
     };
   }
@@ -73,12 +77,14 @@ export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
   cookie: Cookie;
   sessionId: number;
   languageId: number;
+  name: string;
 }>;
 
 export default function StudySession({
   cookie,
   sessionId,
   languageId,
+  name,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const studySessionRoomService = new StudySessionRoomService(
     cookie.accessToken,
@@ -217,6 +223,9 @@ export default function StudySession({
 
   return (
     <>
+      <Head>
+        <title>{name}</title>
+      </Head>
       {showModal && (
         <FinishStudySessionModal
           onCancelButtonClick={handleStayInStudySession}

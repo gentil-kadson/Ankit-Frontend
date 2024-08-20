@@ -15,7 +15,7 @@ import { NationalityData } from "@/services/NationalityService";
 import { cookies } from "@/context/AuthContext";
 import { HTTP_200_OK, SUCCESS_MESSAGE_TIMEOUT } from "@/utils/constants";
 
-import GoogleLogo from "../../public/googleLogo.svg";
+import GoogleLogo from "../../public/images/googleLogo.svg";
 
 type Props = {
   user: User;

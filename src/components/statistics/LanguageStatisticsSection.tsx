@@ -3,8 +3,6 @@ import styled from "styled-components";
 import StatisticsCard from "./StatisticsCard";
 import LanguageStatisticRow from "./LanguageStatisticRow";
 
-import brazilFlag from "/public/brazilFlag.svg";
-
 import {
   StudySessionStats,
   CardsAddedStats,

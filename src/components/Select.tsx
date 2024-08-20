@@ -24,7 +24,7 @@ const SelectInput = styled.select<{ width?: string }>`
   width: ${(props) => (props.width ? props.width : "26.375rem")};
 
   appearance: none;
-  background-image: url("selectArrow.svg");
+  background-image: url("/images/selectInputArrow.svg");
   background-repeat: no-repeat;
   background-position: right 0.7rem top 50%;
   background-size: 1.5rem auto;

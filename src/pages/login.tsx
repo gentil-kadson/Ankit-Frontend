@@ -12,7 +12,7 @@ import Button from "@/components/Button";
 import ApiMessage from "@/components/ApiMessage";
 import Head from "next/head";
 
-import googleLogo from "/public/googleLogo.svg";
+import googleLogo from "/public/images/googleLogo.svg";
 import Router from "next/router";
 import { HTTP_200_OK, HTTP_201_CREATED } from "@/utils/constants";
 

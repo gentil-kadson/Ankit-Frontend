@@ -13,7 +13,14 @@ export default function StudySessionActionButton({
   ...props
 }: Props) {
   return (
-    <Button onClick={onClick} {...props}>
+    <Button
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        onClick();
+      }}
+      {...props}
+    >
       <MaterialSymbol icon={icon} size={24} fill />
     </Button>
   );

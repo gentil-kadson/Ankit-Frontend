@@ -14,15 +14,7 @@ export default function StudySessionButton({
   ...props
 }: Props) {
   return (
-    <Button
-      type="button"
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick();
-      }}
-      width={width}
-      {...props}
-    >
+    <Button type="button" onClick={onClick} width={width} {...props}>
       {children}
     </Button>
   );

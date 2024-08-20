@@ -4,7 +4,7 @@ import ProfilePicture from "../ProfilePicture";
 import StatisticsCard from "./StatisticsCard";
 import StreakStudyRow from "./StreakStudy";
 
-import NoProfilePicture from "/public/noProfilePicture.svg";
+import NoProfilePicture from "/public/images/noProfilePicture.svg";
 
 import { User } from "@/services/UserService";
 

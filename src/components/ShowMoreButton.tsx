@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import Image from "next/image";
-import SelectArrow from "/public/selectArrow.svg";
+import SelectArrow from "/public/images/selectInputArrow.svg";
 
 type Props = {
   width: number;
