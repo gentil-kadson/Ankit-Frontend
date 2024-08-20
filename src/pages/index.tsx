@@ -145,22 +145,13 @@ export default function Home({
           />
         </div>
         <div className="cards-container">
-          {sessions &&
-            sessions.map((studySession) => (
-              <Link
-                key={studySession.id}
-                href={
-                  studySession.csv_file
-                    ? `/`
-                    : `/study-session/${studySession.id}`
-                }
-              >
-                <StudySessionCard
-                  session={studySession}
-                  onDeleteClick={handleDeleteStudySession}
-                />
-              </Link>
-            ))}
+          {sessions.map((studySession) => (
+            <StudySessionCard
+              key={studySession.id}
+              session={studySession}
+              onDeleteClick={handleDeleteStudySession}
+            />
+          ))}
         </div>
         {displayShowMoreButton && (
           <ShowMoreButton width={width} onClick={handleShowMore} />
@@ -177,6 +168,7 @@ export default function Home({
 
 const Main = styled.main`
   max-width: 1240px;
+  width: 100%;
   margin: auto;
   padding-top: 4.75rem;
   padding-bottom: 4rem;
