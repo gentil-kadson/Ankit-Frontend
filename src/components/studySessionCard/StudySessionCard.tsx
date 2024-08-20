@@ -20,8 +20,10 @@ type Props = {
 };
 
 export default function StudySessionCard({ session, onDeleteClick }: Props) {
+  const hasCSV = session.csv_file ? true : false;
+
   return (
-    <Container csv_path={session.csv_file}>
+    <Container $csv_path={hasCSV}>
       <div className="card-title">
         <MaterialSymbol icon="dictionary" size={24} />
         <h3>{session.name}</h3>
@@ -44,7 +46,7 @@ export default function StudySessionCard({ session, onDeleteClick }: Props) {
         <div className="action-buttons">
           {session.csv_file && (
             <StudySessionActionButton
-              disabled={!session.csv_file}
+              disabled={!hasCSV}
               onClick={() => downloadFile(session.csv_file as string)}
               icon="csv"
             />
@@ -60,16 +62,16 @@ export default function StudySessionCard({ session, onDeleteClick }: Props) {
   );
 }
 
-const Container = styled.div<{ csv_path: string | null }>`
+const Container = styled.div<{ $csv_path: boolean }>`
   border-radius: 1rem;
 
   width: 24.96rem;
   height: 18.8125rem;
 
-  filter: brightness(${(props) => (props.csv_path ? 0.75 : 1)});
+  filter: brightness(${(props) => (props.$csv_path ? 0.75 : 1)});
 
   &:hover {
-    cursor: ${(props) => (props.csv_path ? "not-allowed" : "pointer")};
+    cursor: ${(props) => (props.$csv_path ? "not-allowed" : "pointer")};
   }
 
   .card-title {

@@ -145,13 +145,27 @@ export default function Home({
           />
         </div>
         <div className="cards-container">
-          {sessions.map((studySession) => (
-            <StudySessionCard
-              key={studySession.id}
-              session={studySession}
-              onDeleteClick={handleDeleteStudySession}
-            />
-          ))}
+          {sessions &&
+            sessions.map((studySession) =>
+              studySession.csv_file ? (
+                <StudySessionCard
+                  key={studySession.id}
+                  session={studySession}
+                  onDeleteClick={handleDeleteStudySession}
+                />
+              ) : (
+                <Link
+                  key={studySession.id}
+                  href={`/study-session/${studySession.id}`}
+                >
+                  <StudySessionCard
+                    key={studySession.id}
+                    session={studySession}
+                    onDeleteClick={handleDeleteStudySession}
+                  />
+                </Link>
+              )
+            )}
         </div>
         {displayShowMoreButton && (
           <ShowMoreButton width={width} onClick={handleShowMore} />
@@ -190,7 +204,7 @@ const Main = styled.main`
     justify-content: flex-start;
     column-gap: 1.25rem;
     row-gap: 1rem;
-    z-index: 3;
+    z-index: 2;
   }
 
   #sticky-buttons-container {
