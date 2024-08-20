@@ -63,7 +63,11 @@ export default function ResetPassword() {
         {errorMessages && (
           <div className="error-messages">
             {errorMessages.map((message) => {
-              return <ApiMessage category="error">{message}</ApiMessage>;
+              return (
+                <ApiMessage key={message} category="error">
+                  {message}
+                </ApiMessage>
+              );
             })}
           </div>
         )}
