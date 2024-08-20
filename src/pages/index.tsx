@@ -190,6 +190,7 @@ const Main = styled.main`
     justify-content: flex-start;
     column-gap: 1.25rem;
     row-gap: 1rem;
+    z-index: 3;
   }
 
   #sticky-buttons-container {
