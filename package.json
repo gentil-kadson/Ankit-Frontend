@@ -9,16 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.3"
+    "axios": "^1.7.3",
+    "date-fns": "^3.6.0",
+    "next": "14.2.4",
+    "react": "18.3.1",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.52.2",
+    "react-material-symbols": "^4.4.0",
+    "styled-components": "^6.1.11",
+    "universal-cookie": "^7.2.0"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "eslint-config-next": "14.2.3",
+    "typescript": "^5"
   }
 }
