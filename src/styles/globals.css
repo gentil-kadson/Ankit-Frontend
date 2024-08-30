@@ -33,6 +33,10 @@ body {
   flex-direction: column;
 }
 
+main {
+  flex: 1;
+}
+
 #__next {
   display: flex;
   flex-direction: column;
@@ -88,6 +92,6 @@ select:focus {
 
   main {
     height: auto;
-    padding: 0.5rem;
+    padding: 1rem;
   }
 }
