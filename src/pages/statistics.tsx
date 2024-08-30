@@ -206,6 +206,11 @@ const Main = styled.main`
   p.alert.filter {
     background: var(--blue);
   }
+
+  @media (max-width: 432px) {
+    width: 100%;
+    max-width: 100%;
+  }
 `;
 
 const Header = styled.header`

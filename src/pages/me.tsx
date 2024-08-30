@@ -239,6 +239,7 @@ const Main = styled.main`
 
     .user-data {
       width: 100%;
+      gap: 4rem;
     }
   }
 `;
