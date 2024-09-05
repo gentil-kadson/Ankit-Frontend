@@ -144,7 +144,8 @@ export default function StudySession({
               type: "success",
             });
             downloadFile(
-              process.env.NEXT_PUBLIC_ANKIT_API_URL + response.data.csv_file
+              process.env.NEXT_PUBLIC_CSV_FILE_DOWNLOAD_BASE_URL +
+                response.data.csv_file
             );
             setTimeout(() => {
               Router.push("/");
