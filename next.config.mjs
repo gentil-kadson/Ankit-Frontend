@@ -7,8 +7,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "localhost",
+        protocol: "https",
+        hostname: "ankit.backend.gentil.dev.br",
         pathname: "/media/**",
       },
     ],

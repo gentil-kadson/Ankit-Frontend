@@ -295,4 +295,9 @@ const Main = styled.main`
   form {
     width: 100%;
   }
+
+  @media (max-width: 432px) {
+    max-width: 100%;
+    width: 100%;
+  }
 `;

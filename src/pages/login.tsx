@@ -136,6 +136,11 @@ const Main = styled.main`
 
   padding-top: 4.75rem;
   padding-bottom: 4rem;
+
+  @media (max-width: 432px) {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
 `;
 
 const Header = styled.header`
@@ -143,6 +148,10 @@ const Header = styled.header`
   align-items: center;
   flex-direction: column;
   padding-bottom: 4.3125rem;
+
+  @media (max-width: 431px) {
+    padding-bottom: 2rem;
+  }
 
   .main-heading {
     width: 100%;
@@ -159,6 +168,7 @@ const Header = styled.header`
     @media (max-width: 431px) {
       flex-direction: column;
       text-align: center;
+      gap: 0.5rem;
     }
   }
 
@@ -190,7 +200,8 @@ const LoginForm = styled.form`
     width: 100%;
 
     @media (max-width: 431px) {
-      width: 80%;
+      width: 100%;
+      gap: 1rem;
     }
   }
 
@@ -203,7 +214,11 @@ const LoginForm = styled.form`
     width: 100%;
 
     @media (max-width: 431px) {
-      width: 80%;
+      width: 100%;
+
+      a[href="/login"] {
+        width: 100%;
+      }
     }
   }
 

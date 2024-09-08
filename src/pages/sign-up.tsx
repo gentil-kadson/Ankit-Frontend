@@ -297,7 +297,7 @@ const Main = styled.main`
       align-self: flex-start;
 
       @media (max-width: 875px) {
-        align-self: center;
+        align-self: flex-start;
       }
     }
 
@@ -315,7 +315,7 @@ const Main = styled.main`
       }
 
       @media (max-width: 431px) {
-        width: 70%;
+        font-size: 1.625rem;
       }
     }
 
@@ -335,7 +335,10 @@ const Main = styled.main`
     > header {
       align-self: center;
       padding-bottom: 1.25rem;
+      gap: 2rem;
     }
+
+    gap: 1rem;
   }
 `;
 
@@ -356,7 +359,8 @@ const Form = styled.form`
     }
 
     @media (max-width: 431px) {
-      width: 80%;
+      width: 100%;
+      padding-bottom: 2rem;
     }
   }
 `;
