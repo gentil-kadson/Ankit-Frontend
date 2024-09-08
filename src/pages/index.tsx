@@ -205,16 +205,15 @@ const Main = styled.main`
     column-gap: 1.25rem;
     row-gap: 1rem;
     z-index: 2;
+    flex-grow: 2;
   }
 
   #sticky-buttons-container {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-    align-items: flex-end;
     position: sticky;
-    bottom: 0.625rem;
-    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    bottom: 2rem;
   }
 
   @media (max-width: 432px) {
