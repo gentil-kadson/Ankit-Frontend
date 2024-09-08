@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import StudySessionRoomService from "@/services/StudySessionRoomService";
 import StudySessionService from "@/services/StudySessionService";
-import { ChangeEvent, FormEvent, useState } from "react";
+import UserService from "@/services/UserService";
+import { ChangeEvent, FormEvent, useState, useContext } from "react";
 import Router from "next/router";
 import { downloadFile } from "@/utils/utilityFunctions";
+import AuthContext from "@/context/AuthContext";
 
 import Head from "next/head";
 
@@ -91,6 +93,7 @@ export default function StudySession({
     sessionId
   );
 
+  const { setUser } = useContext(AuthContext);
   const [cards, setCards] = useState<ResponseCard[]>([]);
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -137,7 +140,7 @@ export default function StudySession({
     if (cards.length > 0) {
       await studySessionRoomService
         .finishStudySession(cards)
-        .then((response) => {
+        .then(async (response) => {
           if (response.status === 200) {
             handleMessage({
               message: "Sessão encerrada com sucesso",
@@ -147,6 +150,14 @@ export default function StudySession({
               process.env.NEXT_PUBLIC_CSV_FILE_DOWNLOAD_BASE_URL +
                 response.data.csv_file
             );
+
+            const userService = new UserService(cookie.accessToken);
+            const meResponse = await userService.getMe();
+
+            if (meResponse.status === 200) {
+              setUser(meResponse.data);
+            }
+
             setTimeout(() => {
               Router.push("/");
             }, 3000);
