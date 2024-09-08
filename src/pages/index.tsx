@@ -209,7 +209,6 @@ const Main = styled.main`
   }
 
   #sticky-buttons-container {
-    position: sticky;
     display: flex;
     justify-content: flex-end;
     width: 100%;
