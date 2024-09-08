@@ -1,4 +1,4 @@
-import { subDays, subMonths, addDays, subYears } from "date-fns";
+import { subMonths, addDays, subYears } from "date-fns";
 
 export async function downloadFile(url: string) {
   const link = document.createElement("a");
@@ -15,7 +15,6 @@ export function getISODate(date: Date) {
 
 export function prepareFiltersDate() {
   const dateBeforeExact = getISODate(new Date());
-  const dateBeforeOneDayBehind = getISODate(subDays(dateBeforeExact, 1));
   const dateBeforeOneDayAhead = getISODate(addDays(dateBeforeExact, 1));
 
   const sixMonthsAgo = getISODate(subMonths(dateBeforeOneDayAhead, 6));
@@ -23,7 +22,7 @@ export function prepareFiltersDate() {
   const oneYearAgo = getISODate(subYears(dateBeforeOneDayAhead, 1));
 
   return {
-    dateBefore: dateBeforeOneDayBehind,
+    dateBefore: dateBeforeOneDayAhead,
     dateAfter: {
       sixMonthsAgo,
       oneMonthAgo,
