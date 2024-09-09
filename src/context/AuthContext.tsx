@@ -65,6 +65,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         });
         cookies.set("accessToken", data.access, {
           maxAge: ACCESS_TOKEN_EXPIRE_TIME,
+          path: "/",
         });
       }
     }
@@ -92,8 +93,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [authTokens, loading]);
 
   function logoutUser() {
-    cookies.remove("accessToken");
-    cookies.remove("refreshToken");
+    cookies.remove("accessToken", { path: "/" });
+    cookies.remove("refreshToken", { path: "/" });
     setUser(null);
   }
 
@@ -112,9 +113,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(response.data.user);
       cookies.set("accessToken", response.data.access, {
         maxAge: ACCESS_TOKEN_EXPIRE_TIME,
+        path: "/",
       });
       cookies.set("refreshToken", response.data.refresh, {
         maxAge: REFRESH_TOKEN_EXPIRE_TIME,
+        path: "/",
       });
     }
     return response;
@@ -132,9 +135,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(data.user);
       cookies.set("accessToken", data.access, {
         maxAge: ACCESS_TOKEN_EXPIRE_TIME,
+        path: "/",
       });
       cookies.set("refreshToken", data.refresh, {
         maxAge: REFRESH_TOKEN_EXPIRE_TIME,
+        path: "/",
       });
       return { status, message: "Usuário criado com sucesso" };
     } else {
