@@ -216,7 +216,7 @@ const LoginForm = styled.form`
     @media (max-width: 431px) {
       width: 100%;
 
-      a[href="/login"] {
+      a {
         width: 100%;
       }
     }
