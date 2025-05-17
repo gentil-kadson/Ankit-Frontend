@@ -11,6 +11,11 @@ const nextConfig = {
         hostname: "ankit.backend.gentil.dev.br",
         pathname: "/media/**",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        pathname: "/media/**"
+      }
     ],
   },
 };
