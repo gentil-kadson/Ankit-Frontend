@@ -143,10 +143,10 @@ export default function StudySession({
               message: "Sessão encerrada com sucesso",
               type: "success",
             });
-            downloadFile(
-              process.env.NEXT_PUBLIC_CSV_FILE_DOWNLOAD_BASE_URL +
-                response.data.csv_file
-            );
+            // downloadFile(
+            //   process.env.NEXT_PUBLIC_CSV_FILE_DOWNLOAD_BASE_URL +
+            //     response.data.csv_file
+            // );
             setTimeout(() => {
               Router.push("/");
             }, 3000);
