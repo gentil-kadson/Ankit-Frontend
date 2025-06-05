@@ -25,7 +25,7 @@ import type {
   GetServerSideProps,
   GetServerSidePropsContext,
 } from "next";
-import { HTTP_204_NO_CONTENT } from "@/utils/constants";
+import { HTTP_200_OK, HTTP_204_NO_CONTENT } from "@/utils/constants";
 
 export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
   const accessToken = ctx.req.cookies.accessToken;
@@ -106,6 +106,17 @@ export default function Home({
     });
   }
 
+  function handleAddStudySessionCardsToAnki(id: number) {
+    const accessToken = cookies.get("accessToken");
+    const studySessionService = new StudySessionService(accessToken);
+
+    studySessionService.addToAnki(id).then((response) => {
+      if (response.status === HTTP_200_OK) {
+        console.log(response.data);
+      }
+    });
+  }
+
   async function handleShowMore() {
     const accessToken = cookies.get("accessToken");
     const studySessionService = new StudySessionService(accessToken);
@@ -152,6 +163,7 @@ export default function Home({
                   key={studySession.id}
                   session={studySession}
                   onDeleteClick={handleDeleteStudySession}
+                  onAddClick={handleAddStudySessionCardsToAnki}
                 />
               ) : (
                 <Link
@@ -162,6 +174,7 @@ export default function Home({
                     key={studySession.id}
                     session={studySession}
                     onDeleteClick={handleDeleteStudySession}
+                    onAddClick={handleAddStudySessionCardsToAnki}
                   />
                 </Link>
               )

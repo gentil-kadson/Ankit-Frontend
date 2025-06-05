@@ -82,4 +82,19 @@ export default class StudySessionService {
       return error.response;
     }
   }
+
+  async addToAnki(id: number) {
+    try {
+      const url = `${this.baseURL}/${id}/cards_from_csv/`;
+      const response = await this.axiosClient.get(url, {
+        headers: {
+          Authorization: `Bearer ${this.authToken}`,
+        },
+      });
+      console.log(response);
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
 }

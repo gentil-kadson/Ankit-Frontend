@@ -17,9 +17,14 @@ type StudySession = {
 type Props = {
   session: StudySession;
   onDeleteClick: (id: number) => void;
+  onAddClick: (id: number) => void;
 };
 
-export default function StudySessionCard({ session, onDeleteClick }: Props) {
+export default function StudySessionCard({
+  session,
+  onDeleteClick,
+  onAddClick,
+}: Props) {
   const hasCSV = session.csv_file ? true : false;
 
   return (
@@ -47,7 +52,7 @@ export default function StudySessionCard({ session, onDeleteClick }: Props) {
           {session.csv_file && (
             <StudySessionActionButton
               disabled={!hasCSV}
-              onClick={() => downloadFile(session.csv_file as string)}
+              onClick={async () => onAddClick(session.id)}
               icon="playing_cards"
             />
           )}
