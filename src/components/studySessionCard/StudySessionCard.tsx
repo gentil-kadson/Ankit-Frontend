@@ -48,7 +48,7 @@ export default function StudySessionCard({ session, onDeleteClick }: Props) {
             <StudySessionActionButton
               disabled={!hasCSV}
               onClick={() => downloadFile(session.csv_file as string)}
-              icon="csv"
+              icon="playing_cards"
             />
           )}
 
