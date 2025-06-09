@@ -106,15 +106,12 @@ export default function Home({
     });
   }
 
-  function handleAddStudySessionCardsToAnki(id: number) {
+  async function handleAddStudySessionCardsToAnki(id: number) {
     const accessToken = cookies.get("accessToken");
     const studySessionService = new StudySessionService(accessToken);
 
-    studySessionService.addToAnki(id).then((response) => {
-      if (response.status === HTTP_200_OK) {
-        console.log(response.data);
-      }
-    });
+    const response = await studySessionService.retrieveStudySessionData(id);
+    console.log(response.data);
   }
 
   async function handleShowMore() {
