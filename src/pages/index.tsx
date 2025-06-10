@@ -106,12 +106,21 @@ export default function Home({
     });
   }
 
-  async function handleAddStudySessionCardsToAnki(id: number) {
+  async function handleSendStudySessionCardsToExtension(id: number) {
     const accessToken = cookies.get("accessToken");
     const studySessionService = new StudySessionService(accessToken);
 
     const response = await studySessionService.retrieveStudySessionData(id);
-    console.log(response.data);
+
+    if (typeof window !== undefined) {
+      window.postMessage(
+        {
+          type: "ANKIT",
+          flashcards: response.data,
+        },
+        "*"
+      );
+    }
   }
 
   async function handleShowMore() {
@@ -160,7 +169,7 @@ export default function Home({
                   key={studySession.id}
                   session={studySession}
                   onDeleteClick={handleDeleteStudySession}
-                  onAddClick={handleAddStudySessionCardsToAnki}
+                  onAddClick={handleSendStudySessionCardsToExtension}
                 />
               ) : (
                 <Link
@@ -171,7 +180,7 @@ export default function Home({
                     key={studySession.id}
                     session={studySession}
                     onDeleteClick={handleDeleteStudySession}
-                    onAddClick={handleAddStudySessionCardsToAnki}
+                    onAddClick={handleSendStudySessionCardsToExtension}
                   />
                 </Link>
               )
