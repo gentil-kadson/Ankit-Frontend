@@ -25,7 +25,7 @@ import type {
   GetServerSideProps,
   GetServerSidePropsContext,
 } from "next";
-import { HTTP_200_OK, HTTP_204_NO_CONTENT } from "@/utils/constants";
+import { HTTP_204_NO_CONTENT } from "@/utils/constants";
 
 export const getServerSideProps = (async (ctx: GetServerSidePropsContext) => {
   const accessToken = ctx.req.cookies.accessToken;
