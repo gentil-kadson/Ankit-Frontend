@@ -146,18 +146,6 @@ export default function StudySession({
               message: "Sessão encerrada com sucesso",
               type: "success",
             });
-            downloadFile(
-              process.env.NEXT_PUBLIC_CSV_FILE_DOWNLOAD_BASE_URL +
-                response.data.csv_file
-            );
-
-            const userService = new UserService(cookie.accessToken);
-            const meResponse = await userService.getMe();
-
-            if (meResponse.status === 200) {
-              setUser(meResponse.data);
-            }
-
             setTimeout(() => {
               Router.push("/");
             }, 3000);
@@ -210,7 +198,7 @@ export default function StudySession({
       topic: formData.topic,
     });
 
-    if (response.status === 200) {
+    if (response.status === 200 && response.data.cards.length > 0) {
       setCards((prevCards) => {
         return [...prevCards, ...response.data.cards];
       });
@@ -224,7 +212,9 @@ export default function StudySession({
       setErrorMessage({
         show: true,
         message:
-          "Ocorreu um erro ao tentar buscar vocabulário. Por favor, tente novamente",
+          response.status !== 200
+            ? "Ocorreu um erro ao tentar buscar vocabulário. Por favor, tente novamente"
+            : "O ChatGPT não pôde te ajudar com essa palavra",
       });
       setTimeout(() => {
         setErrorMessage({

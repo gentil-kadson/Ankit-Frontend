@@ -82,4 +82,18 @@ export default class StudySessionService {
       return error.response;
     }
   }
+
+  async retrieveStudySessionData(id: number) {
+    try {
+      const url = `${this.baseURL}/${id}/cards_from_csv/`;
+      const response = await this.axiosClient.get(url, {
+        headers: {
+          Authorization: `Bearer ${this.authToken}`,
+        },
+      });
+      return response;
+    } catch (error: any) {
+      return error.response;
+    }
+  }
 }

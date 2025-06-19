@@ -1,4 +1,4 @@
-import { SymbolCodepoints } from "react-material-symbols";
+import { MaterialSymbol, SymbolCodepoints } from "react-material-symbols";
 
 import Modal from "./Modal";
 
@@ -46,10 +46,12 @@ export default function FinishStudySessionModal({
       mainTitle="Encerrar Sessão de Estudos"
       subtitle={
         <>
-          Se você encerrar sua sessão, você baixará o arquivo CSV com os cards,
-          mas <strong>perderá o acesso</strong> a esta sessão. Tem certeza que
-          deseja encerrar (você também pode baixar o arquivo CSV na tela
-          principal)?
+          Se encerrar sua sessão de estudos,{" "}
+          <strong>não vai poder entrar nela novamente</strong>. No entanto, com
+          ela finalizada, você poderá gerar os cartões dessa sessão{" "}
+          <strong>com áudio e adicioná-los ao Anki</strong> através do botão{" "}
+          <MaterialSymbol icon="playing_cards" color="var(--white)" size={32} />
+          .
         </>
       }
       onCancelButton={onCancelButtonClick}

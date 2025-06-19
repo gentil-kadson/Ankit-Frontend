@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { downloadFile } from "@/utils/utilityFunctions";
 
 import { MaterialSymbol } from "react-material-symbols";
 import StudySessionInfo from "./StudySessionInfo";
@@ -17,9 +16,14 @@ type StudySession = {
 type Props = {
   session: StudySession;
   onDeleteClick: (id: number) => void;
+  onAddClick: (id: number) => Promise<void>;
 };
 
-export default function StudySessionCard({ session, onDeleteClick }: Props) {
+export default function StudySessionCard({
+  session,
+  onDeleteClick,
+  onAddClick,
+}: Props) {
   const hasCSV = session.csv_file ? true : false;
 
   return (
@@ -47,8 +51,8 @@ export default function StudySessionCard({ session, onDeleteClick }: Props) {
           {session.csv_file && (
             <StudySessionActionButton
               disabled={!hasCSV}
-              onClick={() => downloadFile(session.csv_file as string)}
-              icon="csv"
+              onClick={async () => await onAddClick(session.id)}
+              icon="playing_cards"
             />
           )}
 

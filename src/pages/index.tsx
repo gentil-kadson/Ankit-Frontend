@@ -106,6 +106,23 @@ export default function Home({
     });
   }
 
+  async function handleSendStudySessionCardsToExtension(id: number) {
+    const accessToken = cookies.get("accessToken");
+    const studySessionService = new StudySessionService(accessToken);
+
+    const response = await studySessionService.retrieveStudySessionData(id);
+
+    if (typeof window !== undefined) {
+      window.postMessage(
+        {
+          type: "ANKIT",
+          flashcards: response.data,
+        },
+        "*"
+      );
+    }
+  }
+
   async function handleShowMore() {
     const accessToken = cookies.get("accessToken");
     const studySessionService = new StudySessionService(accessToken);
@@ -152,6 +169,7 @@ export default function Home({
                   key={studySession.id}
                   session={studySession}
                   onDeleteClick={handleDeleteStudySession}
+                  onAddClick={handleSendStudySessionCardsToExtension}
                 />
               ) : (
                 <Link
@@ -162,6 +180,7 @@ export default function Home({
                     key={studySession.id}
                     session={studySession}
                     onDeleteClick={handleDeleteStudySession}
+                    onAddClick={handleSendStudySessionCardsToExtension}
                   />
                 </Link>
               )
